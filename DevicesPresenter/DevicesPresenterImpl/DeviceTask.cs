@@ -108,11 +108,11 @@ namespace DevicesPresenter
 			await communicator.SendGPIOTask(this);
 		}
 
-		public void ResetChanged()
+		public void ResetStatusChanged()
 		{
 			foreach(IActionGPIO action in Actions)
 			{
-				(action as ActionGPIO).ResetChanged();
+				(action as ActionGPIO).ResetStatusChanged();
 			}
 		}
 

@@ -125,7 +125,6 @@ namespace SHBase.Communication
 					new CommandParameter("password", connectionParams.Password)
 				};
 
-				//TODO: изменить на устройстве код приёма параметров подключения
 				Communicator communicator = new Communicator();
 				OperationResult result = await communicator.SendToDevice(_ip, CommandNames.ConnectionParams, content);
 

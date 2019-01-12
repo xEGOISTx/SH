@@ -92,7 +92,7 @@ namespace DevicesPresenter
 					newTasks.Add(task);
 				}
 
-				(task as DeviceTask).ResetChanged();
+				(task as DeviceTask).ResetStatusChanged();
 			}
 
 			//Update changed tasks to DB

@@ -43,14 +43,3 @@ namespace DevicesPresenter
 		bool IsDelete { get; }
 	}
 }
-
-///// <summary>
-///// Список действий
-///// </summary>
-//IReadOnlyDictionary<byte,IActionGPIO> Actions { get; }
-
-///// <summary>
-///// Выполнить задачу
-///// </summary>
-///// <returns></returns>
-//Task<bool> ExecuteAsync();

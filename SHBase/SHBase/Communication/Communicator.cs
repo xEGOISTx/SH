@@ -32,7 +32,6 @@ namespace SHBase.Communication
 					{
 						if (gPIOAction.Mode != GPIOMode.NotDefined && gPIOAction.Level != GPIOLevel.NotDefined)
 						{
-							//TODO: изменить в коде устройства прием команд для пинов
 							CommandParameter commandParameter = new CommandParameter(gPIOAction.PinNumber.ToString(), $"{gPIOAction.Mode}_{gPIOAction.Level}");
 							content.Add(commandParameter);
 						}
@@ -60,7 +59,7 @@ namespace SHBase.Communication
 		{
 			return await Task.Run(async () =>
 			{
-				OperationResult resilt = new OperationResult();
+				OperationResult result = new OperationResult();
 
 				string strContent = $"&{commandName}&";
 
@@ -87,22 +86,22 @@ namespace SHBase.Communication
 								{
 									string response = await responseMessage.Content.ReadAsStringAsync();
 
-									resilt.Success = true;
-									resilt.ResponseMessage = response.Replace("\r\n", string.Empty);
+									result.Success = true;
+									result.ResponseMessage = response.Replace("\r\n", string.Empty);
 									System.Diagnostics.Debug.WriteLine("Post success!");
 									break;
 								}
 								else
 								{
-									resilt.ErrorMessage = "Post failed!";
+									result.ErrorMessage = "Post failed!";
 									System.Diagnostics.Debug.WriteLine("Post failed!");
 								}
 							}
 						}
 						catch(Exception ex)
 						{
-							resilt.ErrorMessage = ex.Message;
-							resilt.Success = false;
+							result.ErrorMessage = ex.Message;
+							result.Success = false;
 							break;
 						}
 
@@ -110,7 +109,7 @@ namespace SHBase.Communication
 					};
 				}
 
-				return resilt;
+				return result;
 			});
 		}
 	}

@@ -63,7 +63,7 @@ namespace DevicesPresenter
 			Level = level;
 		}
 
-		public void ResetChanged()
+		public void ResetStatusChanged()
 		{
 			_mode = Mode;
 			_level = Level;

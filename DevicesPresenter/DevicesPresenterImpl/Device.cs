@@ -181,6 +181,5 @@ namespace DevicesPresenter
 		//}
 		#endregion Methods
 
-		//public event ExcecuteTaskEventHandler TaskExecutionRequest;
 	}
 }
