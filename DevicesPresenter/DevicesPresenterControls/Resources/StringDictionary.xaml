@@ -1,0 +1,19 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <x:String x:Key="SsidText">Имя сети</x:String>
+    <x:String x:Key="PasswordText">Пароль</x:String>
+    <x:String x:Key="ConnectToHubText">Подключение к роутеру</x:String>
+    <x:String x:Key="ConnectToDeviceText">Подключение к девайсу</x:String>
+    <x:String x:Key="SaveText">Сохранить</x:String>
+    <x:String x:Key="FindAndConnect">Найти и подключить</x:String>
+    <x:String x:Key="Devices">Устройства</x:String>
+    <x:String x:Key="StatusText">Статус</x:String>
+    <x:String x:Key="CommandListText">Список команд</x:String>
+    <x:String x:Key="ActionsListText">Действия</x:String>
+    <x:String x:Key="InputOutputText">I/O</x:String>
+    <x:String x:Key="HighLowText">H/L</x:String>
+    <x:String x:Key="ExecuteText">Выполнить</x:String>
+
+</ResourceDictionary>
