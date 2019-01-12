@@ -113,7 +113,19 @@ namespace DevicesPresenterControls.ViewModels
 			{
 				if (IsEditing)
 				{
-					ShowMessageDialog();				
+					if (_currentDeviceVM.Tasks.Any(t => t.IsChanged) || _currentDeviceVM.Description != _originalDeviceVM.Description)
+					{
+						ShowMessageDialog();
+					}		
+					else
+					{
+						_currentDeviceVM = _originalDeviceVM;
+						OnPropertyChanged(nameof(Description));
+						RefreshTaskList();
+
+						_deviceCopy = null;
+						IsEditing = false;
+					}
 				}
 				else
 				{

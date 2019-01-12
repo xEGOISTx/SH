@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace DevicesPresenter
 {
+	//TODO: разделить логику на редактирования устройсва и редактирования задач для устройства
 	internal class DeviceEditor : IDeviceEditor
 	{
 		private readonly IDevicesManager _devicesManager;
@@ -80,11 +81,7 @@ namespace DevicesPresenter
 				if ((task as DeviceTask).IsChanged)
 				{
 					changedTasks.Add(task);
-
-					//(task as DeviceTask).IsChanged = false;
-					//originalDevice.AddTask(task);
 				}
-
 
 				if (task.IsNew)
 				{
@@ -97,7 +94,7 @@ namespace DevicesPresenter
 
 			//Update changed tasks to DB
 			//Save new tasks to DB.
-			//Set IDs for new tasks
+			////Set IDs for new tasks
 
 			//очищаем список задач в оригинальном девайсе
 			originalDevice.ClearTasks();
