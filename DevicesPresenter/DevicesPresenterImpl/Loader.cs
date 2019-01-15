@@ -20,7 +20,7 @@ namespace DevicesPresenter
 			return new ConnectionParams() {Ssid ="MGTS_GPON_2214", Password ="4AMYNYKM" };
 		}
 
-		public async Task<bool> SaveDeviceAsync(IDevice device)
+		public async Task<bool> SaveDeviceAsync(ISwitchingDevice device)
 		{
 			return await Task.Run(() =>
 			{
@@ -51,7 +51,7 @@ namespace DevicesPresenter
 		/// <param name="device"></param>
 		/// <param name="description"></param>
 		/// <returns></returns>
-		public bool UpdateDeviceDescriptionInDB(IDevice device,string description)
+		public bool UpdateDeviceDescriptionInDB(ISwitchingDevice device,string description)
 		{
 			return true;
 		}

@@ -10,11 +10,14 @@ using SHBase.DeviceBase;
 
 namespace DevicesPresenter
 {
-	public class Device : IDevice
+	public class SwitchingDevice : ISwitchingDevice
 	{
 		private readonly Dictionary<int, IDeviceTask> _tasks = new Dictionary<int, IDeviceTask>();
 
-
+		public SwitchingDevice(IPAddress iPAddress)
+		{
+			IP = iPAddress;
+		}
 		
 		#region Properties
 		public ushort ID { get; set; }
@@ -42,7 +45,7 @@ namespace DevicesPresenter
 		/// <summary>
 		/// IP устройства
 		/// </summary>
-		public IPAddress IP { get; set; }
+		public IPAddress IP { get; }
 
 		/// <summary>
 		/// Мак-адрес устройства
@@ -138,14 +141,13 @@ namespace DevicesPresenter
 		/// Возвращает копию устройства
 		/// </summary>
 		/// <returns></returns>
-		public IDevice Copy()
+		public ISwitchingDevice Copy()
 		{
-			Device device = new Device
+			SwitchingDevice device = new SwitchingDevice(IPAddress.Parse(IP.ToString()))
 			{
 				ID = ID,
 				Description = Description,
 				FirmwareType = FirmwareType,
-				IP = IPAddress.Parse(IP.ToString()),
 				IsConnected = IsConnected,
 				Mac = Mac,
 				Name = Name

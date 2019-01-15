@@ -16,7 +16,6 @@ namespace DevicesPresenterControls.ViewModels
 	{
 		private readonly IDevicesManager _devicesManager;
 		private ConnectionParamsViewModel _connectionParamsVM;
-		//private DevicePresenterViewModel _devicePresenterVM;
 		private DeviceViewModel _selectedDevice;
 
 		public List<DeviceViewModel> Devices { get; private set; } = new List<DeviceViewModel>();
@@ -24,18 +23,23 @@ namespace DevicesPresenterControls.ViewModels
 		public DevicesViewModel(IDevicesManager devicesManager)
 		{
 			_devicesManager = devicesManager;
-			//DevicePresenterVM = new DevicePresenterViewModel(devicesManager.GetDeviceEditor());
+			_devicesManager.LoadDevicesComplete += DevicesManager_LoadDevicesComplete;
+			_devicesManager.SynchronizationWithDevicesAsync();
 
-			foreach (IDevice device in devicesManager.Devices.Values)
+
+			FindAndConnect = new RelayCommand(ExecuteFindAndConnect);
+			SendId = new RelayCommand(ExecuteSendId);
+			GetId = new RelayCommand(ExecuteGetId);
+		}
+
+		private void DevicesManager_LoadDevicesComplete(object sender, EventArgs e)
+		{
+			foreach (ISwitchingDevice device in _devicesManager.Devices.GetDevices<ISwitchesList>().Values)
 			{
 				DeviceViewModel deviceVM = new DeviceViewModel(device);
 				Devices.Add(deviceVM);
 			}
 			OnPropertyChanged(nameof(Devices));
-
-			FindAndConnect = new RelayCommand(ExecuteFindAndConnect);
-			SendId = new RelayCommand(ExecuteSendId);
-			GetId = new RelayCommand(ExecuteGetId);
 		}
 
 
@@ -83,7 +87,7 @@ namespace DevicesPresenterControls.ViewModels
 			Devices.Clear();
 			List<DeviceViewModel> devicesVM = new List<DeviceViewModel>();
 
-			foreach (IDevice device in _devicesManager.Devices.Values)
+			foreach (ISwitchingDevice device in _devicesManager.Devices.GetDevices<ISwitchesList>().Values)
 			{
 				DeviceViewModel deviceVM = new DeviceViewModel(device);
 				devicesVM.Add(deviceVM);

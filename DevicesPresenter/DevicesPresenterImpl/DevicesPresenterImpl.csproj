@@ -109,12 +109,15 @@
     <Compile Include="ActionGPIO.cs" />
     <Compile Include="ConnectionParams.cs" />
     <Compile Include="ConnectionSettings.cs" />
-    <Compile Include="Device.cs" />
+    <Compile Include="DeviceBaseList.cs" />
+    <Compile Include="SwitchingDevice.cs" />
+    <Compile Include="DeviceCommonList.cs" />
     <Compile Include="DeviceEditor.cs" />
     <Compile Include="DeviceTask.cs" />
     <Compile Include="Loader.cs" />
     <Compile Include="DevicesManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SwitchesList.cs" />
     <Compile Include="VoiceControl.cs" />
     <EmbeddedResource Include="Properties\DevicesPresenterImpl.rd.xml" />
   </ItemGroup>

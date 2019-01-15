@@ -17,7 +17,7 @@ namespace DevicesPresenterControls.ViewModels
 		private readonly IDeviceEditor _deviceEditor;
 		private DeviceViewModel _originalDeviceVM;
 		private DeviceViewModel _currentDeviceVM;
-		private IDevice _deviceCopy;
+		private ISwitchingDevice _deviceCopy;
 		private bool _isEditing;
 		private DeviceTaskViewModel _selectedTask;
 

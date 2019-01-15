@@ -13,27 +13,27 @@ namespace DevicesPresenter
 		/// </summary>
 		/// <param name="deviceCopy"></param>
 		/// <returns></returns>
-		IDeviceTask CreateNewTaskFor(IDevice deviceCopy);
+		IDeviceTask CreateNewTaskFor(ISwitchingDevice deviceCopy);
 
 		/// <summary>
 		/// Получить копию устройства по ID
 		/// </summary>
 		/// <param name="deviceID"></param>
 		/// <returns></returns>
-		IDevice GetDeviceCopy(ushort deviceID);
+		ISwitchingDevice GetDeviceCopy(ushort deviceID);
 
 		/// <summary>
 		/// Применить и сохранить изменения
 		/// </summary>
 		/// <param name="deviceCopy"></param>
 		/// <returns></returns>
-		bool ApplyAndSaveChanges(IDevice deviceCopy);
+		bool ApplyAndSaveChanges(ISwitchingDevice deviceCopy);
 
 		/// <summary>
 		/// Пометить задачу на удаление
 		/// </summary>
 		/// <param name="deviceCopy"></param>
 		/// <param name="taskID"></param>
-		void MarkTaskForDelete(IDevice deviceCopy, int taskID);
+		void MarkTaskForDelete(ISwitchingDevice deviceCopy, int taskID);
 	}
 }

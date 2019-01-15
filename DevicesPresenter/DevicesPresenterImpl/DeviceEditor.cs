@@ -23,16 +23,16 @@ namespace DevicesPresenter
 		/// </summary>
 		/// <param name="deviceCopy"></param>
 		/// <returns></returns>
-		public IDeviceTask CreateNewTaskFor(IDevice deviceCopy)
+		public IDeviceTask CreateNewTaskFor(ISwitchingDevice deviceCopy)
 		{
 			DeviceTask task = null;
 
 			if (deviceCopy != null)
 			{
 				int tempID = 0;
-				if ((deviceCopy as Device).Tasks.Count() > 0)
+				if ((deviceCopy as SwitchingDevice).Tasks.Count() > 0)
 				{
-					tempID = (deviceCopy as Device).Tasks.Min(t => t.ID);
+					tempID = (deviceCopy as SwitchingDevice).Tasks.Min(t => t.ID);
 
 					if (tempID > 0)
 						tempID = 0;
@@ -41,7 +41,7 @@ namespace DevicesPresenter
 				}
 
 				task = new DeviceTask { ID = tempID, Description = "New task" };
-				(deviceCopy as Device).AddTask(task);
+				(deviceCopy as SwitchingDevice).AddTask(task);
 			}
 			return task;
 		}
@@ -51,10 +51,10 @@ namespace DevicesPresenter
 		/// </summary>
 		/// <param name="deviceCopy"></param>
 		/// <returns></returns>
-		public bool ApplyAndSaveChanges(IDevice deviceCopy)
+		public bool ApplyAndSaveChanges(ISwitchingDevice deviceCopy)
 		{
 			Loader loader = new Loader();
-			Device originalDevice = _devicesManager.Devices[deviceCopy.ID] as Device;
+			SwitchingDevice originalDevice = _devicesManager.Devices.GetDevices<SwitchesList>()[deviceCopy.ID] as SwitchingDevice;
 			List<IDeviceTask> newTasks = new List<IDeviceTask>();
 			List<IDeviceTask> changedTasks = new List<IDeviceTask>();
 
@@ -72,7 +72,7 @@ namespace DevicesPresenter
 			//delete tasks from DB
 
 			//удаляем задачи из копии девайса
-			(deviceCopy as Device).RemoveTasks(tasksForDelete);
+			(deviceCopy as SwitchingDevice).RemoveTasks(tasksForDelete);
 
 
 			//выбираем новые и изменёные задачи
@@ -110,9 +110,9 @@ namespace DevicesPresenter
 		/// </summary>
 		/// <param name="deviceID"></param>
 		/// <returns></returns>
-		public IDevice GetDeviceCopy(ushort deviceID)
+		public ISwitchingDevice GetDeviceCopy(ushort deviceID)
 		{
-			Device device = (Device)_devicesManager.Devices[deviceID];
+			SwitchingDevice device = _devicesManager.Devices.GetDevices<ISwitchesList>()[deviceID] as SwitchingDevice;
 			return device.Copy();
 		}
 
@@ -121,7 +121,7 @@ namespace DevicesPresenter
 		/// </summary>
 		/// <param name="deviceCopy"></param>
 		/// <param name="taskID"></param>
-		public void MarkTaskForDelete(IDevice deviceCopy, int taskID)
+		public void MarkTaskForDelete(ISwitchingDevice deviceCopy, int taskID)
 		{
 			if (deviceCopy.IsPresentTask(taskID))
 			{
@@ -129,7 +129,7 @@ namespace DevicesPresenter
 
 				if(task.IsNew)
 				{
-					(deviceCopy as Device).RemoveTask(task);
+					(deviceCopy as SwitchingDevice).RemoveTask(task);
 				}
 				else
 				{
@@ -143,7 +143,7 @@ namespace DevicesPresenter
 		/// </summary>
 		/// <param name="device"></param>
 		/// <returns></returns>
-		private int GenerateIDForTask(IDevice device)
+		private int GenerateIDForTask(ISwitchingDevice device)
 		{
 			int ID = 1;
 

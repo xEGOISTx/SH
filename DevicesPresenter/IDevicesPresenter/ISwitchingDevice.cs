@@ -11,7 +11,7 @@ namespace DevicesPresenter
 	/// <summary>
 	/// Интерфейс устройства
 	/// </summary>
-	public interface IDevice : IDeviceBase, IDeviceBaseTaskType<IDeviceTask>
+	public interface ISwitchingDevice : IDeviceBase, IDeviceBaseTaskType<IDeviceTask>
 	{
 		/// <summary>
 		/// Идентификатор устройства

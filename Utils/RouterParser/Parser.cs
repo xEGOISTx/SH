@@ -15,7 +15,6 @@ namespace RouterParser
 		private readonly string _login;
 		private readonly string _password;
 		private static WebView _webView;
-		//private static bool _isPreparigWebView = true;
 
 		public Parser(string ip,string login,string password)
 		{
@@ -33,6 +32,7 @@ namespace RouterParser
 
 		public async void LoadDeviceInfosAsync()
 		{
+
 			OperationResult authorizationResult = await Authorization();
 
 			_webView.LoadCompleted += WebView_LoadCompleted;
@@ -61,7 +61,6 @@ namespace RouterParser
 			{
 				string[] colStrs = str.Split(new string[] { "td" }, StringSplitOptions.RemoveEmptyEntries);
 				List<string> temp = new List<string>();
-
 
 				foreach (string colStr in colStrs)
 				{

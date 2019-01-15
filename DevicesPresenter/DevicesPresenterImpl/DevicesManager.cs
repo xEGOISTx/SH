@@ -23,17 +23,14 @@ namespace DevicesPresenter
 		#region Fields
 		private readonly IPAddress _aPDefaultIP = IPAddress.Parse("192.168.4.1");
 		private readonly IPAddress _host;
-		private readonly Dictionary<ushort, IDevice> _devices = new Dictionary<ushort, IDevice>();
-
-
-		//private WiFiAdapter _wifiAdapter;
-		//private readonly IPAddress _zeroIP = IPAddress.Parse("0.0.0.0");
-
-		//private readonly List<IDevice> _newDevices = new List<IDevice>();
+		//private readonly Dictionary<ushort, IDevice> _devices = new Dictionary<ushort, IDevice>();
+		private bool _loadDevicesIsComplite = true;
 		#endregion Fields
 
-		public DevicesManager()
+		public DevicesManager(IDeviceCommonList deviceCommonList)
 		{
+			Devices = deviceCommonList;
+
 			ConnectionSettings settings = new ConnectionSettings();
 			settings.Load();
 			ConnectionSettings = settings;
@@ -69,7 +66,9 @@ namespace DevicesPresenter
 			//_devices.Add(5, device);
 		}
 
-		public IReadOnlyDictionary<ushort,IDevice> Devices => _devices;
+		public IDeviceCommonList Devices { get; }
+
+		//public IReadOnlyDictionary<ushort,IDevice> Devices => _devices;
 
 		public IConnectionSettings ConnectionSettings { get; }
 
@@ -86,7 +85,7 @@ namespace DevicesPresenter
 			//получаем доступные девайсы
 			IEnumerable<WiFiAvailableNetwork> wifiAvailableDevices = await connector.GetAvailableDevicesAsAPAsync();
 
-			List<Device> newDevices = new List<Device>();
+			List<SwitchingDevice> newDevices = new List<SwitchingDevice>();
 
 			foreach (WiFiAvailableNetwork wifiDevice in wifiAvailableDevices)
 			{
@@ -115,10 +114,9 @@ namespace DevicesPresenter
 
 								if (sendRes)
 								{
-									Device device = new Device()
+									SwitchingDevice device = new SwitchingDevice(iP)
 									{
 										ID = id,
-										IP = iP,
 										FirmwareType = deviceInfo.FirmwareType,
 										Mac = deviceInfo.Mac,
 										Name = deviceInfo.Name,
@@ -128,7 +126,9 @@ namespace DevicesPresenter
 
 
 									newDevices.Add(device);
-									_devices.Add(device.ID, device);
+
+									SwitchesList switches = Devices.GetDevices<SwitchesList>();
+									switches.Add(device);
 								}
 							}
 						}
@@ -145,9 +145,53 @@ namespace DevicesPresenter
 			return true;
 		}
 
-		public async Task UpdateConnectedDevicesAsync()
+		public void SynchronizationWithDevicesAsync()
 		{
-			throw new NotImplementedException();
+			if (_loadDevicesIsComplite)
+			{
+				_loadDevicesIsComplite = false;
+				Parser parser = new Parser("http://192.168.1.254/", "admin", "admin");
+
+				parser.LoadDeviceInfosComplete += Parser_LoadDeviceInfosComplete;
+				parser.LoadDeviceInfosAsync();
+			}
+
+		}
+
+		private async void Parser_LoadDeviceInfosComplete(object sender, DeviceInfosEventArgs e)
+		{
+			await Task.Run(async () =>
+			{
+				foreach(RDeviceInfo deviceInfo in e.DeviceInfos)
+				{			
+					SwitchingDevice device = new SwitchingDevice(deviceInfo.Ip)
+					{
+						Name = deviceInfo.Name,
+						Mac = new SHBase.MacAddress(deviceInfo.Mac),
+						IsConnected = deviceInfo.IsConnected,
+						Description = deviceInfo.Name,			
+					};
+
+					Communicator communicator = new Communicator();
+					int id = await communicator.GetDeviceID(device);
+					if (id != -1)
+					{
+						device.ID = (ushort)id;
+
+						SwitchesList switches = Devices.GetDevices<SwitchesList>();
+
+						if (!switches.ContainsKey(device.ID))
+						{
+							//где-то тут загрузим задачи устройства
+
+							switches.Add(device);
+						}
+
+					}				
+				}			
+			});
+
+			OnLoadDevicesComplete();
 		}
 
 		private ushort GeneratedId()
@@ -170,5 +214,13 @@ namespace DevicesPresenter
 
 			return (ushort)id;
 		}
+
+		private void OnLoadDevicesComplete()
+		{
+			_loadDevicesIsComplite = true;
+			LoadDevicesComplete?.Invoke(this, new EventArgs());
+		}
+
+		public event EventHandler LoadDevicesComplete;
 	}
 }

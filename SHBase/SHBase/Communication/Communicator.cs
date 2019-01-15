@@ -49,6 +49,34 @@ namespace SHBase.Communication
 		}
 
 		/// <summary>
+		/// Получить ID устройства
+		/// </summary>
+		/// <param name="device"></param>
+		/// <returns></returns>
+		public async Task<int> GetDeviceID(IDeviceBase device)
+		{
+			return await Task.Run(async () =>
+			{
+				if (device != null && device.IP != null && device.IP != Consts.ZERO_IP)
+				{
+					OperationResult result = await SendToDevice(device.IP, CommandNames.GetID);
+
+					if(result.Success)
+					{
+						return ushort.Parse(result.ResponseMessage);
+					}
+					else
+					{
+						return -1;
+					}
+				}
+
+				return -1;
+			});
+
+		}
+
+		/// <summary>
 		/// Отправить устройству запрос
 		/// </summary>
 		/// <param name="ip"></param>

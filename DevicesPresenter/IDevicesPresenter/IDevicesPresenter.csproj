@@ -108,12 +108,15 @@
   <ItemGroup>
     <Compile Include="IActionGPIO.cs" />
     <Compile Include="IConnectionSettings.cs" />
+    <Compile Include="IDeviceBaseList.cs" />
+    <Compile Include="IDeviceCommonList.cs" />
     <Compile Include="IDeviceTask.cs" />
     <Compile Include="IDeviceEditor.cs" />
-    <Compile Include="IDevice.cs" />
+    <Compile Include="ISwitchingDevice.cs" />
     <Compile Include="IConnectionParams.cs" />
     <Compile Include="ILoader.cs" />
     <Compile Include="IDevicesManager.cs" />
+    <Compile Include="ISwitchesList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\IDevicesPresenter.rd.xml" />
   </ItemGroup>

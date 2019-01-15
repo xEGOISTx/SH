@@ -17,7 +17,7 @@ namespace SHMain.Main.ViewModels
 			DataManager.DataManager dataManager = new DataManager.DataManager();
 			dataManager.InitializeDatabase();
 			
-			DevicesVM = new DevicesViewModel(new DevicesPresenter.DevicesManager());
+			DevicesVM = new DevicesViewModel(new DevicesPresenter.DevicesManager(new DevicesPresenter.DeviceCommonList()));
 			GoToDevices = new RelayCommand(ExecuteGoToDevices);
 		}
  

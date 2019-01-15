@@ -63,7 +63,7 @@ namespace SHMain.Main.Views
 
 		private async void Button_Click_1(object sender, RoutedEventArgs e)
 		{
-			Parserrrrr();
+			//Parserrrrr();
 		}
 
 	}

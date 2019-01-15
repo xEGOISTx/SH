@@ -11,6 +11,7 @@ namespace SHBase.Communication
 		GPIOActions,
 		GetInfo,
 		GetIP,
+		GetID,
 		SetID,
 		ConnectionParams
 	}

@@ -11,10 +11,10 @@ namespace DevicesPresenterControls.ViewModels
 {
 	public class DeviceViewModel : BaseViewModel
 	{
-		private readonly IDevice _device;
+		private readonly ISwitchingDevice _device;
 		private string _description;
 
-		public DeviceViewModel(IDevice device)
+		public DeviceViewModel(ISwitchingDevice device)
 		{
 			_device = device;
 			Description = _device.Description;
