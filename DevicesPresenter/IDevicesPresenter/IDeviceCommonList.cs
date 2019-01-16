@@ -9,9 +9,6 @@ namespace DevicesPresenter
 {
 	public interface IDeviceCommonList
 	{
-		Task<bool> Load();
-
 		DeviceListType GetDevices<DeviceListType>();
-
 	}
 }

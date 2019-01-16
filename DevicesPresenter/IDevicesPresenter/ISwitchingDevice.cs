@@ -16,7 +16,7 @@ namespace DevicesPresenter
 		/// <summary>
 		/// Идентификатор устройства
 		/// </summary>
-		ushort ID { get; }
+		//ushort ID { get; }
 
 		/// <summary>
 		/// Описание

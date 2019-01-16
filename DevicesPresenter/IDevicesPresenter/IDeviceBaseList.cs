@@ -8,7 +8,9 @@ using System.Threading.Tasks;
 
 namespace DevicesPresenter
 {
-	public interface IDeviceBaseList 
+	public interface IDeviceBaseList<DeviceType>  : IReadOnlyDictionary<int, DeviceType>
+		where DeviceType : IDeviceBase
 	{
+
 	}
 }

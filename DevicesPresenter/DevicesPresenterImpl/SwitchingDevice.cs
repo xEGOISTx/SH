@@ -20,7 +20,7 @@ namespace DevicesPresenter
 		}
 		
 		#region Properties
-		public ushort ID { get; set; }
+		public int ID { get; set; }
 
 		/// <summary>
 		/// Тип прошивки  

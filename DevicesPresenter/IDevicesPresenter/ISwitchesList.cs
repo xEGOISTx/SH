@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DevicesPresenter
 {
-	public interface ISwitchesList : IDeviceBaseList , IReadOnlyDictionary<ushort, ISwitchingDevice>
+	public interface ISwitchesList : IDeviceBaseList<ISwitchingDevice> 
 	{
 	}
 }

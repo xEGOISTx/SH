@@ -9,11 +9,12 @@ namespace DevicesPresenter
 {
 	public class DeviceCommonList : IDeviceCommonList
 	{
-		private readonly List<IDeviceBaseList> _devices = new List<IDeviceBaseList>();
+		private readonly List<object> _devices = new List<object>();
 
 		public DeviceCommonList()
 		{
-			_devices.Add(new SwitchesList());
+			Add(new SwitchesList());
+
 		}
 
 		public DeviceListType GetDevices<DeviceListType>()
@@ -21,9 +22,10 @@ namespace DevicesPresenter
 			return (DeviceListType)_devices.Where(d => d is DeviceListType).FirstOrDefault();
 		}
 
-		public Task<bool> Load()
+		public void Add<T>(IDeviceBaseList<T> deviceList )
+			where T : IDeviceBase
 		{
-			throw new NotImplementedException();
+			_devices.Add(deviceList);
 		}
 	}
 }

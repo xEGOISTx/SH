@@ -54,7 +54,10 @@ namespace DevicesPresenter
 		public bool ApplyAndSaveChanges(ISwitchingDevice deviceCopy)
 		{
 			Loader loader = new Loader();
-			SwitchingDevice originalDevice = _devicesManager.Devices.GetDevices<SwitchesList>()[deviceCopy.ID] as SwitchingDevice;
+
+			ISwitchesList switches = _devicesManager.Devices.GetDevices<ISwitchesList>();
+
+			SwitchingDevice originalDevice = switches[deviceCopy.ID] as SwitchingDevice;
 			List<IDeviceTask> newTasks = new List<IDeviceTask>();
 			List<IDeviceTask> changedTasks = new List<IDeviceTask>();
 

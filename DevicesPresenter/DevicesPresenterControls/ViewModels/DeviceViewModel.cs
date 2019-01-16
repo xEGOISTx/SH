@@ -21,7 +21,7 @@ namespace DevicesPresenterControls.ViewModels
 			RefreshTasks();			
 		}
 
-		public ushort ID => _device.ID;
+		public ushort ID => (ushort)_device.ID;
 		public string Name => _device.Name;
 		public string FirmwareType => _device.FirmwareType.ToString();
 		public string Mac => _device.Mac.ToString();

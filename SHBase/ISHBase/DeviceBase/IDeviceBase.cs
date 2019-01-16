@@ -16,6 +16,8 @@ namespace SHBase.DeviceBase
 
 	public interface IDeviceBase
 	{
+		int ID { get; }
+
 		string Name { get; }
 
 		bool IsConnected { get; }
