@@ -5,7 +5,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Web.Http;
-using SHBase.DeviceBase;
+using SHBase.DevicesBaseComponents;
 using SHBase.Communication;
 
 namespace DevicesPresenter

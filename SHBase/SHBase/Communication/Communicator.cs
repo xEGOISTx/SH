@@ -1,4 +1,4 @@
-﻿using SHBase.DeviceBase;
+﻿using SHBase.DevicesBaseComponents;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,14 +21,14 @@ namespace SHBase.Communication
 		/// <param name="task">Задача</param>
 		/// <returns></returns>
 		public async Task<bool> SendGPIOTask<T>(IGPIOActionTask<T> task)
-			where T: IGPIOAction
+			where T: IBaseGPIOAction
 		{
 			return await Task.Run(async () =>
 			{
 				if(task != null && task.OwnerIP != null && task.OwnerIP != Consts.ZERO_IP)
 				{
 					List<ICommandParameter> content = new List<ICommandParameter>();
-					foreach (IGPIOAction gPIOAction in task.Actions)
+					foreach (IBaseGPIOAction gPIOAction in task.Actions)
 					{
 						if (gPIOAction.Mode != GPIOMode.NotDefined && gPIOAction.Level != GPIOLevel.NotDefined)
 						{

@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using RouterParser;
 using SHBase;
-using SHBase.DeviceBase;
+using SHBase.DevicesBaseComponents;
 
 namespace DevicesPresenter
 {

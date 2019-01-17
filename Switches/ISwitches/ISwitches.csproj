@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{56A497FA-3A32-49F2-95DD-66D2D24B3D9D}</ProjectGuid>
+    <ProjectGuid>{2C13FEAB-0284-45D6-A4D2-9E5B58D68EBE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SHBase</RootNamespace>
-    <AssemblyName>SHBase</AssemblyName>
+    <RootNamespace>ISwitches</RootNamespace>
+    <AssemblyName>ISwitches</AssemblyName>
     <DefaultLanguage>ru-RU</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.17134.0</TargetPlatformVersion>
@@ -120,30 +120,24 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Communication\CommandNames.cs" />
-    <Compile Include="Communication\Communicator.cs" />
-    <Compile Include="Communication\CommunicatorAP.cs" />
-    <Compile Include="Communication\ConnectorByWiFi.cs" />
-    <Compile Include="DeviceBase\CommandParameter.cs" />
-    <Compile Include="DeviceBase\DeviceBaseInfo.cs" />
-    <Compile Include="Communication\OperationResult.cs" />
-    <Compile Include="Consts.cs" />
+    <Compile Include="IGPIOAction.cs" />
+    <Compile Include="SwitchesOutlets\ISwitchesAndOutletsList.cs" />
+    <Compile Include="SwitchesOutlets\ISwitchOutlet.cs" />
+    <Compile Include="SwitchesOutlets\ISwitchOutletTask.cs" />
+    <Compile Include="SwitchesOutlets\ISwitchOutletTaskList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Properties\SHBase.rd.xml" />
+    <EmbeddedResource Include="Properties\ISwitches.rd.xml" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>6.2.2</Version>
+      <Version>6.2.3</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ISHBase\ISHBase.csproj">
+    <ProjectReference Include="..\..\SHBase\ISHBase\ISHBase.csproj">
       <Project>{31e8465c-6bc2-46d5-834d-0e940c3c33ea}</Project>
       <Name>ISHBase</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="DevicesBaseComponents\" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

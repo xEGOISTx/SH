@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using SHBase.DeviceBase;
+using SHBase.DevicesBaseComponents;
 
 namespace DevicesPresenter
 {

@@ -14,7 +14,7 @@ using System.IO;
 using Windows.Networking;
 using Windows.Networking.Connectivity;
 using SHBase.Communication;
-using SHBase.DeviceBase;
+using SHBase.DevicesBaseComponents;
 
 namespace DevicesPresenter
 {

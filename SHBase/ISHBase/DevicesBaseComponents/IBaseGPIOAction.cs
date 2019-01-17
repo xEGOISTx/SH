@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SHBase.DeviceBase
+namespace SHBase.DevicesBaseComponents
 {
 	/// <summary>
 	/// Режим GPIO
@@ -26,7 +26,7 @@ namespace SHBase.DeviceBase
 		NotDefined
 	}
 
-	public interface IGPIOAction
+	public interface IBaseGPIOAction
 	{
 		byte PinNumber { get; }
 

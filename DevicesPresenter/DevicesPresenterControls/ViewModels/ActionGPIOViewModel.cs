@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UWPHelper;
-using SHBase.DeviceBase;
+using SHBase.DevicesBaseComponents;
 
 namespace DevicesPresenterControls.ViewModels
 {

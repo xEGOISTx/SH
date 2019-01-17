@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SHBase.DeviceBase
+namespace SHBase.DevicesBaseComponents
 {
 	public interface IGPIOActionTask<ActionType> : IDeviceBaseTask
-		where ActionType: IGPIOAction
+		where ActionType: IBaseGPIOAction
 	{
 		IEnumerable<ActionType> Actions { get; }
 	}

@@ -1,7 +1,7 @@
-﻿using SHBase.DeviceBase;
+﻿using SHBase.DevicesBaseComponents;
 using System.Net;
 
-namespace SHBase.DeviceBase
+namespace SHBase.DevicesBaseComponents
 {
 	/// <summary>
 	/// Базовая инфа устройства
