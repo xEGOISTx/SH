@@ -1,21 +1,18 @@
 ﻿using SHBase.DevicesBaseComponents;
 
-namespace ISwitches.SwitchesOutlets
+namespace Switches.SwitchesOutlets
 {
-	public enum CurrentState
+	public enum TaskType
 	{
-		TurnedOn,
-		TurnedOff
+		TurnOn,
+		TurnOff
 	}
 
 	/// <summary>
 	/// Задача для обычного выключателя или розетки
 	/// </summary>
-	public interface ISwitchOutletTask : IGPIOActionTask<IGPIOAction>
+	public interface ISwitchOutletTask : IBaseGPIOActionTask<IGPIOAction>
 	{
-		/// <summary>
-		/// Текущее состояние 
-		/// </summary>
-		CurrentState State { get; }
+		TaskType TaskType { get; }
 	}
 }

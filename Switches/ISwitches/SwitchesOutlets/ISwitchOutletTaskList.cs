@@ -1,11 +1,11 @@
 ﻿using SHBase.BaseContainers;
 
-namespace ISwitches.SwitchesOutlets
+namespace Switches.SwitchesOutlets
 {
 	/// <summary>
 	/// Список задач для обычного выулючателя или розетки
 	/// </summary>
-	public interface ISwitchOutletTaskList : IContainer<int, ISwitchOutletTask>
+	public interface ISwitchOutletTaskList : IContainer<TaskType, ISwitchOutletTask>
 	{		
 	}
 }

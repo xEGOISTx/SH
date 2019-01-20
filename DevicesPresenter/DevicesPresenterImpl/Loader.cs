@@ -32,7 +32,7 @@ namespace DevicesPresenter
 				};
 
 				DataManager.DataManager dB = new DataManager.DataManager();
-				dB.SaveDevice(dbDeviceInfo);
+				//dB.SaveSwitches(dbDeviceInfo);
 
 				return true;
 			});
@@ -41,8 +41,8 @@ namespace DevicesPresenter
 
 		public List<int> GetDevicesIDs()
 		{
-			DataManager.DataManager dB = new DataManager.DataManager();
-			return dB.GetDevicesIDs();
+			//DataManager.DataManager dB = new DataManager.DataManager();
+			return new List<int>(); //dB.GetDevicesIDs();
 		}
 
 		/// <summary>

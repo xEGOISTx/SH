@@ -1,0 +1,85 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Threading.Tasks;
+using SHBase;
+using SHBase.DevicesBaseComponents;
+
+namespace Switches.SwitchesOutlets
+{
+	public class SwitchOutlet : ISwitchOutlet
+	{
+		private SwitchOutletTaskList _tasks;
+		private IPAddress _IP;
+
+		public SwitchOutlet(MacAddress mac, FirmwareType firmwareType, DeviceType deviceType)
+		{
+			Mac = mac;
+			FirmwareType = firmwareType;
+			DeviceType = deviceType;
+
+			_tasks = new SwitchOutletTaskList(firmwareType);
+		}
+
+
+		public CurrentState State { get; set; }
+
+		public string Description { get; set; }
+
+		public ISwitchOutletTaskList Tasks => _tasks;
+
+		public int ID { get; set; }
+
+		public string Name { get; set; }
+
+		public bool IsConnected { get; set; }
+
+		public IPAddress IP
+		{
+			get { return _IP; }
+			set
+			{
+				_IP = value;
+
+				foreach(ISwitchOutletTask task in _tasks)
+				{
+					(task as SwitchOutletTask).OwnerIP = value;
+				}
+			}
+		}
+
+
+		public MacAddress Mac { get; set; }
+
+		public DeviceType DeviceType { get; }
+
+		public FirmwareType FirmwareType { get; }
+
+		/// <summary>
+		/// Включить
+		/// </summary>
+		public void TurnOn()
+		{
+			ISwitchOutletTask turnOn = _tasks.GetByKey(TaskType.TurnOn);
+			turnOn?.Execute();
+		}
+
+		/// <summary>
+		/// Выключить
+		/// </summary>
+		public void TurnOff()
+		{
+			ISwitchOutletTask turnOff = _tasks.GetByKey(TaskType.TurnOn);
+			turnOff?.Execute();
+		}
+
+		private void OnConnectedStatysChange()
+		{
+			ConnectedStatysChange?.Invoke(this, new EventArgs());
+		}
+
+		public event EventHandler ConnectedStatysChange;
+	}
+}

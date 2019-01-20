@@ -10,7 +10,9 @@ namespace DataManager
 	{
 		public int Id { get; set; }
 
-		//public int DeviceType { get; set; }
+		public string MacAddress { get; set; }
+
+		public int DeviceType { get; set; }
 
 		public int FirmwareType { get; set; }
 

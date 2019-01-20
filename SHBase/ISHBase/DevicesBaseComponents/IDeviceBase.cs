@@ -14,6 +14,22 @@ namespace SHBase.DevicesBaseComponents
 		ESP_8266
 	}
 
+	/// <summary>
+	/// Тип устройства
+	/// </summary>
+	public enum DeviceType
+	{
+		/// <summary>
+		/// Выключатель
+		/// </summary>
+		Switch = 1,
+
+		/// <summary>
+		/// Розетка
+		/// </summary>
+		Outlet
+	}
+
 	public interface IDeviceBase
 	{
 		int ID { get; }
@@ -26,6 +42,10 @@ namespace SHBase.DevicesBaseComponents
 
 		MacAddress Mac { get; }
 
+		DeviceType DeviceType { get; }
+
 		FirmwareType FirmwareType { get; }
+
+		event EventHandler ConnectedStatysChange;
 	}
 }

@@ -10,7 +10,7 @@ namespace DevicesPresenter
 	/// <summary>
 	/// Интерфейс задачи для устройства
 	/// </summary>
-	public interface IDeviceTask : IGPIOActionTask<IActionGPIO>
+	public interface IDeviceTask : IBaseGPIOActionTask<IActionGPIO>
 	{
 		/// <summary>
 		/// Идентификатор задачи

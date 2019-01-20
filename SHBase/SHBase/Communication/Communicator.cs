@@ -20,7 +20,7 @@ namespace SHBase.Communication
 		/// <typeparam name="T">Тип действия</typeparam>
 		/// <param name="task">Задача</param>
 		/// <returns></returns>
-		public async Task<bool> SendGPIOTask<T>(IGPIOActionTask<T> task)
+		public async Task<bool> SendGPIOTask<T>(IBaseGPIOActionTask<T> task)
 			where T: IBaseGPIOAction
 		{
 			return await Task.Run(async () =>
@@ -74,6 +74,35 @@ namespace SHBase.Communication
 				return -1;
 			});
 
+		}
+
+		/// <summary>
+		/// Отпрпавить id устройству
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
+		public async Task<OperationResult> SendIdToDevice(int id , IDeviceBase device)
+		{
+			if (device != null && device.IP != null && device.IP != Consts.ZERO_IP)
+			{
+				byte[] bytes = BitConverter.GetBytes(id);
+				string byte1value = bytes[0].ToString();
+				string byte2value = bytes[1].ToString();
+
+				List<ICommandParameter> content = new List<ICommandParameter>
+				{
+					new CommandParameter("b1", byte1value),
+					new CommandParameter("b2", byte2value)
+				};
+
+				OperationResult result = await SendToDevice(device.IP, CommandNames.SetID, content);
+
+				return result;
+			}
+			else
+			{
+				return new OperationResult {Success = false,ErrorMessage = "Не задан IP" };
+			}
 		}
 
 		/// <summary>

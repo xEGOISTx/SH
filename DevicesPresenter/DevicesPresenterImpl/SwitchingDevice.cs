@@ -14,6 +14,8 @@ namespace DevicesPresenter
 	{
 		private readonly Dictionary<int, IDeviceTask> _tasks = new Dictionary<int, IDeviceTask>();
 
+		public event EventHandler ConnectedStatysChange;
+
 		public SwitchingDevice(IPAddress iPAddress)
 		{
 			IP = iPAddress;
@@ -53,6 +55,8 @@ namespace DevicesPresenter
 		public MacAddress Mac { get; set; }
 
 		public IEnumerable<IDeviceTask> Tasks => _tasks.Values;
+
+		public DeviceType DeviceType => throw new NotImplementedException();
 
 		#endregion Properties
 

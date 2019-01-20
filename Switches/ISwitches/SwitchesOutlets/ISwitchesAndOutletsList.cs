@@ -1,6 +1,6 @@
 ﻿using SHBase.DevicesBaseComponents;
 
-namespace ISwitches.SwitchesOutlets
+namespace Switches.SwitchesOutlets
 {
 	public interface ISwitchesAndOutletsList : IDeviceBaseList<ISwitchOutlet>
 	{

@@ -10,7 +10,7 @@ namespace DataManager
     public class DataManager
     {
 		private const string CONNECTION_STRING = "Filename=Data.db";
-		private const string DEVICES_TABLE = "Devices";
+		private const string SWITCHES_TABLE = "Switches";
 
 		public void InitializeDatabase()
 		{
@@ -19,10 +19,11 @@ namespace DataManager
 				db.Open();
 
 				string tableCommand = "CREATE TABLE IF NOT " +
-					$"EXISTS {DEVICES_TABLE} (Id INTEGER NOT NULL UNIQUE PRIMARY KEY, " +
-					"DeviceType INTEGER NULL, " +
-					"FirmwareType INTEGER NULL, " +
-					"Description NVARCHAR(2048) NULL)";
+					$"EXISTS {SWITCHES_TABLE} (Id INTEGER NOT NULL UNIQUE PRIMARY KEY, " +
+					"MacAddress VARCHAR(17) NOT NULL, " +
+					"DeviceType INTEGER NOT NULL, " +
+					"FirmwareType INTEGER NOT NULL, " +
+					"Description NVARCHAR(100) NULL)";
 
 				SqliteCommand createTable = new SqliteCommand(tableCommand, db);
 
@@ -31,8 +32,11 @@ namespace DataManager
 		}
 
 
-		public void SaveDevice(DBDeviceInfo dBDeviceInfo)
+		public ResultOperationSave SaveSwitches(DBDeviceInfo[] deviceInfos)
 		{
+			ResultOperationSave result = new ResultOperationSave();
+			List<int> newIDs = GenerateIDs(deviceInfos, SWITCHES_TABLE);
+
 			using (SqliteConnection db = new SqliteConnection(CONNECTION_STRING))
 			{
 				db.Open();
@@ -40,20 +44,101 @@ namespace DataManager
 				SqliteCommand insertDeviceCommand = new SqliteCommand();
 				insertDeviceCommand.Connection = db;
 
-				insertDeviceCommand.CommandText = $"INSERT INTO {DEVICES_TABLE} VALUES (@Id, @FirmwareType, @Description);";
-				insertDeviceCommand.Parameters.AddWithValue("@Id", dBDeviceInfo.Id);
-				insertDeviceCommand.Parameters.AddWithValue("@FirmwareType", dBDeviceInfo.FirmwareType);
-				insertDeviceCommand.Parameters.AddWithValue("@Description", dBDeviceInfo.Description);
+				insertDeviceCommand.CommandText = $"INSERT INTO {SWITCHES_TABLE} VALUES (@Id, @MacAddress, @DeviceType, @FirmwareType, @Description);";
+				insertDeviceCommand.Parameters.Add(new SqliteParameter("@Id", SqliteType.Integer));
+				insertDeviceCommand.Parameters.Add(new SqliteParameter("@MacAddress", SqliteType.Text));
+				insertDeviceCommand.Parameters.Add(new SqliteParameter("@DeviceType", SqliteType.Integer));
+				insertDeviceCommand.Parameters.Add(new SqliteParameter("@FirmwareType", SqliteType.Integer));
+				insertDeviceCommand.Parameters.Add(new SqliteParameter("@Description", SqliteType.Text));
 
-				insertDeviceCommand.ExecuteNonQuery();
+				try
+				{
+					foreach (DBDeviceInfo deviceInfo in deviceInfos)
+					{
+						insertDeviceCommand.Parameters[0].Value = deviceInfo.Id;
+						insertDeviceCommand.Parameters[1].Value = deviceInfo.MacAddress;
+						insertDeviceCommand.Parameters[2].Value = deviceInfo.DeviceType;
+						insertDeviceCommand.Parameters[3].Value = deviceInfo.FirmwareType;
+						insertDeviceCommand.Parameters[4].Value = deviceInfo.Description;
+
+						insertDeviceCommand.ExecuteNonQuery();
+
+					}
+				}
+				catch(Exception ex)
+				{
+					result.ErrorText = ex.Message;
+				}
+
+				if (result.ErrorText == null)
+				{
+					result.Success = true;
+					result.IDs = newIDs;
+				}
 
 				db.Close();
 			};
+
+			return result;
 		}
 
-		public List<int> GetDevicesIDs()
+		private List<int> GenerateIDs(DBDeviceInfo[] deviceInfos, string tableName)
 		{
-			List<int> iDs = new List<int>();
+			List<int> newIDs = new List<int>();
+			Dictionary<int, int> oldIDs = GetDevicesIDs(tableName);
+
+			int howManyIDs = deviceInfos.Length;
+
+			//если записи не первые
+			if (oldIDs.Count > 0)
+			{
+				for (int i = 1; i < oldIDs.Last().Value; i++)
+				{
+					if (newIDs.Count != howManyIDs)
+					{
+						if (!oldIDs.ContainsKey(i))
+						{
+							newIDs.Add(i);
+						}
+					}
+					else
+					{
+						break;
+					}
+				}
+			}
+			else
+			{
+				newIDs.Add(1);
+			}
+
+			//если не добавленно необходимое кол-во IDs
+			if (newIDs.Count != howManyIDs)
+			{
+				//сколько осталось добавить
+				int leftAdd = howManyIDs - newIDs.Count;
+
+				//последний id
+				int lastIdItem = oldIDs.Count > 0 ? oldIDs.Values.Last() : newIDs.Last();
+
+				for (int i = 1; i <= leftAdd; i++)
+				{
+					int id = lastIdItem + i;
+					newIDs.Add(id);
+				}
+			}
+
+			for (int i = 0; i< deviceInfos.Length; i++)
+			{
+				deviceInfos[i].Id = newIDs[i];
+			}
+
+			return newIDs;
+		}
+
+		private Dictionary<int, int> GetDevicesIDs(string tableName)
+		{
+			Dictionary<int,int> iDs = new Dictionary<int,int>();
 
 			using (SqliteConnection db = new SqliteConnection(CONNECTION_STRING))
 			{
@@ -62,13 +147,13 @@ namespace DataManager
 				SqliteCommand getIDs = new SqliteCommand();
 				getIDs.Connection = db;
 
-				getIDs.CommandText = $"SELECT Id FROM {DEVICES_TABLE} ORDER BY Id";
+				getIDs.CommandText = $"SELECT Id FROM {tableName} ORDER BY Id";
 
 				SqliteDataReader reader = getIDs.ExecuteReader();
 
 				while(reader.Read())
 				{
-					iDs.Add(reader.GetInt32(0));
+					iDs.Add(reader.GetInt32(0), reader.GetInt32(0));
 				}
 
 				db.Close();

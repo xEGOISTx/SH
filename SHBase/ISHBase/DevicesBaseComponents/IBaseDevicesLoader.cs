@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace SHBase.DevicesBaseComponents
 {
-	public interface IBaseGPIOActionTask<ActionType> : IDeviceBaseTask
-		where ActionType: IBaseGPIOAction
+	public interface IBaseDevicesLoader
 	{
-		IEnumerable<ActionType> Actions { get; }
+		Task<bool> Load();
+
+		Task<bool> RenameDevice(IDeviceBase device);
 	}
 }

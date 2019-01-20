@@ -1,13 +1,12 @@
 ﻿using SHBase.DevicesBaseComponents;
 
-namespace ISwitches.SwitchesOutlets
+namespace Switches.SwitchesOutlets
 {
-	public enum SwitchOutletType
+	public enum CurrentState
 	{
-		Switch,
-		Outlet
+		TurnedOn,
+		TurnedOff
 	}
-
 
 	/// <summary>
 	/// Обычный переключатель или розетка
@@ -15,9 +14,9 @@ namespace ISwitches.SwitchesOutlets
 	public interface ISwitchOutlet : IDeviceBase
 	{
 		/// <summary>
-		/// Тип. Выключатель или розетка
+		/// Текущее состояние 
 		/// </summary>
-		SwitchOutletType Type { get; }
+		CurrentState State { get; }
 
 		/// <summary>
 		/// Описание
@@ -28,5 +27,15 @@ namespace ISwitches.SwitchesOutlets
 		/// Задачи
 		/// </summary>
 		ISwitchOutletTaskList Tasks { get; }
+
+		/// <summary>
+		/// Включить
+		/// </summary>
+		void TurnOn();
+
+		/// <summary>
+		/// Выключить
+		/// </summary>
+		void TurnOff();
 	}
 }
