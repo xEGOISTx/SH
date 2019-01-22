@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace Switches.SwitchesOutlets
 {
-	public interface ISwithes : IDevices
+	public interface ISwithes
 	{
-		ISwitchesAndOutletsList SwitchesAndOutletsList { get; }
+		ISwitchesAndOutletsList SwitchesAndOutlets { get; }
 	}
 }

@@ -54,5 +54,7 @@ namespace Switches.SwitchesOutlets
 		{
 			return new SwitchesAndOutletsLoader();
 		}
+
+
 	}
 }

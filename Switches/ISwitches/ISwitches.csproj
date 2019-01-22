@@ -136,6 +136,10 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\DataManager\IDataManager\IDataManager.csproj">
+      <Project>{d47ad259-430a-4a84-8ac2-fced700fb4ad}</Project>
+      <Name>IDataManager</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\SHBase\ISHBase\ISHBase.csproj">
       <Project>{31e8465c-6bc2-46d5-834d-0e940c3c33ea}</Project>
       <Name>ISHBase</Name>

@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DataManager
+﻿namespace DataManager
 {
-	public class ResultOperationSave : DBOperationResult
+	internal class ResultOperationSave : DBOperationResult, IResultOperationSave
 	{
-		public IEnumerable<int> IDs { get; set; }
+		public int[] NewIDs { get; set; } = new int[0];
 	}
 }

@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DataManager
+﻿namespace DataManager
 {
-	public class DBOperationResult
+	internal class DBOperationResult : IDBOperationResult
 	{
 		public bool Success { get; set; }
 

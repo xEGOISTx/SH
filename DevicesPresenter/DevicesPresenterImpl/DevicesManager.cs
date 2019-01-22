@@ -182,7 +182,7 @@ namespace DevicesPresenter
 
 						if (!switches.ContainsKey(device.ID))
 						{
-							//где-то тут загрузим задачи устройства
+
 
 							switches.Add(device);
 						}

@@ -9,49 +9,31 @@ using DataManager;
 namespace Switches.SwitchesOutlets
 {
 	public class SwitchesAndOutletsLoader : ISwitchesAndOutletsLoader
-	{		
-		public async Task<bool> Load()
-		{
-			throw new NotImplementedException();
-		}
+	{
+		private readonly DataManager.DataManager _dataManager = new DataManager.DataManager();
 
-		public async Task<bool> RenameDevice(IDeviceBase device)
+		public async Task<IResultOperationLoad> LoadDevices()
 		{
-			throw new NotImplementedException();
-		}
-
-		public async Task<int[]> SaveDevices(IEnumerable<ISwitchOutlet> devices)
-		{
-			//TODO: сделать интерфейсы для DataManag и передавать резултат операции дальше 
 			return await Task.Run(() =>
 			{
-				//сохраняем
-				DataManager.DataManager dataManager = new DataManager.DataManager();
-				DBDeviceInfo[] deviceInfos = MakeInfos(devices);
-				ResultOperationSave result = dataManager.SaveSwitches(deviceInfos);
-
-				return result.IDs.ToArray();
+				return _dataManager.Switches.LoadDevices();
 			});
 		}
 
-		private DBDeviceInfo[] MakeInfos(IEnumerable<ISwitchOutlet> devices)
+		public async Task<IDBOperationResult> RenameDevice(IDeviceInfo device)
 		{
-			List<DBDeviceInfo> deviceInfos = new List<DBDeviceInfo>();
-
-			foreach(ISwitchOutlet device in devices)
+			return await Task.Run(() =>
 			{
-				DBDeviceInfo deviceInfo = new DBDeviceInfo
-				{
-					Description = device.Description,
-					DeviceType = (int)device.DeviceType,
-					FirmwareType = (int)device.FirmwareType,
-					MacAddress = device.Mac.ToString()
-				};
+				return _dataManager.Switches.RenameDevice(device);
+			});
+		}
 
-				deviceInfos.Add(deviceInfo);
-			}
-
-			return deviceInfos.ToArray();
+		public async Task<IResultOperationSave> SaveDevices(IDeviceInfo[] devices)
+		{
+			return await Task.Run(() =>
+			{
+				return _dataManager.Switches.SaveDevices(devices);
+			});
 		}
 	}
 }

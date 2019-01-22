@@ -11,7 +11,8 @@ namespace DevicesPresenter
 	public interface IDevicesManager
 	{
 
-		//IReadOnlyDictionary<ushort,IDevice> Devices { get; }
+
+
 
 		IDeviceCommonList Devices { get; }
 
@@ -25,14 +26,5 @@ namespace DevicesPresenter
 
 		event EventHandler LoadDevicesComplete;
 
-
-		//Task<IEnumerable<WiFiAvailableNetwork>> GetAvailableDevices(string ssid);
-
-		//Task<bool> ConnectAndSendConnectionSettingAsync(IEnumerable<WiFiAvailableNetwork> availableNetworks, 
-		//	IConnectionParams deviceConnectionParams, IConnectionParams routerConnectionParams);
-
-		//Task<bool> SendIdTo(IPAddress iPAddress, ushort id);
-
-		//Task<ushort> GetId(IPAddress iPAddress);
 		}
 }

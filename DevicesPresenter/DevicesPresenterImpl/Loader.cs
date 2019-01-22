@@ -24,9 +24,9 @@ namespace DevicesPresenter
 		{
 			return await Task.Run(() =>
 			{
-				DBDeviceInfo dbDeviceInfo = new DBDeviceInfo
+				DeviceInfo dbDeviceInfo = new DeviceInfo
 				{
-					Id = device.ID,
+					ID = device.ID,
 					Description = device.Description,
 					FirmwareType = (int)device.FirmwareType,					
 				};

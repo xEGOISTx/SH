@@ -13,6 +13,7 @@ namespace Switches.SwitchesOutlets
 	{
 		private SwitchOutletTaskList _tasks;
 		private IPAddress _IP;
+		private bool _isConnected;
 
 		public SwitchOutlet(MacAddress mac, FirmwareType firmwareType, DeviceType deviceType)
 		{
@@ -34,7 +35,19 @@ namespace Switches.SwitchesOutlets
 
 		public string Name { get; set; }
 
-		public bool IsConnected { get; set; }
+		public bool IsConnected
+		{
+			get { return _isConnected; }
+			set
+			{
+				if(_isConnected != value)
+				{
+					_isConnected = value;
+					OnConnectedStatysChange();
+				}
+			}
+		}
+
 
 		public IPAddress IP
 		{
