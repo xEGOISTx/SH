@@ -7,6 +7,8 @@ using UWPHelper;
 using DevicesPresenterControls.ViewModels;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml;
+using DevicesPresenter;
+
 
 namespace SHMain.Main.ViewModels
 {
@@ -16,15 +18,39 @@ namespace SHMain.Main.ViewModels
 		{
 			DataManager.DataManager dataManager = new DataManager.DataManager();
 			dataManager.InitializeDatabase();
-			
-			DevicesVM = new DevicesViewModel(new DevicesPresenter.DevicesManager(new DevicesPresenter.DeviceCommonList()));
+			Init();
+			//DeviceCommonList deviceCommonList = new DeviceCommonList();
+			//DevicesManager devicesManager = new DevicesManager(deviceCommonList);
 
-			GoToDevices = new RelayCommand(ExecuteGoToDevices);
+
+			//DevicesVM = new DevicesViewModel(new DevicesPresenter.DevicesManagerOld(new DevicesPresenter.DeviceCommonListOld()));
+
+			//GoToDevices = new RelayCommand(ExecuteGoToDevices);
 		}
  
-		public DevicesViewModel DevicesVM { get;private set; }
+
+		private async void Init()
+		{
+			DeviceCommonList deviceCommonList = new DeviceCommonList();
+			DevicesManager devicesManager = new DevicesManager(deviceCommonList);
+
+			bool loadResult = await devicesManager.LoadDevicesAsync();
+
+			if(loadResult)
+			{
+				bool synchronizationResult =  await devicesManager.SynchronizationWithDevicesAsync();
+
+				if (synchronizationResult)
+				{
+					//DevicesViewModel devicesVM = new DevicesViewModel();
+					//(Window.Current.Content as Frame).Navigate(typeof(DevicesPresenterControls.Views.DevicesView), DevicesVM);
+				}
+			}
+		}
 
 
+
+		public DevicesViewModel DevicesVM { get; private set; }
 		public RelayCommand GoToDevices { get; private set; }
 		private void ExecuteGoToDevices(object param)
 		{

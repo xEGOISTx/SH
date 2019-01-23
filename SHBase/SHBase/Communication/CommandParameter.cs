@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SHBase.DevicesBaseComponents
+namespace SHBase.Communication
 {
-	internal class CommandParameter : ICommandParameter
+	internal class CommandParameter
 	{
 		public CommandParameter(string name,string value)
 		{

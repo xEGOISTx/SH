@@ -14,17 +14,17 @@ namespace DevicesPresenterControls.ViewModels
 {
 	public class DevicesViewModel : BaseViewModel
 	{
-		private readonly IDevicesManager _devicesManager;
+		private readonly IDevicesManagerOld _devicesManager;
 		private ConnectionParamsViewModel _connectionParamsVM;
 		private DeviceViewModel _selectedDevice;
 
 		public List<DeviceViewModel> Devices { get; private set; } = new List<DeviceViewModel>();
 
-		public DevicesViewModel(IDevicesManager devicesManager)
+		public DevicesViewModel(IDevicesManagerOld devicesManager)
 		{
 			_devicesManager = devicesManager;
 			_devicesManager.LoadDevicesComplete += DevicesManager_LoadDevicesComplete;
-			_devicesManager.SynchronizationWithDevicesAsync();
+			//_devicesManager.SynchronizationWithDevicesAsync();
 
 
 			FindAndConnect = new RelayCommand(ExecuteFindAndConnect);

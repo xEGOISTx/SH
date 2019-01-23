@@ -124,10 +124,11 @@
     <Compile Include="Communication\Communicator.cs" />
     <Compile Include="Communication\CommunicatorAP.cs" />
     <Compile Include="Communication\ConnectorByWiFi.cs" />
-    <Compile Include="DeviceBase\CommandParameter.cs" />
-    <Compile Include="DeviceBase\DeviceBaseInfo.cs" />
+    <Compile Include="Communication\CommandParameter.cs" />
+    <Compile Include="DevicesBaseComponents\DeviceBaseInfo.cs" />
     <Compile Include="Communication\OperationResult.cs" />
     <Compile Include="Consts.cs" />
+    <Compile Include="DevicesBaseComponents\DeviceCommonBaseList.cs" />
     <Compile Include="DevicesBaseComponents\Devices.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\SHBase.rd.xml" />

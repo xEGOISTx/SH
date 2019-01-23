@@ -29,7 +29,7 @@ namespace SHBase.DevicesBaseComponents
 		/// <summary>
 		/// Загрузить устройства
 		/// </summary>
-		public abstract void Load();
+		public abstract Task<bool> Load();
 
 		/// <summary>
 		/// Синхронизация с подключенными к роутеру устройствами. Предварительно должна быть произведена загрузка(метод Load)

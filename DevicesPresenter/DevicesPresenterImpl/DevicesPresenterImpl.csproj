@@ -110,12 +110,14 @@
     <Compile Include="ConnectionParams.cs" />
     <Compile Include="ConnectionSettings.cs" />
     <Compile Include="DeviceBaseList.cs" />
-    <Compile Include="SwitchingDevice.cs" />
     <Compile Include="DeviceCommonList.cs" />
+    <Compile Include="DevicesManager.cs" />
+    <Compile Include="SwitchingDevice.cs" />
+    <Compile Include="DeviceCommonListOld.cs" />
     <Compile Include="DeviceEditor.cs" />
     <Compile Include="DeviceTask.cs" />
     <Compile Include="Loader.cs" />
-    <Compile Include="DevicesManager.cs" />
+    <Compile Include="DevicesManagerOld.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SwitchesList.cs" />
     <Compile Include="VoiceControl.cs" />
@@ -138,6 +140,14 @@
     <ProjectReference Include="..\..\SHBase\SHBase\SHBase.csproj">
       <Project>{56a497fa-3a32-49f2-95dd-66d2d24b3d9d}</Project>
       <Name>SHBase</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Switches\ISwitches\ISwitches.csproj">
+      <Project>{2c13feab-0284-45d6-a4d2-9e5b58d68ebe}</Project>
+      <Name>ISwitches</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Switches\SwitchesImpl\SwitchesImpl.csproj">
+      <Project>{0f48f833-5a2c-4c19-85da-296a6ea5554c}</Project>
+      <Name>SwitchesImpl</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Utils\RouterParser\RouterParser.csproj">
       <Project>{537e7400-e8f3-485c-a746-97c83e3e6a9f}</Project>

@@ -127,7 +127,7 @@
     <Compile Include="SwitchesOutlets\ISwitchOutletTask.cs" />
     <Compile Include="SwitchesOutlets\ISwitchOutletTaskList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SwitchesOutlets\ISwithes.cs" />
+    <Compile Include="SwitchesOutlets\ISwitches.cs" />
     <EmbeddedResource Include="Properties\ISwitches.rd.xml" />
   </ItemGroup>
   <ItemGroup>

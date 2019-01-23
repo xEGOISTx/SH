@@ -10,7 +10,7 @@ using SHBase.DevicesBaseComponents;
 
 namespace Switches.SwitchesOutlets
 {
-	public class Swithes : Devices, ISwithes
+	public class Switches : Devices, ISwitches
 	{
 		private readonly SwitchesAndOutletsList _switchesAndOutlets = new SwitchesAndOutletsList();
 
@@ -91,11 +91,11 @@ namespace Switches.SwitchesOutlets
 		/// <summary>
 		/// Занрузить устройства
 		/// </summary>
-		public override async void Load()
+		public override async Task<bool> Load()
 		{
 			if (!IsLoaded)
 			{
-				await Task.Run(async () =>
+				return await Task.Run(async () =>
 				{
 					ISwitchesAndOutletsLoader loader = _switchesAndOutlets.GetLoader();
 					IResultOperationLoad result = await loader.LoadDevices();
@@ -104,10 +104,16 @@ namespace Switches.SwitchesOutlets
 					{
 						IEnumerable<ISwitchOutlet> devices = ConvertToSwitchesOutlets(result.DeviceInfos);
 						_switchesAndOutlets.AddRange(devices);
+						IsLoaded = true;
+						return true;
 					}
 
-					IsLoaded = true;
+					return false;
 				});
+			}
+			else
+			{
+				return true;
 			}
 		}
 
@@ -124,6 +130,7 @@ namespace Switches.SwitchesOutlets
 				{
 					if (CheckForComplianceDevice(deviceFromRouter))
 					{
+						//TODO: ножно запросить у устройства где то тут 
 						SwitchOutlet device = (SwitchOutlet)_switchesAndOutlets.GetByKey(deviceFromRouter.ID);
 						if (device != null && CheckCorresponding(deviceFromRouter, device))
 						{

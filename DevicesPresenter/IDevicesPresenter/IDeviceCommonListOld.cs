@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Switches.SwitchesOutlets
+namespace DevicesPresenter
 {
-	public interface ISwithes
+	public interface IDeviceCommonListOld
 	{
-		ISwitchesAndOutletsList SwitchesAndOutlets { get; }
+		DeviceListType GetDevices<DeviceListType>();
 	}
 }

@@ -9,9 +9,9 @@ namespace DevicesPresenter
 	//TODO: разделить логику на редактирования устройсва и редактирования задач для устройства
 	internal class DeviceEditor : IDeviceEditor
 	{
-		private readonly IDevicesManager _devicesManager;
+		private readonly IDevicesManagerOld _devicesManager;
 
-		internal DeviceEditor(IDevicesManager devicesManager)
+		internal DeviceEditor(IDevicesManagerOld devicesManager)
 		{
 			_devicesManager = devicesManager;
 		}

@@ -109,13 +109,14 @@
     <Compile Include="IActionGPIO.cs" />
     <Compile Include="IConnectionSettings.cs" />
     <Compile Include="IDeviceBaseList.cs" />
-    <Compile Include="IDeviceCommonList.cs" />
+    <Compile Include="IDeviceCommonListOld.cs" />
+    <Compile Include="IDevicesManager.cs" />
     <Compile Include="IDeviceTask.cs" />
     <Compile Include="IDeviceEditor.cs" />
     <Compile Include="ISwitchingDevice.cs" />
     <Compile Include="IConnectionParams.cs" />
     <Compile Include="ILoader.cs" />
-    <Compile Include="IDevicesManager.cs" />
+    <Compile Include="IDevicesManagerOld.cs" />
     <Compile Include="ISwitchesList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\IDevicesPresenter.rd.xml" />
@@ -129,6 +130,10 @@
     <ProjectReference Include="..\..\SHBase\ISHBase\ISHBase.csproj">
       <Project>{31e8465c-6bc2-46d5-834d-0e940c3c33ea}</Project>
       <Name>ISHBase</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Switches\ISwitches\ISwitches.csproj">
+      <Project>{2c13feab-0284-45d6-a4d2-9e5b58d68ebe}</Project>
+      <Name>ISwitches</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

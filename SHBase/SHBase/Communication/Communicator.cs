@@ -27,7 +27,7 @@ namespace SHBase.Communication
 			{
 				if(task != null && task.OwnerIP != null && task.OwnerIP != Consts.ZERO_IP)
 				{
-					List<ICommandParameter> content = new List<ICommandParameter>();
+					List<CommandParameter> content = new List<CommandParameter>();
 					foreach (IBaseGPIOAction gPIOAction in task.Actions)
 					{
 						if (gPIOAction.Mode != GPIOMode.NotDefined && gPIOAction.Level != GPIOLevel.NotDefined)
@@ -89,7 +89,7 @@ namespace SHBase.Communication
 				string byte1value = bytes[0].ToString();
 				string byte2value = bytes[1].ToString();
 
-				List<ICommandParameter> content = new List<ICommandParameter>
+				List<CommandParameter> content = new List<CommandParameter>
 				{
 					new CommandParameter("b1", byte1value),
 					new CommandParameter("b2", byte2value)
@@ -112,7 +112,7 @@ namespace SHBase.Communication
 		/// <param name="commandName"></param>
 		/// <param name="content"></param>
 		/// <returns></returns>
-		internal async Task<OperationResult> SendToDevice(IPAddress ip,CommandNames commandName, IEnumerable<ICommandParameter> content = null)
+		internal async Task<OperationResult> SendToDevice(IPAddress ip,CommandNames commandName, IEnumerable<CommandParameter> content = null)
 		{
 			return await Task.Run(async () =>
 			{
