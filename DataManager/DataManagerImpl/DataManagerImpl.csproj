@@ -107,7 +107,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Consts.cs" />
-    <Compile Include="DataSwitches.cs" />
     <Compile Include="DeviceInfo.cs" />
     <Compile Include="DataManager.cs" />
     <Compile Include="DBOperationResult.cs" />

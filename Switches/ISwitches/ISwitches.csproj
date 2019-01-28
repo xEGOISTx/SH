@@ -122,12 +122,12 @@
   <ItemGroup>
     <Compile Include="IGPIOAction.cs" />
     <Compile Include="SwitchesOutlets\ISwitchesAndOutletsList.cs" />
-    <Compile Include="SwitchesOutlets\ISwitchesAndOutletsLoader.cs" />
+    <Compile Include="ISwitchesLoader.cs" />
     <Compile Include="SwitchesOutlets\ISwitchOutlet.cs" />
     <Compile Include="SwitchesOutlets\ISwitchOutletTask.cs" />
     <Compile Include="SwitchesOutlets\ISwitchOutletTaskList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SwitchesOutlets\ISwitches.cs" />
+    <Compile Include="ISwitches.cs" />
     <EmbeddedResource Include="Properties\ISwitches.rd.xml" />
   </ItemGroup>
   <ItemGroup>

@@ -125,7 +125,7 @@
     <Compile Include="Communication\CommunicatorAP.cs" />
     <Compile Include="Communication\ConnectorByWiFi.cs" />
     <Compile Include="Communication\CommandParameter.cs" />
-    <Compile Include="DevicesBaseComponents\DeviceBaseInfo.cs" />
+    <Compile Include="DevicesBaseComponents\DeviceBase.cs" />
     <Compile Include="Communication\OperationResult.cs" />
     <Compile Include="Consts.cs" />
     <Compile Include="DevicesBaseComponents\DeviceCommonBaseList.cs" />

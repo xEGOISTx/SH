@@ -31,8 +31,7 @@ namespace SHMain.Main.ViewModels
 
 		private async void Init()
 		{
-			DeviceCommonList deviceCommonList = new DeviceCommonList();
-			DevicesManager devicesManager = new DevicesManager(deviceCommonList);
+			DevicesManager devicesManager = new DevicesManager(new DeviceCommonList());
 
 			bool loadResult = await devicesManager.LoadDevicesAsync();
 

@@ -32,25 +32,28 @@ namespace SHBase.Communication
 		/// Возвращает базовую инфу об устройстве
 		/// </summary>
 		/// <returns></returns>
-		public async Task<DeviceBaseInfo> GetDeviceInfoFromDeviceAsAP()
+		public async Task<DeviceBase> GetDeviceInfoFromDeviceAsAP()
 		{
 			return await Task.Run(async () =>
 			{
-				DeviceBaseInfo device = null;
+				DeviceBase device = null;
 				Communicator communicator = new Communicator();
 
 				OperationResult result = await communicator.SendToDevice(_ip, CommandNames.GetInfo);
+				IPAddress ip = await GetLocalIPFromDeviceAsAP(); 
 
 				if (result.Success)
 				{
 					string[] info = result.ResponseMessage.Split('&');
 
-					ushort id = ushort.Parse(info[0]);
-					FirmwareType firmwareType = (FirmwareType)int.Parse(info[1]);
-					string mac = info[2];
-					string name = info[3];
-
-					device = new DeviceBaseInfo(id, name, new MacAddress(mac), firmwareType);
+					device = new DeviceBase(ip)
+					{
+						ID = ushort.Parse(info[0]),
+						FirmwareType = (FirmwareType)int.Parse(info[1]),					
+						Mac = new MacAddress(info[2]),
+						Name = info[3],
+						DeviceType = (DeviceType)int.Parse(info[4])
+					};
 				}
 
 				return device;

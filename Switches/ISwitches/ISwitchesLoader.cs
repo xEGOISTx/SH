@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Switches.SwitchesOutlets
+namespace Switches
 {
-	public interface ISwitchesAndOutletsLoader
+	public interface ISwitchesLoader
 	{
 		Task<IResultOperationLoad> LoadDevices();
 

@@ -107,6 +107,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="DeviceInfosEventArgs.cs" />
+    <Compile Include="ParseResult.cs" />
     <Compile Include="RDeviceInfo.cs" />
     <Compile Include="OperationResult.cs" />
     <Compile Include="Parser.cs" />

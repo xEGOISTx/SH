@@ -94,7 +94,7 @@ namespace DevicesPresenter
 				if (connRes)
 				{
 					//получаем инфу девайса из него самого
-					DeviceBaseInfo deviceInfo = await communicatorAP.GetDeviceInfoFromDeviceAsAP();
+					DeviceBase deviceInfo = await communicatorAP.GetDeviceInfoFromDeviceAsAP();
 					if (deviceInfo != null && deviceInfo.ID == 0)
 					{
 						//отправляем параметры для подключения к роутеру
@@ -152,8 +152,8 @@ namespace DevicesPresenter
 				_loadDevicesIsComplite = false;
 				Parser parser = new Parser("http://192.168.1.254/", "admin", "admin");
 
-				parser.LoadDeviceInfosComplete += Parser_LoadDeviceInfosComplete;
-				parser.LoadDeviceInfosAsync();
+				//parser.LoadDeviceInfosComplete += Parser_LoadDeviceInfosComplete;
+				//parser.LoadDeviceInfosAsync();
 			}
 
 		}

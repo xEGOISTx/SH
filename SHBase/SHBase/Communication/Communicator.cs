@@ -49,6 +49,37 @@ namespace SHBase.Communication
 		}
 
 		/// <summary>
+		/// Возвращает базовую инфу об устройстве
+		/// </summary>
+		/// <returns></returns>
+		public async Task<IDeviceBase> GetDeviceInfo(IPAddress iPAddress)
+		{
+			return await Task.Run(async () =>
+			{
+				DeviceBase deviceInfo = null;
+				Communicator communicator = new Communicator();
+
+				OperationResult result = await communicator.SendToDevice(iPAddress, CommandNames.GetInfo);
+
+				if (result.Success)
+				{
+					string[] info = result.ResponseMessage.Split('&');
+
+					deviceInfo = new DeviceBase(iPAddress)
+					{
+						ID = ushort.Parse(info[0]),
+						FirmwareType = (FirmwareType)int.Parse(info[1]),
+						Mac = new MacAddress(info[2]),
+						Name = info[3],
+						DeviceType = (DeviceType)int.Parse(info[4])
+					};
+				}
+
+				return deviceInfo;
+			});
+		}
+
+		/// <summary>
 		/// Получить ID устройства
 		/// </summary>
 		/// <param name="device"></param>

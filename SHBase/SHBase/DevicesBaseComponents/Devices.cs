@@ -36,6 +36,6 @@ namespace SHBase.DevicesBaseComponents
 		/// </summary>
 		/// <param name="newDevices"></param>
 		/// <returns></returns>
-		public abstract Task<bool> Synchronization(IEnumerable<IDeviceBase> newDevices);
+		public abstract Task Synchronization(IEnumerable<IDeviceBase> newDevices);
 	}
 }

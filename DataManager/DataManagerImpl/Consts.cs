@@ -2,6 +2,6 @@
 {
 	internal class Consts
 	{
-		public const string SWITCHES_TABLE = "Switches";
+		public const string DEVICES_TABLE = "Devices";
 	}
 }

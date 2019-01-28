@@ -15,6 +15,9 @@ namespace RouterParser
 		private readonly string _login;
 		private readonly string _password;
 		private static WebView _webView;
+		private static bool _loadComplete = true;
+		private static bool _parseComplete = true;
+		private string _content;
 
 		public Parser(string ip,string login,string password)
 		{
@@ -30,13 +33,49 @@ namespace RouterParser
 
 
 
-		public async void LoadDeviceInfosAsync()
+		public async Task<ParseResult> LoadDeviceInfosAsync()
 		{
+			ParseResult result = new ParseResult();
 
-			OperationResult authorizationResult = await Authorization();
+			if (_parseComplete)
+			{
+				_parseComplete = false;
+				_loadComplete = false;
 
-			_webView.LoadCompleted += WebView_LoadCompleted;
-			_webView.Navigate(new Uri(_ip));
+				OperationResult authorizationResult = await Authorization();
+
+				_webView.LoadCompleted += WebView_LoadCompleted;
+				_webView.Navigate(new Uri(_ip));
+
+
+				await Task.Run(() =>
+				{
+					while (!_loadComplete)
+					{ }
+
+					if (_content != null)
+					{
+						result.Success = true;
+						result.DeviceInfos = GetDivInfo(_content).ToArray();
+					}
+					else
+					{
+						result.ErrorText = "Не удалось загрузить контент";
+					}
+				});
+
+				_webView.LoadCompleted -= WebView_LoadCompleted;
+				_webView.NavigateToString("");
+
+				_parseComplete = true;
+			}
+			else
+			{
+				result.ErrorText = "Предыдущий процесс загрузки устройств ещё не завершен!";
+			}
+
+			_content = null;
+			return result;
 		}
 
 
@@ -139,23 +178,8 @@ namespace RouterParser
 
 		private async void WebView_LoadCompleted(object sender, NavigationEventArgs e)
 		{
-			string content = await (sender as WebView).InvokeScriptAsync("eval", new string[] { "document.documentElement.outerHTML;" });
-
-			await Task.Run(() =>
-			{
-				IEnumerable<RDeviceInfo> deviceInfos = GetDivInfo(content);
-				OnLoadDeviceInfosComplete(deviceInfos);
-			});
-
-			_webView.LoadCompleted -= WebView_LoadCompleted;
-			_webView.NavigateToString("");
+			_content = await (sender as WebView).InvokeScriptAsync("eval", new string[] { "document.documentElement.outerHTML;" });
+			_loadComplete = true;
 		}
-
-		private void OnLoadDeviceInfosComplete(IEnumerable<RDeviceInfo> deviceInfos)
-		{
-			LoadDeviceInfosComplete?.Invoke(this, new DeviceInfosEventArgs(deviceInfos));
-		}
-
-		public event LoadDeviceInfosEventHandler LoadDeviceInfosComplete;
 	}
 }

@@ -6,17 +6,23 @@ using System.Threading.Tasks;
 using SHBase.DevicesBaseComponents;
 using DataManager;
 
-namespace Switches.SwitchesOutlets
+namespace Switches
 {
-	public class SwitchesAndOutletsLoader : ISwitchesAndOutletsLoader
+	public class SwitchesLoader : ISwitchesLoader
 	{
 		private readonly DataManager.DataManager _dataManager = new DataManager.DataManager();
+		private DeviceType _deviceType;
+
+		public SwitchesLoader(DeviceType deviceType)
+		{
+			_deviceType = deviceType;
+		}
 
 		public async Task<IResultOperationLoad> LoadDevices()
 		{
 			return await Task.Run(() =>
 			{
-				return _dataManager.Switches.LoadDevices();
+				return _dataManager.LoadDevices((int)_deviceType);
 			});
 		}
 
@@ -24,7 +30,7 @@ namespace Switches.SwitchesOutlets
 		{
 			return await Task.Run(() =>
 			{
-				return _dataManager.Switches.RenameDevice(device);
+				return _dataManager.RenameDevice(device);
 			});
 		}
 
@@ -32,7 +38,7 @@ namespace Switches.SwitchesOutlets
 		{
 			return await Task.Run(() =>
 			{
-				return _dataManager.Switches.SaveDevices(devices);
+				return _dataManager.SaveDevices(devices);
 			});
 		}
 	}

@@ -1,4 +1,5 @@
-﻿using Switches.SwitchesOutlets;
+﻿using Switches;
+using Switches.SwitchesOutlets;
 using System;
 using System.Collections.Generic;
 using System.Linq;
