@@ -142,6 +142,10 @@
       <Project>{31e8465c-6bc2-46d5-834d-0e940c3c33ea}</Project>
       <Name>ISHBase</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\UWPHelper\UWPHelper\UWPHelper.csproj">
+      <Project>{30070a18-bd50-41c5-80a7-7c28667a78be}</Project>
+      <Name>UWPHelper</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ISwitches\ISwitches.csproj">
       <Project>{2c13feab-0284-45d6-a4d2-9e5b58d68ebe}</Project>
       <Name>ISwitches</Name>

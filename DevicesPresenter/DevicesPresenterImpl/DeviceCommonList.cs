@@ -12,7 +12,7 @@ namespace DevicesPresenter
 	{
 		public DeviceCommonList()
 		{			
-			Add(new Switches.SwitchesOutlets.Switches());
+			Add(new Switches.Switches());
 		}
 	}
 }

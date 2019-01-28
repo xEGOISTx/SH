@@ -73,19 +73,30 @@ namespace Switches.SwitchesOutlets
 		/// <summary>
 		/// Включить
 		/// </summary>
-		public void TurnOn()
+		public async void TurnOn()
 		{
 			ISwitchOutletTask turnOn = _tasks.GetByKey(TaskType.TurnOn);
-			turnOn?.Execute();
+			bool res = await turnOn?.Execute();
+
+			if (res)
+			{
+				State = CurrentState.TurnedOn;
+			}
+
 		}
 
 		/// <summary>
 		/// Выключить
 		/// </summary>
-		public void TurnOff()
+		public async void TurnOff()
 		{
 			ISwitchOutletTask turnOff = _tasks.GetByKey(TaskType.TurnOn);
-			turnOff?.Execute();
+			bool res = await turnOff?.Execute();
+
+			if (res)
+			{
+				State = CurrentState.TurnedOff;
+			}
 		}
 
 		private void OnConnectedStatysChange()

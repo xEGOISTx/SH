@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Net;
+using System.Threading.Tasks;
 using SHBase.Communication;
 using SHBase.DevicesBaseComponents;
 
@@ -40,10 +41,10 @@ namespace Switches.SwitchesOutlets
 
 		public IPAddress OwnerIP { get; set; }
 
-		public async void Execute()
+		public async Task<bool> Execute()
 		{
 			Communicator communicator = new Communicator();
-			await communicator.SendGPIOTask(this);
+			return await communicator.SendGPIOTask(this);
 		}
 	}
 }

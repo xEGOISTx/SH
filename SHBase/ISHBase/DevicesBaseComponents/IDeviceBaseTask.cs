@@ -29,6 +29,6 @@ namespace SHBase.DevicesBaseComponents
 		/// </summary>
 		IPAddress OwnerIP { get; }
 
-		void Execute();
+		Task<bool> Execute();
 	}
 }

@@ -102,10 +102,10 @@ namespace DevicesPresenter
 		/// <summary>
 		/// Выполнить задачу
 		/// </summary>
-		public async void Execute()
+		public async Task<bool> Execute()
 		{
 			Communicator communicator = new Communicator();
-			await communicator.SendGPIOTask(this);
+			return await communicator.SendGPIOTask(this);
 		}
 
 		public void ResetStatusChanged()
