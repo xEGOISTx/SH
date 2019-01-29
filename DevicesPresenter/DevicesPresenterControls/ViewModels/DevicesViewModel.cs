@@ -63,7 +63,7 @@ namespace DevicesPresenterControls.ViewModels
 			get { return _selectedDevice; }
 			set
 			{
-				DevicePresenterViewModel devicePresenterVM = new DevicePresenterViewModel(value, _devicesManager.GetDeviceEditor());
+				DevicePresenterViewModelOld devicePresenterVM = new DevicePresenterViewModelOld(value, _devicesManager.GetDeviceEditor());
 				(Window.Current.Content as Frame).Navigate(typeof(Views.DeviceView), devicePresenterVM);
 				_selectedDevice = null;
 				//DevicePresenterVM.SetDevice(value);

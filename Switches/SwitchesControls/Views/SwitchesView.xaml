@@ -14,7 +14,7 @@
             <Setter Property="ItemsPanel">
                 <Setter.Value>
                     <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal"/>
+                        <StackPanel Orientation="Horizontal"/>                           
                     </ItemsPanelTemplate>
                 </Setter.Value>
             </Setter>
@@ -26,12 +26,18 @@
                     </DataTemplate>
                 </Setter.Value>
             </Setter>
+
+            <Setter Property="ScrollViewer.HorizontalScrollMode" Value="Auto"/>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="Margin" Value="10"/>
         </Style>
 
 
         <Style TargetType="ListViewItem">
             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
             <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Margin" Value="10,0,10,20"/>
         </Style>
     </UserControl.Resources>
 
@@ -42,12 +48,8 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <ListView ItemsSource="{Binding Path=Switches.List}" />
-        <!--<ListView.ItemTemplate>
-                <DataTemplate>
-                    <local:SwitchOutletView DataContext="{Binding}"/>
-                </DataTemplate>
-            </ListView.ItemTemplate>-->
+        <ListView ItemsSource="{Binding Path=Switches.List}"/>
 
+        <ListView Grid.Row="1" ItemsSource="{Binding Path=Outlets.List}"/>
     </Grid>
 </UserControl>

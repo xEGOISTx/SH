@@ -126,6 +126,9 @@ namespace Switches
 
 					if (swResult.Success && ouResult.Success)
 					{
+						IEnumerable<ISwitchOutlet> fake = FakeDevices();
+						_switches.AddRange(fake);
+
 						IEnumerable<ISwitchOutlet> swDevices = ConvertToSwitchesOutlets(swResult.DeviceInfos);
 						_switches.AddRange(swDevices);
 
@@ -263,6 +266,26 @@ namespace Switches
 				}
 			}
 		}
+
+
+		private IEnumerable<ISwitchOutlet> FakeDevices()
+		{
+			List<ISwitchOutlet> devs = new List<ISwitchOutlet>();
+
+			for(int i = 1; i < 10; i++)
+			{
+				SwitchOutlet dev = new SwitchOutlet(new MacAddress("EC:FA:BC:85:8F:18"), FirmwareType.ESP_8266, DeviceType.Switch)
+				{
+					Description = "Dev" + i,
+					ID = i
+				};
+
+				devs.Add(dev);
+			}
+
+			return devs;
+		}
+
 
 	}
 }
