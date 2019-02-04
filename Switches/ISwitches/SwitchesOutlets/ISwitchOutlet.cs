@@ -19,11 +19,6 @@ namespace Switches.SwitchesOutlets
 		CurrentState State { get; }
 
 		/// <summary>
-		/// Описание
-		/// </summary>
-		//string Description { get; }
-
-		/// <summary>
 		/// Задачи
 		/// </summary>
 		ISwitchOutletTaskList Tasks { get; }

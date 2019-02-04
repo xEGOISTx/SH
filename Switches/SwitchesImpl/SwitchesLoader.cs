@@ -11,7 +11,7 @@ namespace Switches
 	public class SwitchesLoader : ISwitchesLoader
 	{
 		private readonly DataManager.DataManager _dataManager = new DataManager.DataManager();
-		private DeviceType _deviceType;
+		private readonly DeviceType _deviceType;
 
 		public SwitchesLoader(DeviceType deviceType)
 		{

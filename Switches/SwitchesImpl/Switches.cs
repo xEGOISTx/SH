@@ -163,28 +163,27 @@ namespace Switches
 					{
 						if (CheckForComplianceDevice(deviceFromRouter))
 						{
-						//пробуем получить устройство из имеющихся списков
-						IDeviceBase device = GetDevice(deviceFromRouter.ID);
+							//пробуем получить устройство из имеющихся списков
+							IDeviceBase device = GetDevice(deviceFromRouter.ID);
 
 							if (device != null && CheckCorresponding(deviceFromRouter, device))
 							{
-								if (device is SwitchOutlet dev)
+								if (device is SwitchOutlet dev && !dev.IsConnected)
 								{
 									dev.IP = deviceFromRouter.IP;
 									dev.Name = deviceFromRouter.Name;
 									dev.IsConnected = true;
-								//device.State = статус будем запрашивать отсюда
-							}
+									//device.State = статус будем запрашивать отсюда
+								}
 							}
 							else if (device == null)
 							{
-							//TODO: обработать случай, если утройство найдено но в базе его нет
-						}
+								//TODO: обработать случай, если утройство найдено но в базе его нет
+							}
 							else
 							{
-							//не соответствие устройств
-						}
-
+								//не соответствие устройств
+							}
 						}
 					}
 				});
