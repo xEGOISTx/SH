@@ -21,10 +21,14 @@ namespace DevicesPresenter
 		public DevicesManager(DeviceCommonList deviceCommonList)
 		{
 			_deviceCommonList = deviceCommonList;
+
+			ConnectionSettings settings = new ConnectionSettings();
+			settings.Load();
+			ConnectionSettings = settings;
 		}
 
 
-		public IConnectionSettings ConnectionSettings => throw new NotImplementedException();
+		public IConnectionSettings ConnectionSettings { get; }
 
 		public async Task<bool> FindAndConnectDevicesAsync()
 		{

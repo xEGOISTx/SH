@@ -21,7 +21,7 @@ namespace Switches.SwitchesOutlets
 		/// <summary>
 		/// Описание
 		/// </summary>
-		string Description { get; }
+		//string Description { get; }
 
 		/// <summary>
 		/// Задачи

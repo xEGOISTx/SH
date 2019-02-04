@@ -1,23 +1,35 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Switches.SwitchesOutlets;
+using UWPHelper;
 
 namespace SwitchesControls.ViewModels
 {
-	public class SwitchsOutletsListViewModel
+	public class SwitchsOutletsListViewModel : BaseViewModel
 	{
-		ISwitchesAndOutletsList _devices;
+		private readonly ISwitchesAndOutletsList _devices;
 
 		public SwitchsOutletsListViewModel(ISwitchesAndOutletsList switchesAndOutletsList)
 		{
 			_devices = switchesAndOutletsList;
-
-			foreach (ISwitchOutlet device in switchesAndOutletsList)
-			{
-				SwitchOutletViewModel deviceVM = new SwitchOutletViewModel(device);
-				List.Add(deviceVM);
-			}
+			Refresh();
 		}
 
-		public ObservableCollection<SwitchOutletViewModel> List { get; } = new ObservableCollection<SwitchOutletViewModel>();
+
+
+		public IEnumerable<SwitchOutletViewModel> List { get; private set; }
+
+		public void Refresh()
+		{
+			List<SwitchOutletViewModel> devs = new List<SwitchOutletViewModel>();
+			foreach (ISwitchOutlet device in _devices)
+			{
+				SwitchOutletViewModel deviceVM = new SwitchOutletViewModel(device);
+				devs.Add(deviceVM);
+			}
+
+			List = devs;
+			OnPropertyChanged(nameof(List));
+		}
 	}
 }

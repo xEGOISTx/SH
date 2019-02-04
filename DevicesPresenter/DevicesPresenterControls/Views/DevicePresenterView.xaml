@@ -20,8 +20,13 @@
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <Button Grid.Row="0" Content="{StaticResource FindAndConnect}" HorizontalAlignment="Stretch" 
-                Command="{Binding Path=FindAndConnect}" Background="Transparent"/>
+        <CommandBar OverflowButtonVisibility="Collapsed" Background="Transparent">
+            <AppBarButton Icon="Find" Command="{Binding Path=FindDevices}"/>
+            <AppBarButton Icon="Refresh"/>
+        </CommandBar>
+        
+        <!--<Button Grid.Row="0" Content="{StaticResource FindAndConnect}" HorizontalAlignment="Stretch" 
+                Command="{Binding Path=FindDevices}" Background="Transparent"/>-->
 
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" VerticalScrollMode="Auto">
             <StackPanel Orientation="Vertical">

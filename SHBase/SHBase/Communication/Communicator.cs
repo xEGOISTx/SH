@@ -57,9 +57,8 @@ namespace SHBase.Communication
 			return await Task.Run(async () =>
 			{
 				DeviceBase deviceInfo = null;
-				Communicator communicator = new Communicator();
 
-				OperationResult result = await communicator.SendToDevice(iPAddress, CommandNames.GetInfo);
+				OperationResult result = await SendToDevice(iPAddress, CommandNames.GetInfo);
 
 				if (result.Success)
 				{

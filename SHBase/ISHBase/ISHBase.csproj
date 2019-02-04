@@ -121,7 +121,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="BaseContainers\IContainer.cs" />
-    <Compile Include="DevicesBaseComponents\IBaseDevicesLoader.cs" />
     <Compile Include="DevicesBaseComponents\IDeviceBaseTask.cs" />
     <Compile Include="DevicesBaseComponents\IDeviceBaseTaskType.cs" />
     <Compile Include="DevicesBaseComponents\IDevices.cs" />

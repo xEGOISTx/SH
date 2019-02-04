@@ -25,23 +25,10 @@ namespace SwitchesControls.ViewModels
 
 		public SwitchsOutletsListViewModel Outlets { get; }
 
-		//public ObservableCollection<SwitchOutletViewModel> Switches { get; } = new ObservableCollection<SwitchOutletViewModel>();
-
-		//public ObservableCollection<SwitchOutletViewModel> Outlets { get; } = new ObservableCollection<SwitchOutletViewModel>();
-
-		//private void InitLists()
-		//{
-		//	foreach(ISwitchOutlet device in _switches.SwitchList)
-		//	{
-		//		SwitchOutletViewModel deviceVM = new SwitchOutletViewModel(device);
-		//		Switches.Add(deviceVM);
-		//	}
-
-		//	foreach (ISwitchOutlet device in _switches.OutletList)
-		//	{
-		//		SwitchOutletViewModel deviceVM = new SwitchOutletViewModel(device);
-		//		Outlets.Add(deviceVM);
-		//	}
-		//}
+		public void Refresh()
+		{
+			Switches.Refresh();
+			Outlets.Refresh();
+		}
 	}
 }

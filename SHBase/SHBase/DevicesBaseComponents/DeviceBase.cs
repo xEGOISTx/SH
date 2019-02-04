@@ -28,6 +28,8 @@ namespace SHBase.DevicesBaseComponents
 
 		public FirmwareType FirmwareType { get; set; }
 
+		public string Description { get; set; }
+
 		public event EventHandler ConnectedStatysChange;
 	}
 }

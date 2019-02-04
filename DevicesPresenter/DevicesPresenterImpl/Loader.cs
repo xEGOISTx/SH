@@ -20,24 +20,24 @@ namespace DevicesPresenter
 			return new ConnectionParams() {Ssid ="MGTS_GPON_2214", Password ="4AMYNYKM" };
 		}
 
-		public async Task<bool> SaveDeviceAsync(ISwitchingDevice device)
-		{
-			return await Task.Run(() =>
-			{
-				DeviceInfo dbDeviceInfo = new DeviceInfo
-				{
-					ID = device.ID,
-					Description = device.Description,
-					FirmwareType = (int)device.FirmwareType,					
-				};
+		//public async Task<bool> SaveDeviceAsync(ISwitchingDevice device)
+		//{
+		//	return await Task.Run(() =>
+		//	{
+		//		DeviceInfo dbDeviceInfo = new DeviceInfo
+		//		{
+		//			ID = device.ID,
+		//			Description = device.Description,
+		//			FirmwareType = (int)device.FirmwareType,					
+		//		};
 
-				DataManager.DataManager dB = new DataManager.DataManager();
-				//dB.SaveSwitches(dbDeviceInfo);
+		//		DataManager.DataManager dB = new DataManager.DataManager();
+		//		//dB.SaveSwitches(dbDeviceInfo);
 
-				return true;
-			});
+		//		return true;
+		//	});
 
-		}
+		//}
 
 		public List<int> GetDevicesIDs()
 		{
@@ -51,9 +51,9 @@ namespace DevicesPresenter
 		/// <param name="device"></param>
 		/// <param name="description"></param>
 		/// <returns></returns>
-		public bool UpdateDeviceDescriptionInDB(ISwitchingDevice device,string description)
-		{
-			return true;
-		}
+		//public bool UpdateDeviceDescriptionInDB(ISwitchingDevice device,string description)
+		//{
+		//	return true;
+		//}
 	}
 }

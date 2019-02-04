@@ -36,6 +36,8 @@ namespace SHBase.DevicesBaseComponents
 
 		string Name { get; }
 
+		string Description { get; }
+
 		bool IsConnected { get; }
 
 		IPAddress IP { get; }

@@ -90,7 +90,7 @@ namespace Switches.SwitchesOutlets
 		/// </summary>
 		public async void TurnOff()
 		{
-			ISwitchOutletTask turnOff = _tasks.GetByKey(TaskType.TurnOn);
+			ISwitchOutletTask turnOff = _tasks.GetByKey(TaskType.TurnOff);
 			bool res = await turnOff?.Execute();
 
 			if (res)
