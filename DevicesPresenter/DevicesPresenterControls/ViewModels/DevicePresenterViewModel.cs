@@ -12,22 +12,60 @@ namespace DevicesPresenterControls.ViewModels
 	public class DevicePresenterViewModel : BaseViewModel
 	{
 		private readonly IDevicesManager _manager;
+		private bool _devicePresenterVisibility;
 
 		public DevicePresenterViewModel(IDevicesManager manager)
 		{
 			_manager = manager;
 			FindDevices = new RelayCommand(ExecuteFindDevices);
+			Update = new RelayCommand(ExecuteUpdate);
 
 			Switches = new SwitchesViewModel(_manager.GetSwitches());
 		}
 
 		public SwitchesViewModel Switches { get; }
 
+		public bool DevicePresenterVisibility
+		{
+			get { return _devicePresenterVisibility; }
+			set
+			{
+				_devicePresenterVisibility = value;
+				OnPropertyChanged(nameof(DevicePresenterVisibility));
+				OnPropertyChanged(nameof(PBIsActive));
+			}
+		}
+
+		public bool PBIsActive
+		{
+			get { return !_devicePresenterVisibility; }
+		}
+
+
 		public RelayCommand FindDevices { get; private set; }
 		private async void ExecuteFindDevices(object param)
 		{
-			await _manager.FindAndConnectDevicesAsync();
+			await ExecuteProcess(_manager.FindAndConnectDevicesAsync());
+		}
+
+		public RelayCommand Update { get; private set; }
+		private async void ExecuteUpdate(object param)
+		{
+			await ExecuteProcess(_manager.SynchronizationWithDevicesAsync());
+		}
+
+		public void RefreshPresenter()
+		{
 			Switches.Refresh();
+		}
+
+		private async Task<bool> ExecuteProcess(Task<bool> process)
+		{
+			DevicePresenterVisibility = false;
+			bool res = await process;
+			RefreshPresenter();
+			DevicePresenterVisibility = true;
+			return res;
 		}
 
 	}

@@ -4,8 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Security.Credentials;
+using Windows.UI.Core;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+
+
 
 namespace RouterParser
 {
@@ -45,7 +49,11 @@ namespace RouterParser
 				OperationResult authorizationResult = await Authorization();
 
 				_webView.LoadCompleted += WebView_LoadCompleted;
-				_webView.Navigate(new Uri(_ip));
+
+				await Window.Current.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+				{
+					 _webView.Navigate(new Uri(_ip));
+				});
 
 
 				await Task.Run(() =>
@@ -65,7 +73,12 @@ namespace RouterParser
 				});
 
 				_webView.LoadCompleted -= WebView_LoadCompleted;
-				_webView.NavigateToString("");
+
+				await Window.Current.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+				{
+					_webView.NavigateToString("");
+				});
+
 
 				_parseComplete = true;
 			}

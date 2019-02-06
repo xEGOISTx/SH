@@ -12,9 +12,10 @@
     
 
     <Grid>
-        <ProgressRing IsActive="{Binding Path=PBIsActive}" Height="100" Width="100"/>
+        <dPresenter:DevicePresenterView DataContext="{Binding Path=DevicePresenterVM}"/>
+        <!--<ProgressRing IsActive="{Binding Path=PBIsActive}" Height="100" Width="100"/>-->
 
-        <dPresenter:DevicePresenterView DataContext="{Binding Path=DevicePresenterVM}"
-                                        Visibility="{Binding ElementName=thisControl, Path=DataContext.DevicePresenterVisibility}"/>
+        <!--<dPresenter:DevicePresenterView DataContext="{Binding Path=DevicePresenterVM}"
+                                        Visibility="{Binding ElementName=thisControl, Path=DataContext.DevicePresenterVisibility}"/>-->
     </Grid>
 </Page>
