@@ -25,9 +25,9 @@ namespace SHBase.DevicesBaseComponents
 		string VoiceCommand { get; set; }
 
 		/// <summary>
-		/// IP владельца
+		/// Владелец
 		/// </summary>
-		IPAddress OwnerIP { get; }
+		IDeviceBase Owner { get; }
 
 		Task<bool> Execute();
 	}

@@ -47,7 +47,5 @@ namespace SHBase.DevicesBaseComponents
 		DeviceType DeviceType { get; }
 
 		FirmwareType FirmwareType { get; }
-
-		event EventHandler ConnectedStatysChange;
 	}
 }

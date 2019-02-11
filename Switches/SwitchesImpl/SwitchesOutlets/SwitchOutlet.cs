@@ -9,71 +9,32 @@ using SHBase.DevicesBaseComponents;
 
 namespace Switches.SwitchesOutlets
 {
-	public class SwitchOutlet : ISwitchOutlet
+	public class SwitchOutlet : DeviceBase, ISwitchOutlet
 	{
 		private SwitchOutletTaskList _tasks;
-		private IPAddress _IP;
-		private bool _isConnected;
 
-		public SwitchOutlet(MacAddress mac, FirmwareType firmwareType, DeviceType deviceType)
+		public SwitchOutlet(IPAddress ip, MacAddress mac, FirmwareType firmwareType, DeviceType deviceType) : base(ip)
 		{
 			Mac = mac;
 			FirmwareType = firmwareType;
 			DeviceType = deviceType;
 
-			_tasks = new SwitchOutletTaskList(firmwareType);
+			_tasks = new SwitchOutletTaskList(this);
 		}
+
+		public SwitchOutlet(MacAddress mac, FirmwareType firmwareType, DeviceType deviceType) :
+			this(Consts.ZERO_IP, mac, firmwareType, deviceType) { }
 
 
 		public CurrentState State { get; set; }
 
-		public string Description { get; set; }
-
 		public ISwitchOutletTaskList Tasks => _tasks;
 
-		public int ID { get; set; }
-
-		public string Name { get; set; }
-
-		public bool IsConnected
-		{
-			get { return _isConnected; }
-			set
-			{
-				if(_isConnected != value)
-				{
-					_isConnected = value;
-					OnConnectedStatysChange();
-				}
-			}
-		}
-
-
-		public IPAddress IP
-		{
-			get { return _IP; }
-			set
-			{
-				_IP = value;
-
-				foreach(ISwitchOutletTask task in _tasks)
-				{
-					(task as SwitchOutletTask).OwnerIP = value;
-				}
-			}
-		}
-
-
-		public MacAddress Mac { get; set; }
-
-		public DeviceType DeviceType { get; }
-
-		public FirmwareType FirmwareType { get; }
 
 		/// <summary>
 		/// Включить
 		/// </summary>
-		public async void TurnOn()
+		public async Task<bool> TurnOn()
 		{
 			ISwitchOutletTask turnOn = _tasks.GetByKey(TaskType.TurnOn);
 			bool res = await turnOn?.Execute();
@@ -83,12 +44,14 @@ namespace Switches.SwitchesOutlets
 				State = CurrentState.TurnedOn;
 			}
 
+			return res;
+
 		}
 
 		/// <summary>
 		/// Выключить
 		/// </summary>
-		public async void TurnOff()
+		public async Task<bool> TurnOff()
 		{
 			ISwitchOutletTask turnOff = _tasks.GetByKey(TaskType.TurnOff);
 			bool res = await turnOff?.Execute();
@@ -97,13 +60,8 @@ namespace Switches.SwitchesOutlets
 			{
 				State = CurrentState.TurnedOff;
 			}
-		}
 
-		private void OnConnectedStatysChange()
-		{
-			ConnectedStatysChange?.Invoke(this, new EventArgs());
+			return res;
 		}
-
-		public event EventHandler ConnectedStatysChange;
 	}
 }

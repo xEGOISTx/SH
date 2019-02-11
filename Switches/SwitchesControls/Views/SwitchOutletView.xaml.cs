@@ -21,7 +21,7 @@ namespace SwitchesControls.Views
 	{
 		public SwitchOutletView()
 		{
-			this.InitializeComponent();
+			this.InitializeComponent();			
 		}
 	}
 }

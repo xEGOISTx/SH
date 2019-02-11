@@ -1,4 +1,5 @@
 ﻿using SHBase.DevicesBaseComponents;
+using System.Threading.Tasks;
 
 namespace Switches.SwitchesOutlets
 {
@@ -26,11 +27,11 @@ namespace Switches.SwitchesOutlets
 		/// <summary>
 		/// Включить
 		/// </summary>
-		void TurnOn();
+		Task<bool> TurnOn();
 
 		/// <summary>
 		/// Выключить
 		/// </summary>
-		void TurnOff();
+		Task<bool> TurnOff();
 	}
 }

@@ -11,8 +11,9 @@ namespace Switches.SwitchesOutlets
 		private readonly List<IGPIOAction> _actions = new List<IGPIOAction>();
 
 
-		public SwitchOutletTask(byte pinNumber, TaskType taskType)
+		public SwitchOutletTask(IDeviceBase owner, byte pinNumber, TaskType taskType)
 		{
+			Owner = owner;
 			TaskType = taskType;
 			GPIOAction action;
 
@@ -39,7 +40,7 @@ namespace Switches.SwitchesOutlets
 
 		public string VoiceCommand { get; set; }
 
-		public IPAddress OwnerIP { get; set; }
+		public IDeviceBase Owner { get; set; }
 
 		public async Task<bool> Execute()
 		{

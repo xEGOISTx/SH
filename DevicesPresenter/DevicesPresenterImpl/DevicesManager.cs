@@ -50,7 +50,7 @@ namespace DevicesPresenter
 					DeviceBase deviceInfo = await communicatorAP.GetDeviceInfoFromDeviceAsAP();
 					if (deviceInfo != null && deviceInfo.ID == 0)
 					{
-						//отправляем параметры для подключения к роутеру
+						//отправляем параметры для подключения к роутеру и ждём пока подключится
 						bool postRes = await communicatorAP.SendConnectionParamsToDeviceAsAP(ConnectionSettings.RouterConnParams);
 						if (postRes)
 						{
@@ -80,24 +80,53 @@ namespace DevicesPresenter
 		public async Task<bool> SynchronizationWithDevicesAsync()
 		{
 			bool result = false;
+			List<IDeviceBase> allDevices = new List<IDeviceBase>();
+			Dictionary<int,IDeviceBase> notConnectedDevices = new Dictionary<int,IDeviceBase>();
+			Communicator communicator = new Communicator();
 
-			Parser parser = new Parser("http://192.168.1.254/", "admin", "admin");
-			ParseResult pResult = await parser.LoadDeviceInfosAsync();
-
-			if (pResult.Success)
+			//выбираем все устройства
+			foreach(Devices devices in _deviceCommonList)
 			{
-				result = await SynchronizeAsync(pResult.DeviceInfos);
+				allDevices.AddRange(devices.GetAllDevices());
+			}
+
+			//ищем не соединённые устройства
+			foreach(IDeviceBase device in allDevices)
+			{
+				bool res = await communicator.CheckConnection(device);
+				if (!res)
+				{
+					(device as DeviceBase).IsConnected = false;
+					notConnectedDevices.Add(device.ID, device);
+				}
+
+			}
+
+			if (notConnectedDevices.Any())
+			{
+				result = await SynchronizeAsync(notConnectedDevices, communicator);	
+			}
+			else
+			{
+				result = true;
 			}
 
 			return result;
 		}
 
-
+		/// <summary>
+		/// Возвращает колекцию списков переключателей
+		/// </summary>
+		/// <returns></returns>
 		public ISwitches GetSwitches()
 		{
 			return _deviceCommonList.GetDeviceList<Switches.Switches>();
 		}
 
+		/// <summary>
+		/// Загрузка устройств
+		/// </summary>
+		/// <returns></returns>
 		public async Task<bool> LoadDevicesAsync()
 		{
 			foreach(Devices devList in _deviceCommonList)
@@ -110,34 +139,45 @@ namespace DevicesPresenter
 
 
 		//TODO:пока что всегда возвращаем true. В будущем определить другой исход
-		private async Task<bool> SynchronizeAsync(IEnumerable<RDeviceInfo> deviceInfos)
+		private async Task<bool> SynchronizeAsync(IReadOnlyDictionary<int,IDeviceBase> devices, Communicator communicator)
 		{
+			List<IDeviceBase> toSynchronize = new List<IDeviceBase>();
+
+			Parser parser = new Parser("http://192.168.1.254/", "admin", "admin");
+			ParseResult pResult = await parser.LoadDeviceInfosAsync();
+
 			return await Task.Run(async () =>
 			{
-				List<IDeviceBase> devices = new List<IDeviceBase>();
-
-				//получаем IPs устройств подключённых к роутеру и по IP получаем базовую инфу с устройств
-				foreach (RDeviceInfo deviceInfo in deviceInfos)
+				if (pResult.Success)
 				{
-					Communicator communicator = new Communicator();
-					DeviceBase deviceBaseInfo = (DeviceBase)await communicator.GetDeviceInfo(deviceInfo.Ip);
-
-					if (deviceBaseInfo != null && deviceBaseInfo.ID > 0)
+					foreach (RDeviceInfo rDeviceInfo in pResult.DeviceInfos)
 					{
-						deviceBaseInfo.IsConnected = deviceInfo.IsConnected;
-						devices.Add(deviceBaseInfo);		
-					}
-				}
+						GetBaseInfoResult infoResult = await communicator.GetDeviceInfo(rDeviceInfo.Ip);
 
-				//передаём спискам устройсва. Каждый список сам определит принадлежащие ему устройства и синхронизируется
-				foreach (Devices devList in _deviceCommonList)
-				{
-					await devList.Synchronization(devices);
+						if (infoResult.Success && devices.Any(d => d.Key == infoResult.BasicInfo.ID))
+						{
+							DeviceBase deviceInfo = new DeviceBase(infoResult.BasicInfo.IP)
+							{
+								ID = infoResult.BasicInfo.ID,
+								IP = infoResult.BasicInfo.IP,
+								Mac = infoResult.BasicInfo.Mac,
+								DeviceType = infoResult.BasicInfo.DeviceType,
+								FirmwareType = infoResult.BasicInfo.FirmwareType,
+								Name = infoResult.BasicInfo.Name
+							};
+
+							toSynchronize.Add(deviceInfo);
+						}
+					}
+
+					foreach (Devices devList in _deviceCommonList)
+					{
+						await devList.Synchronization(toSynchronize);
+					}
 				}
 
 				return true;
 			});
 		}
-
 	}
 }

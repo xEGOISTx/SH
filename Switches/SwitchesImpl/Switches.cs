@@ -175,6 +175,8 @@ namespace Switches
 									dev.IsConnected = true;
 									//device.State = статус будем запрашивать отсюда
 								}
+
+
 							}
 							else if (device == null)
 							{
@@ -188,6 +190,15 @@ namespace Switches
 					}
 				});
 			}
+		}
+
+		public override IEnumerable<IDeviceBase> GetAllDevices()
+		{
+			List<IDeviceBase> allDevices = new List<IDeviceBase>();
+			allDevices.AddRange(SwitchList.Cast<IDeviceBase>());
+			allDevices.AddRange(OutletList.Cast<IDeviceBase>());
+
+			return allDevices;
 		}
 
 		private IDeviceInfo[] ConvertToDeviceInfos(IEnumerable<IDeviceBase> devices)

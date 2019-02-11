@@ -8,10 +8,12 @@ namespace SHBase.Communication
 {
 	public class OperationResult
 	{
-		public bool Success { get; set; }
+		internal OperationResult() { }
+
+		public bool Success { get; internal set; }
 
 		internal string ResponseMessage { get; set; } = string.Empty;
 
-		public string ErrorMessage { get; set; } = string.Empty;
+		public string ErrorMessage { get; internal set; } = string.Empty;
 	}
 }

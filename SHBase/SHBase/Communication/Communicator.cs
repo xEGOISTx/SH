@@ -25,7 +25,7 @@ namespace SHBase.Communication
 		{
 			return await Task.Run(async () =>
 			{
-				if(task != null && task.OwnerIP != null && task.OwnerIP != Consts.ZERO_IP)
+				if(task != null && task.Owner != null &&  task.Owner.IP != null && task.Owner.IP != Consts.ZERO_IP)
 				{
 					List<CommandParameter> content = new List<CommandParameter>();
 					foreach (IBaseGPIOAction gPIOAction in task.Actions)
@@ -39,7 +39,7 @@ namespace SHBase.Communication
 
 					if (content.Count() > 0)
 					{
-						OperationResult result = await SendToDevice(task.OwnerIP, CommandNames.GPIOActions, content);
+						OperationResult result = await SendToDevice(task.Owner.IP, CommandNames.GPIOActions, content);
 						return result.Success;
 					}
 				}
@@ -52,11 +52,11 @@ namespace SHBase.Communication
 		/// Возвращает базовую инфу об устройстве
 		/// </summary>
 		/// <returns></returns>
-		public async Task<IDeviceBase> GetDeviceInfo(IPAddress iPAddress)
+		public async Task<GetBaseInfoResult> GetDeviceInfo(IPAddress iPAddress)
 		{
 			return await Task.Run(async () =>
 			{
-				DeviceBase deviceInfo = null;
+				DeviceBasicInfo deviceInfo = null;
 
 				OperationResult result = await SendToDevice(iPAddress, CommandNames.GetInfo);
 
@@ -64,7 +64,7 @@ namespace SHBase.Communication
 				{
 					string[] info = result.ResponseMessage.Split('&');
 
-					deviceInfo = new DeviceBase(iPAddress)
+					deviceInfo = new DeviceBasicInfo(iPAddress)
 					{
 						ID = ushort.Parse(info[0]),
 						FirmwareType = (FirmwareType)int.Parse(info[1]),
@@ -74,7 +74,7 @@ namespace SHBase.Communication
 					};
 				}
 
-				return deviceInfo;
+				return new GetBaseInfoResult(result) { BasicInfo = deviceInfo };
 			});
 		}
 
@@ -83,15 +83,15 @@ namespace SHBase.Communication
 		/// </summary>
 		/// <param name="device"></param>
 		/// <returns></returns>
-		public async Task<int> GetDeviceID(IDeviceBase device)
+		public async Task<int> GetDeviceID(IPAddress iP)
 		{
 			return await Task.Run(async () =>
 			{
-				if (device != null && device.IP != null && device.IP != Consts.ZERO_IP)
+				if (iP != null && iP != Consts.ZERO_IP)
 				{
-					OperationResult result = await SendToDevice(device.IP, CommandNames.GetID);
+					OperationResult result = await SendToDevice(iP, CommandNames.GetID);
 
-					if(result.Success)
+					if (result.Success && result.ResponseMessage != "0")
 					{
 						return ushort.Parse(result.ResponseMessage);
 					}
@@ -133,6 +133,21 @@ namespace SHBase.Communication
 			{
 				return new OperationResult {Success = false,ErrorMessage = "Не задан IP" };
 			}
+		}
+
+		public async Task<bool> CheckConnection(IDeviceBase device)
+		{
+			return await Task.Run(() =>
+			{
+				if (device.IP != null && device.IP != Consts.ZERO_IP)
+				{
+					//TODO:до делать проверку на соединение
+					return true;
+				}
+
+				return false;
+			});
+
 		}
 
 		/// <summary>

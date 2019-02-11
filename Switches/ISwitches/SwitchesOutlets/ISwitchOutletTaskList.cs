@@ -3,7 +3,7 @@
 namespace Switches.SwitchesOutlets
 {
 	/// <summary>
-	/// Список задач для обычного выулючателя или розетки
+	/// Список задач для обычного выключателя или розетки
 	/// </summary>
 	public interface ISwitchOutletTaskList : IContainer<TaskType, ISwitchOutletTask>
 	{		

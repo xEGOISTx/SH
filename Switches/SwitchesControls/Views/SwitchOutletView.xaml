@@ -8,37 +8,42 @@
     mc:Ignorable="d"
     Height="200"
     Width="200">
+    <UserControl.Resources>
+
+    </UserControl.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
+        <TextBlock Grid.Row="0" Text="{Binding Path=Description, Mode=OneWay}" TextAlignment="Center" Margin="0,5"/>
 
-            <TextBox Text="{Binding Path=Description, Mode=TwoWay}"  IsEnabled="{Binding Path=EditsDescription}"/>
+        <ContentControl Grid.Row="1" Content="{Binding Img}"/>
 
-            <AppBarButton Grid.Column="1" Width="35" Height="35" Command="{Binding EditDescription}">
-                <AppBarButton.Icon>
-                    <SymbolIcon  Symbol="Edit" Margin="0,-10,0,0"/>
-                </AppBarButton.Icon>
-            </AppBarButton>
+        <TextBox Grid.Row="1" Text="{Binding Path=Description, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding Path=EditsDescription}"
+                 VerticalAlignment="Bottom" />
 
-            <AppBarButton Grid.Column="2" Width="35" Height="35" >
-                <AppBarButton.Icon>
-                    <SymbolIcon  Symbol="Setting" Margin="0,-10,0,0" />
-                </AppBarButton.Icon>
-            </AppBarButton>
-        </Grid>
+        <Grid Grid.Row="2">
 
-        <Grid Grid.Row="1">
-            <Button HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Command="{Binding TurnOnOff}" Content="No image"/>
+            <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
+                <AppBarButton Width="35" Height="35" Command="{Binding EditDescription}">
+                    <AppBarButton.Icon>
+                        <SymbolIcon  Symbol="Edit" Margin="0,-10,0,0"/>
+                    </AppBarButton.Icon>
+                </AppBarButton>
+
+                <AppBarButton Width="35" Height="35" >
+                    <AppBarButton.Icon>
+                        <SymbolIcon  Symbol="Setting" Margin="0,-10,0,0" />
+                    </AppBarButton.Icon>
+                </AppBarButton>
+            </StackPanel>
+
+            <ToggleSwitch Grid.Row="2" Margin="5,0,0,5" Height="31" IsOn="{Binding Path=TurnOnOff,Mode=TwoWay}" 
+                          IsHitTestVisible="{Binding Path=IsNotBlockOnOff,Mode=OneWay}"/>
         </Grid>
     </Grid>
 </UserControl>

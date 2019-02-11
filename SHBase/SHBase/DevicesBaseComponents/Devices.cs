@@ -34,8 +34,14 @@ namespace SHBase.DevicesBaseComponents
 		/// <summary>
 		/// Синхронизация с подключенными к роутеру устройствами. Предварительно должна быть произведена загрузка(метод Load)
 		/// </summary>
-		/// <param name="newDevices"></param>
+		/// <param name="deviceInfos"></param>
 		/// <returns></returns>
-		public abstract Task Synchronization(IEnumerable<IDeviceBase> newDevices);
+		public abstract Task Synchronization(IEnumerable<IDeviceBase> deviceInfos);
+
+		/// <summary>
+		/// Получить все устройства
+		/// </summary>
+		/// <returns></returns>
+		public abstract IEnumerable<IDeviceBase> GetAllDevices();
 	}
 }

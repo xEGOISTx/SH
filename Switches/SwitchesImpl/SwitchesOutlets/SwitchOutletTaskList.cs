@@ -1,10 +1,6 @@
 ﻿using SHBase.DevicesBaseComponents;
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 
 namespace Switches.SwitchesOutlets
@@ -13,12 +9,12 @@ namespace Switches.SwitchesOutlets
 	{
 		private readonly Dictionary<TaskType, ISwitchOutletTask> _tasks = new Dictionary<TaskType, ISwitchOutletTask>();
 
-		public SwitchOutletTaskList(FirmwareType firmwareType)
+		public SwitchOutletTaskList(IDeviceBase owner)
 		{
-			if (firmwareType == FirmwareType.ESP_8266)
+			if (owner.FirmwareType == FirmwareType.ESP_8266)
 			{
-				_tasks.Add(TaskType.TurnOn, new SwitchOutletTask(5, TaskType.TurnOn));
-				_tasks.Add(TaskType.TurnOff, new SwitchOutletTask(5, TaskType.TurnOff));
+				_tasks.Add(TaskType.TurnOn, new SwitchOutletTask(owner,5, TaskType.TurnOn));
+				_tasks.Add(TaskType.TurnOff, new SwitchOutletTask(owner,5, TaskType.TurnOff));
 			}
 
 		}
