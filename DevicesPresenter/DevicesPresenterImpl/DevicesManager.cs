@@ -80,26 +80,21 @@ namespace DevicesPresenter
 		public async Task<bool> SynchronizationWithDevicesAsync()
 		{
 			bool result = false;
-			List<IDeviceBase> allDevices = new List<IDeviceBase>();
 			Dictionary<int,IDeviceBase> notConnectedDevices = new Dictionary<int,IDeviceBase>();
 			Communicator communicator = new Communicator();
 
-			//выбираем все устройства
-			foreach(Devices devices in _deviceCommonList)
-			{
-				allDevices.AddRange(devices.GetAllDevices());
-			}
-
 			//ищем не соединённые устройства
-			foreach(IDeviceBase device in allDevices)
-			{
-				bool res = await communicator.CheckConnection(device);
-				if (!res)
+			foreach (Devices devices in _deviceCommonList)
+			{			
+				foreach (IDeviceBase device in devices)
 				{
-					(device as DeviceBase).IsConnected = false;
-					notConnectedDevices.Add(device.ID, device);
+					bool res = await communicator.CheckConnection(device);
+					if (!res)
+					{
+						(device as DeviceBase).IsConnected = false;
+						notConnectedDevices.Add(device.ID, device);
+					}
 				}
-
 			}
 
 			if (notConnectedDevices.Any())

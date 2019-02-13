@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -164,19 +165,20 @@ namespace Switches
 						if (CheckForComplianceDevice(deviceFromRouter))
 						{
 							//пробуем получить устройство из имеющихся списков
-							IDeviceBase device = GetDevice(deviceFromRouter.ID);
+							DeviceBase device = (DeviceBase)GetDevice(deviceFromRouter.ID);
 
 							if (device != null && CheckCorresponding(deviceFromRouter, device))
 							{
-								//if (device is регул. выключатель)
-								//{
-									//запрос на уровень напряжения
-								//}
 								
 								device.IP = deviceFromRouter.IP;
 								device.Name = deviceFromRouter.Name;
 								device.IsConnected = true;
 								//device.State = статус будем запрашивать отсюда
+
+								//if (device is регул. выключатель)
+								//{
+									//запрос на уровень напряжения
+								//}
 							}
 							else if (device == null)
 							{
@@ -192,13 +194,22 @@ namespace Switches
 			}
 		}
 
-		public override IEnumerable<IDeviceBase> GetAllDevices()
+		//public override IEnumerable<IDeviceBase> GetAllDevices()
+		//{
+		//	List<IDeviceBase> allDevices = new List<IDeviceBase>();
+		//	allDevices.AddRange(SwitchList.Cast<IDeviceBase>());
+		//	allDevices.AddRange(OutletList.Cast<IDeviceBase>());
+
+		//	return allDevices;
+		//}
+
+		public override IEnumerator GetEnumerator()
 		{
 			List<IDeviceBase> allDevices = new List<IDeviceBase>();
 			allDevices.AddRange(SwitchList.Cast<IDeviceBase>());
 			allDevices.AddRange(OutletList.Cast<IDeviceBase>());
 
-			return allDevices;
+			return allDevices.GetEnumerator();
 		}
 
 		private IDeviceInfo[] ConvertToDeviceInfos(IEnumerable<IDeviceBase> devices)

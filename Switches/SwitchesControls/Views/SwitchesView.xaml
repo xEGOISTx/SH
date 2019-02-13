@@ -10,36 +10,34 @@
     d:DesignWidth="400">
     
     <UserControl.Resources>
-        <Style TargetType="ListView">
-            <Setter Property="ItemsPanel">
-                <Setter.Value>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal"/>                           
-                    </ItemsPanelTemplate>
-                </Setter.Value>
-            </Setter>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Resources/StylesOfSwitches.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
 
-            <Setter Property="ItemTemplate">
-                <Setter.Value>
-                    <DataTemplate>
-                        <local:SwitchOutletView DataContext="{Binding}"/>
-                    </DataTemplate>
-                </Setter.Value>
-            </Setter>
+            <Style TargetType="ListView">
+                <Setter Property="ItemsPanel">
+                    <Setter.Value>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </Setter.Value>
+                </Setter>
 
-            <Setter Property="ScrollViewer.HorizontalScrollMode" Value="Auto"/>
-            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
-            <Setter Property="Margin" Value="10"/>
-            <Setter Property="SelectionMode" Value="None"/>
-        </Style>
+                <Setter Property="ScrollViewer.HorizontalScrollMode" Value="Auto"/>
+                <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
+                <Setter Property="Margin" Value="10"/>
+                <Setter Property="SelectionMode" Value="None"/>
+            </Style>
 
 
-        <Style TargetType="ListViewItem">
-            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-            <Setter Property="VerticalContentAlignment" Value="Stretch"/>
-            <Setter Property="Padding" Value="0"/>
-            <Setter Property="Margin" Value="10,0,10,20"/>
-        </Style>
+            <Style TargetType="ListViewItem">
+                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+                <Setter Property="Padding" Value="0"/>
+                <Setter Property="Margin" Value="10,0,10,20"/>
+            </Style>
+        </ResourceDictionary>
     </UserControl.Resources>
 
     <Grid>
@@ -49,8 +47,8 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <ListView ItemsSource="{Binding Path=Switches.List}"/>
+        <ListView ItemsSource="{Binding Path=Switches.List}" ItemTemplate="{StaticResource SwitchOutletItemTemplate}"/>
 
-        <ListView Grid.Row="1" ItemsSource="{Binding Path=Outlets.List}"/>
+        <ListView Grid.Row="1" ItemsSource="{Binding Path=Outlets.List}" ItemTemplate="{StaticResource SwitchOutletItemTemplate}"/>
     </Grid>
 </UserControl>

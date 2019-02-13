@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SHBase.DevicesBaseComponents
 {
-	public abstract class Devices
+	public abstract class Devices : IEnumerable
 	{
 		/// <summary>
 		/// Признак, что устройства загружены
@@ -38,10 +39,12 @@ namespace SHBase.DevicesBaseComponents
 		/// <returns></returns>
 		public abstract Task Synchronization(IEnumerable<IDeviceBase> deviceInfos);
 
-		/// <summary>
-		/// Получить все устройства
-		/// </summary>
-		/// <returns></returns>
-		public abstract IEnumerable<IDeviceBase> GetAllDevices();
+		///// <summary>
+		///// Получить все устройства
+		///// </summary>
+		///// <returns></returns>
+		//public abstract IEnumerable<IDeviceBase> GetAllDevices();
+
+		public abstract IEnumerator GetEnumerator();
 	}
 }
