@@ -168,15 +168,15 @@ namespace Switches
 
 							if (device != null && CheckCorresponding(deviceFromRouter, device))
 							{
-								if (device is SwitchOutlet dev && !dev.IsConnected)
-								{
-									dev.IP = deviceFromRouter.IP;
-									dev.Name = deviceFromRouter.Name;
-									dev.IsConnected = true;
-									//device.State = статус будем запрашивать отсюда
-								}
-
-
+								//if (device is регул. выключатель)
+								//{
+									//запрос на уровень напряжения
+								//}
+								
+								device.IP = deviceFromRouter.IP;
+								device.Name = deviceFromRouter.Name;
+								device.IsConnected = true;
+								//device.State = статус будем запрашивать отсюда
 							}
 							else if (device == null)
 							{
