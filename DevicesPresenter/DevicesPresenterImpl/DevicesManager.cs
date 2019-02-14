@@ -147,10 +147,11 @@ namespace DevicesPresenter
 				if (pResult.Success)
 				{
 					foreach (RDeviceInfo rDeviceInfo in pResult.DeviceInfos)
-					{
+					{						
 						GetBaseInfoResult infoResult = await communicator.GetDeviceInfo(rDeviceInfo.Ip);
-
-						if (infoResult.Success && devices.Any(d => d.Key == infoResult.BasicInfo.ID))
+						//TODO: переделать. не создавать новое устройство, а добавлять то,что получил
+						//убрать(уничтожить) тип BaseInfo
+						if (infoResult.Success && devices.ContainsKey(infoResult.BasicInfo.ID))
 						{
 							DeviceBase deviceInfo = new DeviceBase(infoResult.BasicInfo.IP)
 							{
