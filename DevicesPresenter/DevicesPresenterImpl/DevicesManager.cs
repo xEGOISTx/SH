@@ -46,6 +46,7 @@ namespace DevicesPresenter
 				bool connRes = await connector.ConnectToDeviceAsync(wifiDevice, new PasswordCredential { Password = ConnectionSettings.DeviceConnParams.Password });
 				if (connRes)
 				{
+					//TODO: переделать. сначала получить id, отправляем д для подкл, получаем инфу.  Попробовать закрыть DeviceBase  				
 					//получаем инфу устройства из него самого
 					DeviceBase deviceInfo = await communicatorAP.GetDeviceInfoFromDeviceAsAP();
 					if (deviceInfo != null && deviceInfo.ID == 0)
