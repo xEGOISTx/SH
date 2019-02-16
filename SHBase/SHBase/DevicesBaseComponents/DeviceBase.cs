@@ -7,7 +7,7 @@ namespace SHBase.DevicesBaseComponents
 	/// <summary>
 	/// Базовая инфа устройства
 	/// </summary>
-	public class DeviceBase : IDeviceBase
+	internal class DeviceBase : IDeviceBase
 	{
 		public DeviceBase(IPAddress iP)
 		{

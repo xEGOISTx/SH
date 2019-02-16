@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace SHBase.DevicesBaseComponents
 {
+	//TODO: удалить нах
 	public class DeviceBasicInfo
 	{
 		internal DeviceBasicInfo(IPAddress iP) { IP = iP; }

@@ -1,5 +1,4 @@
-﻿using Switches.SwitchesOutlets;
-
+﻿
 namespace Switches
 {
 	public interface ISwitches
@@ -7,11 +6,11 @@ namespace Switches
 		/// <summary>
 		/// Список обычных выключателей
 		/// </summary>
-		ISwitchesAndOutletsList SwitchList { get; }
+		ISwitchList SwitchList { get; }
 
 		/// <summary>
 		/// Список розеток
 		/// </summary>
-		ISwitchesAndOutletsList OutletList { get; }
+		IOutletList OutletList { get; }
 	}
 }

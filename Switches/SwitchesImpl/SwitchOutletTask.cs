@@ -4,20 +4,20 @@ using System.Threading.Tasks;
 using SHBase.Communication;
 using SHBase.DevicesBaseComponents;
 
-namespace Switches.SwitchesOutlets
+namespace Switches
 {
 	public class SwitchOutletTask : ISwitchOutletTask
 	{
 		private readonly List<IGPIOAction> _actions = new List<IGPIOAction>();
 
 
-		public SwitchOutletTask(IDeviceBase owner, byte pinNumber, TaskType taskType)
+		public SwitchOutletTask(IDeviceBase owner, byte pinNumber, SwitchOutletTaskType taskType)
 		{
 			Owner = owner;
 			TaskType = taskType;
 			GPIOAction action;
 
-			if (taskType == TaskType.TurnOn)
+			if (taskType == SwitchOutletTaskType.TurnOn)
 			{
 				action = new GPIOAction(pinNumber, GPIOMode.Output, GPIOLevel.High);
 			}
@@ -32,7 +32,7 @@ namespace Switches.SwitchesOutlets
 
 		public IEnumerable<IGPIOAction> Actions => _actions;
 
-		public TaskType TaskType { get; }
+		public SwitchOutletTaskType TaskType { get; }
 
 		public int ID { get; }
 

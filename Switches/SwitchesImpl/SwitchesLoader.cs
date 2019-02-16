@@ -8,7 +8,7 @@ using DataManager;
 
 namespace Switches
 {
-	public class SwitchesLoader : ISwitchesLoader
+	internal class SwitchesLoader : ISwitchesLoader
 	{
 		private readonly DataManager.DataManager _dataManager = new DataManager.DataManager();
 		private readonly DeviceType _deviceType;

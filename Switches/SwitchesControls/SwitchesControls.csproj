@@ -121,9 +121,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\OutletListViewModel.cs" />
+    <Compile Include="ViewModels\OutletViewModel.cs" />
     <Compile Include="ViewModels\SwitchesViewModel.cs" />
-    <Compile Include="ViewModels\SwitchOutletViewModel.cs" />
-    <Compile Include="ViewModels\SwitchsOutletsListViewModel.cs" />
+    <Compile Include="ViewModels\SwitchOutletBaseViewModel.cs" />
+    <Compile Include="ViewModels\SwitchViewModel.cs" />
+    <Compile Include="ViewModels\SwitchListViewModel.cs" />
     <Compile Include="Views\SwitchesView.xaml.cs">
       <DependentUpon>SwitchesView.xaml</DependentUpon>
     </Compile>

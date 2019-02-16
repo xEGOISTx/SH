@@ -38,33 +38,29 @@ namespace DevicesPresenter
 			//получаем доступные устройства
 			IEnumerable<WiFiAvailableNetwork> wifiAvailableDevices = await connector.GetAvailableDevicesAsAPAsync();
 
-			List<DeviceBase> newDevices = new List<DeviceBase>();
+			List<IDeviceBase> newDevices = new List<IDeviceBase>();
 
 			foreach (WiFiAvailableNetwork wifiDevice in wifiAvailableDevices)
 			{
 				//подключаемся к устройству
 				bool connRes = await connector.ConnectToDeviceAsync(wifiDevice, new PasswordCredential { Password = ConnectionSettings.DeviceConnParams.Password });
 				if (connRes)
-				{
-					//TODO: переделать. сначала получить id, отправляем д для подкл, получаем инфу.  Попробовать закрыть DeviceBase  				
+				{		
 					//получаем инфу устройства из него самого
-					DeviceBase deviceInfo = await communicatorAP.GetDeviceInfoFromDeviceAsAP();
-					if (deviceInfo != null && deviceInfo.ID == 0)
+					int id = await communicatorAP.GetDeviceIDAsAP();
+					if (id != -1)
 					{
 						//отправляем параметры для подключения к роутеру и ждём пока подключится
 						bool postRes = await communicatorAP.SendConnectionParamsToDeviceAsAP(ConnectionSettings.RouterConnParams);
 						if (postRes)
 						{
-							//запрашиваем ip
-							IPAddress iP = await communicatorAP.GetLocalIPFromDeviceAsAP();
-							if (iP != null)
+							IDeviceBase deviceInfo = await communicatorAP.GetDeviceInfoFromDeviceAsAP();
+							if(deviceInfo != null)
 							{
-								deviceInfo.IP = iP;
-								deviceInfo.IsConnected = true;
-
 								newDevices.Add(deviceInfo);
 							}
 						}
+
 					}
 				}
 			}
@@ -92,7 +88,7 @@ namespace DevicesPresenter
 					bool res = await communicator.CheckConnection(device);
 					if (!res)
 					{
-						(device as DeviceBase).IsConnected = false;
+						(device as BaseSwitch).IsConnected = false;
 						notConnectedDevices.Add(device.ID, device);
 					}
 				}
@@ -149,21 +145,11 @@ namespace DevicesPresenter
 					foreach (RDeviceInfo rDeviceInfo in pResult.DeviceInfos)
 					{						
 						GetBaseInfoResult infoResult = await communicator.GetDeviceInfo(rDeviceInfo.Ip);
-						//TODO: переделать. не создавать новое устройство, а добавлять то,что получил
-						//убрать(уничтожить) тип BaseInfo
+						//TODO: убрать(уничтожить) тип BaseInfo
 						if (infoResult.Success && devices.ContainsKey(infoResult.BasicInfo.ID))
 						{
-							DeviceBase deviceInfo = new DeviceBase(infoResult.BasicInfo.IP)
-							{
-								ID = infoResult.BasicInfo.ID,
-								IP = infoResult.BasicInfo.IP,
-								Mac = infoResult.BasicInfo.Mac,
-								DeviceType = infoResult.BasicInfo.DeviceType,
-								FirmwareType = infoResult.BasicInfo.FirmwareType,
-								Name = infoResult.BasicInfo.Name
-							};
 
-							toSynchronize.Add(deviceInfo);
+							toSynchronize.Add(infoResult.BasicInfo);
 						}
 					}
 

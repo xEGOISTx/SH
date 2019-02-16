@@ -4,13 +4,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Switches.SwitchesOutlets
+namespace Switches
 {
-	public abstract class SwitchesAndOutletsListBaseImpl : ISwitchesAndOutletsList
+	public abstract class SwitchesAndOutletsBaseList<TValue>
+		where TValue : IBaseSwitch
 	{
-		protected readonly Dictionary<int, ISwitchOutlet> _devices = new Dictionary<int, ISwitchOutlet>();
+		protected readonly Dictionary<int, TValue> _devices = new Dictionary<int, TValue>();
 
-		public SwitchesAndOutletsListBaseImpl(DeviceType devicesType)
+		public SwitchesAndOutletsBaseList(DeviceType devicesType)
 		{
 			DevicesType = devicesType;
 		}
@@ -26,14 +27,14 @@ namespace Switches.SwitchesOutlets
 			return _devices.ContainsKey(key);
 		}
 
-		public ISwitchOutlet GetByKey(int key)
+		public TValue GetByKey(int key)
 		{
 			if (ContainsKey(key))
 			{
 				return _devices[key];
 			}
 
-			return null;
+			return default(TValue);
 		}
 
 		public IEnumerator GetEnumerator()
@@ -41,7 +42,7 @@ namespace Switches.SwitchesOutlets
 			return _devices.Values.GetEnumerator();
 		}
 
-		public void Add(ISwitchOutlet device)
+		public void Add(TValue device)
 		{
 			if (!ContainsKey(device.ID))
 			{
@@ -49,15 +50,16 @@ namespace Switches.SwitchesOutlets
 			}
 		}
 
-		public void AddRange(IEnumerable<ISwitchOutlet> devices)
+		public void AddRange(IEnumerable<TValue> devices)
 		{
-			foreach (ISwitchOutlet device in devices.ToArray())
+			foreach (TValue device in devices.ToArray())
 			{
 				Add(device);
 			}
 		}
 
-		public abstract ISwitchesLoader GetLoader();
+		internal abstract ISwitchesLoader GetLoader();
 
+		internal abstract DBConvertor<TValue> Convertor { get; }
 	}
 }

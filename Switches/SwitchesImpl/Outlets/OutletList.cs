@@ -7,14 +7,18 @@ using System.Threading.Tasks;
 
 namespace Switches.SwitchesOutlets
 {
-	public class OutletList : SwitchesAndOutletsListBaseImpl, ISwitchesAndOutletsList
+	public class OutletList : SwitchesAndOutletsBaseList<IOutlet>, IOutletList
 	{
 		public OutletList() : base(DeviceType.Outlet) { }
 
+		
 
-		public override ISwitchesLoader GetLoader()
+		internal override ISwitchesLoader GetLoader()
 		{
 			return new SwitchesLoader(DevicesType);
 		}
+
+		internal override DBConvertor<IOutlet> Convertor => new OutletsConvertor();
+
 	}
 }

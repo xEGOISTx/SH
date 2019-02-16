@@ -1,8 +1,8 @@
 ﻿using SHBase.DevicesBaseComponents;
 
-namespace Switches.SwitchesOutlets
+namespace Switches
 {
-	public enum TaskType
+	public enum SwitchOutletTaskType
 	{
 		TurnOn,
 		TurnOff
@@ -13,6 +13,6 @@ namespace Switches.SwitchesOutlets
 	/// </summary>
 	public interface ISwitchOutletTask : IBaseGPIOActionTask<IGPIOAction>
 	{
-		TaskType TaskType { get; }
+		SwitchOutletTaskType TaskType { get; }
 	}
 }

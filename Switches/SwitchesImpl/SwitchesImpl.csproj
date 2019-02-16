@@ -120,15 +120,21 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="BaseSwitch.cs" />
+    <Compile Include="DBConvertor.cs" />
+    <Compile Include="LoadableList.cs" />
+    <Compile Include="Outlets\Outlet.cs" />
+    <Compile Include="Outlets\OutletsConvertor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GPIOAction.cs" />
-    <Compile Include="SwitchesOutlets\OutletList.cs" />
-    <Compile Include="SwitchesOutlets\SwitchesAndOutletsListBaseImpl.cs" />
+    <Compile Include="Outlets\OutletList.cs" />
+    <Compile Include="SwitchesOutlets\SwitchesConvertor.cs" />
+    <Compile Include="SwitchesAndOutletsBaseList.cs" />
     <Compile Include="SwitchesOutlets\SwitchList.cs" />
     <Compile Include="SwitchesLoader.cs" />
-    <Compile Include="SwitchesOutlets\SwitchOutlet.cs" />
-    <Compile Include="SwitchesOutlets\SwitchOutletTask.cs" />
-    <Compile Include="SwitchesOutlets\SwitchOutletTaskList.cs" />
+    <Compile Include="SwitchesOutlets\Switch.cs" />
+    <Compile Include="SwitchOutletTask.cs" />
+    <Compile Include="SwitchOutletTaskList.cs" />
     <Compile Include="Switches.cs" />
     <EmbeddedResource Include="Properties\SwitchesImpl.rd.xml" />
   </ItemGroup>
@@ -159,7 +165,6 @@
       <Name>ISwitches</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

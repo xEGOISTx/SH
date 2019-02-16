@@ -1,4 +1,4 @@
-﻿using Switches.SwitchesOutlets;
+﻿using Switches;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,17 +10,18 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace SwitchesControls.ViewModels
 {
-	public class SwitchOutletViewModel : BaseViewModel
+	public abstract class SwitchOutletBaseViewModel : BaseViewModel
 	{
-		private readonly ISwitchOutlet _device;
+		private readonly IBaseSwitch _device;
 		private string _description;
 		private bool _editsDescription;
 		private bool _isNotBlockOnOff = true;
 
-		public SwitchOutletViewModel(ISwitchOutlet switchOutlet)
+		public SwitchOutletBaseViewModel(IBaseSwitch baseSwitch)
 		{
-			_device = switchOutlet;
-			Description = _device.Description;		
+			_device = baseSwitch;
+
+			Description = _device.Description;
 			InitCommands();
 		}
 
@@ -51,7 +52,7 @@ namespace SwitchesControls.ViewModels
 			get { return _description; }
 			set
 			{
-				_description = value;				
+				_description = value;
 			}
 		}
 
@@ -62,11 +63,10 @@ namespace SwitchesControls.ViewModels
 
 		public Image Img { get { return GetImg(); } }
 
-
 		public RelayCommand EditDescription { get; private set; }
 		private void ExecuteEditDescription(object param)
 		{
-			if(EditsDescription)
+			if (EditsDescription)
 			{
 				OnPropertyChanged(nameof(Description));
 			}
@@ -98,7 +98,7 @@ namespace SwitchesControls.ViewModels
 			EditDescription = new RelayCommand(ExecuteEditDescription);
 		}
 
-		private Image GetImg()
+		protected Image GetImg()
 		{
 			Image image = new Image();
 			BitmapImage img = new BitmapImage(new Uri($"{AppContext.BaseDirectory}/SwitchesControls/Resources/Imgs/NoImage.jpg"));

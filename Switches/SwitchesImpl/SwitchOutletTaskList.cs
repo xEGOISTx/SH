@@ -3,30 +3,30 @@ using System.Collections;
 using System.Collections.Generic;
 
 
-namespace Switches.SwitchesOutlets
+namespace Switches
 {
 	public class SwitchOutletTaskList : ISwitchOutletTaskList
 	{
-		private readonly Dictionary<TaskType, ISwitchOutletTask> _tasks = new Dictionary<TaskType, ISwitchOutletTask>();
+		private readonly Dictionary<SwitchOutletTaskType, ISwitchOutletTask> _tasks = new Dictionary<SwitchOutletTaskType, ISwitchOutletTask>();
 
 		public SwitchOutletTaskList(IDeviceBase owner)
 		{
 			if (owner.FirmwareType == FirmwareType.ESP_8266)
 			{
-				_tasks.Add(TaskType.TurnOn, new SwitchOutletTask(owner,5, TaskType.TurnOn));
-				_tasks.Add(TaskType.TurnOff, new SwitchOutletTask(owner,5, TaskType.TurnOff));
+				_tasks.Add(SwitchOutletTaskType.TurnOn, new SwitchOutletTask(owner,5, SwitchOutletTaskType.TurnOn));
+				_tasks.Add(SwitchOutletTaskType.TurnOff, new SwitchOutletTask(owner,5, SwitchOutletTaskType.TurnOff));
 			}
 
 		}
 
 		public int Count => _tasks.Count;
 
-		public bool ContainsKey(TaskType key)
+		public bool ContainsKey(SwitchOutletTaskType key)
 		{
 			return _tasks.ContainsKey(key);
 		}
 
-		public ISwitchOutletTask GetByKey(TaskType key)
+		public ISwitchOutletTask GetByKey(SwitchOutletTaskType key)
 		{
 			if(ContainsKey(key))
 			{

@@ -1,6 +1,6 @@
 ﻿using SHBase.DevicesBaseComponents;
 
-namespace Switches.SwitchesOutlets
+namespace Switches
 {
 	/// <summary>
 	/// Действие пина

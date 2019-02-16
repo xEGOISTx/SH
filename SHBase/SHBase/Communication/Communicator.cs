@@ -56,7 +56,7 @@ namespace SHBase.Communication
 		{
 			return await Task.Run(async () =>
 			{
-				DeviceBasicInfo deviceInfo = null;
+				DeviceBase deviceInfo = null;
 
 				OperationResult result = await SendToDevice(iPAddress, CommandNames.GetInfo);
 
@@ -64,7 +64,7 @@ namespace SHBase.Communication
 				{
 					string[] info = result.ResponseMessage.Split('&');
 
-					deviceInfo = new DeviceBasicInfo(iPAddress)
+					deviceInfo = new DeviceBase(iPAddress)
 					{
 						ID = ushort.Parse(info[0]),
 						FirmwareType = (FirmwareType)int.Parse(info[1]),

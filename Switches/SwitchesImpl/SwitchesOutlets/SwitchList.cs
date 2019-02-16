@@ -6,16 +6,17 @@ using System.Text;
 using System.Threading.Tasks;
 using SHBase.DevicesBaseComponents;
 
-namespace Switches.SwitchesOutlets
+namespace Switches
 {
-	public class SwitchList : SwitchesAndOutletsListBaseImpl, ISwitchesAndOutletsList
+	public class SwitchList : SwitchesAndOutletsBaseList<ISwitch>, ISwitchList
 	{
 		public SwitchList() : base(DeviceType.Switch) { }
 
-
-		public override ISwitchesLoader GetLoader()
+		internal override ISwitchesLoader GetLoader()
 		{
 			return new SwitchesLoader(DevicesType);
 		}
+
+		internal override DBConvertor<ISwitch> Convertor => new SwitchesConvertor();
 	}
 }

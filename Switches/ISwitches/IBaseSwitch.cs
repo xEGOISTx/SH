@@ -1,28 +1,24 @@
 ﻿using SHBase.DevicesBaseComponents;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
-namespace Switches.SwitchesOutlets
+namespace Switches
 {
 	public enum CurrentState
 	{
-		TurnedOn,
-		TurnedOff
+		TurnedOff,
+		TurnedOn
 	}
 
-	/// <summary>
-	/// Обычный переключатель или розетка
-	/// </summary>
-	public interface ISwitchOutlet : IDeviceBase
+	public interface IBaseSwitch : IDeviceBase
 	{
 		/// <summary>
 		/// Текущее состояние 
 		/// </summary>
 		CurrentState State { get; }
-
-		/// <summary>
-		/// Задачи
-		/// </summary>
-		ISwitchOutletTaskList Tasks { get; }
 
 		/// <summary>
 		/// Включить

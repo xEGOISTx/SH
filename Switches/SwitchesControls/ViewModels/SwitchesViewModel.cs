@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Switches;
-using Switches.SwitchesOutlets;
 
 namespace SwitchesControls.ViewModels
 {
@@ -17,13 +16,13 @@ namespace SwitchesControls.ViewModels
 		{
 			_switches = switches;
 
-			Switches = new SwitchsOutletsListViewModel(_switches.SwitchList);
-			Outlets = new SwitchsOutletsListViewModel(_switches.OutletList);
+			Switches = new SwitchListViewModel(_switches.SwitchList);
+			Outlets = new OutletListViewModel(_switches.OutletList);
 		}
 
-		public SwitchsOutletsListViewModel Switches { get; }
+		public SwitchListViewModel Switches { get; }
 
-		public SwitchsOutletsListViewModel Outlets { get; }
+		public OutletListViewModel Outlets { get; }
 
 		public void Refresh()
 		{

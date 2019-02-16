@@ -17,6 +17,6 @@ namespace SHBase.Communication
 			ErrorMessage = operationResult.ErrorMessage;
 		}
 
-		public DevicesBaseComponents.DeviceBasicInfo BasicInfo { get; internal set; }
+		public DevicesBaseComponents.IDeviceBase BasicInfo { get; internal set; }
 	}
 }
