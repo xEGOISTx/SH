@@ -103,7 +103,7 @@ namespace SHBase.Communication
 		/// <summary>
 		/// Отключиться от устройства
 		/// </summary>
-		public async void DisconnectAsync()
+		public async Task DisconnectAsync()
 		{
 			await Task.Run(() =>
 			{

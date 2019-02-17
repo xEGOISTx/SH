@@ -9,9 +9,9 @@ using SHBase.DevicesBaseComponents;
 
 namespace Switches
 {
-	internal class SwitchesConvertor : DBConvertor<ISwitch>
+	internal class SwitchesConvertor : DBConvertor
 	{
-		public override IEnumerable<ISwitch> ConvertToDevices(IEnumerable<IDeviceInfo> infos)
+		public override IEnumerable<IBaseSwitch> ConvertToDevices(IEnumerable<IDeviceInfo> infos)
 		{
 			List<ISwitch> baseSwitches = new List<ISwitch>(infos.Count());
 
@@ -23,6 +23,7 @@ namespace Switches
 
 				Switch sw = new Switch(mac, fType, dType)
 				{
+					ID = deviceInfo.ID,
 					Description = deviceInfo.Description
 				};
 

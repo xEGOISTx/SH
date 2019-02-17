@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace Switches
 {
-	internal abstract class DBConvertor<SwitchType>
+	internal abstract class DBConvertor
 	{
-		public abstract IEnumerable<SwitchType> ConvertToDevices(IEnumerable<IDeviceInfo> infos);
+		public abstract IEnumerable<IBaseSwitch> ConvertToDevices(IEnumerable<IDeviceInfo> infos);
 
 		public IDeviceInfo[] ConvertToDeviceInfos(IEnumerable<IDeviceBase> switches)
 		{

@@ -92,7 +92,7 @@ namespace Switches
 				//сохраняем усройства, передаём устойствам ID
 				if(switches.Count > 0)
 				{
-					ISwitchesLoader loader = _switches.GetLoader();
+					ISwitchesLoader loader = _switches.Loader;
 					IDeviceInfo[] infos = _switches.Convertor.ConvertToDeviceInfos(switches);
 					IResultOperationSave result = await loader.SaveDevices(infos);
 
@@ -106,7 +106,7 @@ namespace Switches
 
 				if (outlets.Count > 0)
 				{
-					ISwitchesLoader loader = _outlets.GetLoader();
+					ISwitchesLoader loader = _outlets.Loader;
 					IDeviceInfo[] infos = _outlets.Convertor.ConvertToDeviceInfos(outlets);
 					IResultOperationSave result = await loader.SaveDevices(infos);
 
@@ -131,28 +131,46 @@ namespace Switches
 			{
 				return await Task.Run(async () =>
 				{
-					ISwitchesLoader swLoader = _switches.GetLoader();
-					IResultOperationLoad swResult = await swLoader.LoadDevices();
+					//TODO: обобщить в список LoadableList и выполнять автоматизированную загрузку всех скписков устройств
 
-					ISwitchesLoader ouLoader = _outlets.GetLoader();
-					IResultOperationLoad ouResult = await ouLoader.LoadDevices();
-
-					if (swResult.Success && ouResult.Success)
+					List<LoadableList> lists = new List<LoadableList>()
 					{
-						//IEnumerable<ISwitchOutlet> fake = FakeDevices();
-						//_switches.AddRange(fake);
+						_switches, _outlets
+					};
 
-						IEnumerable<ISwitch> swDevices = _switches.Convertor.ConvertToDevices(swResult.DeviceInfos);
-						_switches.AddRange(swDevices);
+					foreach(LoadableList list in lists)
+					{
+						ISwitchesLoader loader = list.Loader;
+						IResultOperationLoad result = await loader.LoadDevices();
 
-						IEnumerable<IOutlet> ouDevices = _outlets.Convertor.ConvertToDevices(ouResult.DeviceInfos);
-						_outlets.AddRange(ouDevices);
-
-						IsLoaded = true;
-						return true;
+						if(result.Success)
+						{
+							IEnumerable<IBaseSwitch> devices = _switches.Convertor.ConvertToDevices(result.DeviceInfos);
+							list.AddRange(devices);
+						}
 					}
 
-					return false;
+					IsLoaded = true;
+					return true;
+
+					//ISwitchesLoader swLoader = _switches.Loader;
+					//IResultOperationLoad swResult = await swLoader.LoadDevices();
+
+					//ISwitchesLoader ouLoader = _outlets.Loader;
+					//IResultOperationLoad ouResult = await ouLoader.LoadDevices();
+
+					//if (swResult.Success && ouResult.Success)
+					//{
+					//	IEnumerable<IBaseSwitch> swDevices = _switches.Convertor.ConvertToDevices(swResult.DeviceInfos);
+					//	_switches.AddRange(swDevices);
+
+					//	IEnumerable<IBaseSwitch> ouDevices = _outlets.Convertor.ConvertToDevices(ouResult.DeviceInfos);
+					//	_outlets.AddRange(ouDevices);
+
+					//	IsLoaded = true;
+					//	return true;
+					//}
+
 				});
 			}
 			else

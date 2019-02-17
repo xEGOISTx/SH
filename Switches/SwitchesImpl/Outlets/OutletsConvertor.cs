@@ -6,9 +6,9 @@ using System.Linq;
 
 namespace Switches
 {
-	internal class OutletsConvertor : DBConvertor<IOutlet>
+	internal class OutletsConvertor : DBConvertor
 	{
-		public override IEnumerable<IOutlet> ConvertToDevices(IEnumerable<IDeviceInfo> infos)
+		public override IEnumerable<IBaseSwitch> ConvertToDevices(IEnumerable<IDeviceInfo> infos)
 		{
 			List<IOutlet> baseSwitches = new List<IOutlet>(infos.Count());
 
@@ -20,6 +20,7 @@ namespace Switches
 
 				Outlet ou = new Outlet(mac, fType, dType)
 				{
+					ID = deviceInfo.ID,
 					Description = deviceInfo.Description
 				};
 

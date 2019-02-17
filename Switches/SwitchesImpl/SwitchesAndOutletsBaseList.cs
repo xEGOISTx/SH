@@ -6,48 +6,32 @@ using System.Linq;
 
 namespace Switches
 {
-	public abstract class SwitchesAndOutletsBaseList<TValue>
+	public abstract class SwitchesAndOutletsBaseList<TValue> : LoadableList
 		where TValue : IBaseSwitch
 	{
-		protected readonly Dictionary<int, TValue> _devices = new Dictionary<int, TValue>();
-
-		public SwitchesAndOutletsBaseList(DeviceType devicesType)
+		public SwitchesAndOutletsBaseList(DeviceType devicesType) : base(devicesType)
 		{
-			DevicesType = devicesType;
 		}
 
-
-		public DeviceType DevicesType { get;}
-
-		public int Count => _devices.Count;
-
-
-		public bool ContainsKey(int key)
-		{
-			return _devices.ContainsKey(key);
-		}
-
-		public TValue GetByKey(int key)
+	
+		public new TValue GetByKey(int key)
 		{
 			if (ContainsKey(key))
 			{
-				return _devices[key];
+				return (TValue)_devices[key];
 			}
 
 			return default(TValue);
 		}
 
-		public IEnumerator GetEnumerator()
+		public new IEnumerator GetEnumerator()
 		{
-			return _devices.Values.GetEnumerator();
+			return _devices.Values.Cast<TValue>().GetEnumerator();
 		}
 
 		public void Add(TValue device)
 		{
-			if (!ContainsKey(device.ID))
-			{
-				_devices.Add(device.ID, device);
-			}
+			base.Add(device);
 		}
 
 		public void AddRange(IEnumerable<TValue> devices)
@@ -58,8 +42,5 @@ namespace Switches
 			}
 		}
 
-		internal abstract ISwitchesLoader GetLoader();
-
-		internal abstract DBConvertor<TValue> Convertor { get; }
 	}
 }

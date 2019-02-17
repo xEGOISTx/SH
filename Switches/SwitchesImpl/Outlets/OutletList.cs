@@ -11,14 +11,10 @@ namespace Switches.SwitchesOutlets
 	{
 		public OutletList() : base(DeviceType.Outlet) { }
 
-		
+		internal override ISwitchesLoader Loader => new SwitchesLoader(DevicesType);
 
-		internal override ISwitchesLoader GetLoader()
-		{
-			return new SwitchesLoader(DevicesType);
-		}
 
-		internal override DBConvertor<IOutlet> Convertor => new OutletsConvertor();
+		internal override DBConvertor Convertor => new OutletsConvertor();
 
 	}
 }
