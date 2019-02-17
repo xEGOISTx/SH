@@ -20,7 +20,7 @@ namespace Switches
 		}
 
 
-		internal abstract ISwitchesLoader Loader { get; }
+		internal ISwitchesLoader Loader => new SwitchesLoader(DevicesType);
 
 		internal abstract DBConvertor Convertor { get; }
 

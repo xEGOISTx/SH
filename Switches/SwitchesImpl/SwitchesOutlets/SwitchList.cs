@@ -13,7 +13,7 @@ namespace Switches
 		public SwitchList() : base(DeviceType.Switch) { }
 
 
-		internal override ISwitchesLoader Loader => new SwitchesLoader(DevicesType);
+		//internal override ISwitchesLoader Loader => new SwitchesLoader(DevicesType);
 
 		internal override DBConvertor Convertor => new SwitchesConvertor();
 	}

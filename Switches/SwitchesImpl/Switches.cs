@@ -8,7 +8,7 @@ using DataManager;
 using SHBase;
 using SHBase.Communication;
 using SHBase.DevicesBaseComponents;
-using Switches.SwitchesOutlets;
+using Switches;
 
 namespace Switches
 {
@@ -16,6 +16,14 @@ namespace Switches
 	{
 		private readonly SwitchList _switches = new SwitchList();
 		private readonly OutletList _outlets = new OutletList();
+		private readonly List<LoadableList> _lists = new List<LoadableList>();
+
+		public Switches()
+		{
+			_lists.Add(_switches);
+			_lists.Add(_outlets);
+		}
+
 
 		/// <summary>
 		/// Список обычных выключателей
@@ -92,29 +100,13 @@ namespace Switches
 				//сохраняем усройства, передаём устойствам ID
 				if(switches.Count > 0)
 				{
-					ISwitchesLoader loader = _switches.Loader;
-					IDeviceInfo[] infos = _switches.Convertor.ConvertToDeviceInfos(switches);
-					IResultOperationSave result = await loader.SaveDevices(infos);
-
-					if(result.Success)
-					{
-						await FillIDs(switches.ToArray(), result.NewIDs);
-					}
-
+					await SaveDevices(switches, _switches.Loader, _switches.Convertor);
 					_switches.AddRange(switches);
 				}
 
 				if (outlets.Count > 0)
 				{
-					ISwitchesLoader loader = _outlets.Loader;
-					IDeviceInfo[] infos = _outlets.Convertor.ConvertToDeviceInfos(outlets);
-					IResultOperationSave result = await loader.SaveDevices(infos);
-
-					if (result.Success)
-					{
-						await FillIDs(outlets.ToArray(), result.NewIDs);
-					}
-
+					await SaveDevices(outlets, _outlets.Loader, _outlets.Convertor);
 					_outlets.AddRange(outlets);
 				}
 
@@ -131,14 +123,7 @@ namespace Switches
 			{
 				return await Task.Run(async () =>
 				{
-					//TODO: обобщить в список LoadableList и выполнять автоматизированную загрузку всех скписков устройств
-
-					List<LoadableList> lists = new List<LoadableList>()
-					{
-						_switches, _outlets
-					};
-
-					foreach(LoadableList list in lists)
+					foreach(LoadableList list in _lists)
 					{
 						ISwitchesLoader loader = list.Loader;
 						IResultOperationLoad result = await loader.LoadDevices();
@@ -152,25 +137,6 @@ namespace Switches
 
 					IsLoaded = true;
 					return true;
-
-					//ISwitchesLoader swLoader = _switches.Loader;
-					//IResultOperationLoad swResult = await swLoader.LoadDevices();
-
-					//ISwitchesLoader ouLoader = _outlets.Loader;
-					//IResultOperationLoad ouResult = await ouLoader.LoadDevices();
-
-					//if (swResult.Success && ouResult.Success)
-					//{
-					//	IEnumerable<IBaseSwitch> swDevices = _switches.Convertor.ConvertToDevices(swResult.DeviceInfos);
-					//	_switches.AddRange(swDevices);
-
-					//	IEnumerable<IBaseSwitch> ouDevices = _outlets.Convertor.ConvertToDevices(ouResult.DeviceInfos);
-					//	_outlets.AddRange(ouDevices);
-
-					//	IsLoaded = true;
-					//	return true;
-					//}
-
 				});
 			}
 			else
@@ -184,7 +150,7 @@ namespace Switches
 		/// </summary>
 		/// <param name="devicesFromRouter"></param>
 		/// <returns></returns>
-		public override async Task Synchronization(IEnumerable<IDeviceBase> devicesFromRouter)
+		public override async Task Synchronization(IEnumerable<IDeviceBase> devicesFromRouter, Communicator communicator)
 		{
 			if (IsLoaded)
 			{
@@ -195,19 +161,18 @@ namespace Switches
 						if (CheckForComplianceDevice(deviceFromRouter))
 						{
 							//пробуем получить устройство из имеющихся списков
-							Switch device = (Switch)GetDevice(deviceFromRouter.ID);
+							IBaseSwitch device = GetDevice(deviceFromRouter.ID);
 
 							if (device != null && CheckCorresponding(deviceFromRouter, device))
-							{					
-								device.IP = deviceFromRouter.IP;
-								device.Name = deviceFromRouter.Name;
-								device.IsConnected = true;
-								device.State = CurrentState.TurnedOff; //статус будем запрашивать отсюда
+							{
+								BaseSwitch dev = (device as BaseSwitch);
+								dev.IP = deviceFromRouter.IP;
+								dev.Name = deviceFromRouter.Name;
+								dev.IsConnected = true;
 
-								//if (device is регул. выключатель)
-								//{
-									//запрос на уровень напряжения
-								//}
+								//TODO: здесь будет вызов метода GetOwnParams
+								dev.State = CurrentState.TurnedOff; //статус будем запрашивать отсюда
+
 							}
 							else if (device == null)
 							{
@@ -223,15 +188,6 @@ namespace Switches
 			}
 		}
 
-		//public override IEnumerable<IDeviceBase> GetAllDevices()
-		//{
-		//	List<IDeviceBase> allDevices = new List<IDeviceBase>();
-		//	allDevices.AddRange(SwitchList.Cast<IDeviceBase>());
-		//	allDevices.AddRange(OutletList.Cast<IDeviceBase>());
-
-		//	return allDevices;
-		//}
-
 		public override IEnumerator GetEnumerator()
 		{
 			List<IDeviceBase> allDevices = new List<IDeviceBase>();
@@ -240,50 +196,6 @@ namespace Switches
 
 			return allDevices.GetEnumerator();
 		}
-
-		//private IDeviceInfo[] ConvertToDeviceInfos(IEnumerable<IDeviceBase> devices)
-		//{
-		//	List<DeviceInfo> deviceInfos = new List<DeviceInfo>();
-
-		//	foreach (IDeviceBase device in devices)
-		//	{
-		//		DeviceInfo deviceInfo = new DeviceInfo
-		//		{
-		//			Description = device.Description,
-		//			DeviceType = (int)device.DeviceType,
-		//			FirmwareType = (int)device.FirmwareType,
-		//			MacAddress = device.Mac.ToString()
-		//		};
-
-		//		deviceInfos.Add(deviceInfo);
-		//	}
-
-		//	return deviceInfos.ToArray();
-		//}
-
-		//private IEnumerable<ISwitch> ConvertToSwitches(IDeviceInfo[] deviceInfos)
-		//{
-		//	List<ISwitch> devices = new List<ISwitch>();
-
-		//	foreach(IDeviceInfo deviceInfo in deviceInfos)
-		//	{
-		//		MacAddress mac = new MacAddress(deviceInfo.MacAddress);
-		//		FirmwareType firmwareType = (FirmwareType)deviceInfo.FirmwareType;
-		//		DeviceType deviceType = (DeviceType)deviceInfo.DeviceType;
-
-		//		Switch device = new Switch(mac, firmwareType, deviceType)
-		//		{
-		//			Description = deviceInfo.Description,
-		//			ID = deviceInfo.ID,
-		//			State = CurrentState.TurnedOff
-		//		};
-
-		//		devices.Add(device);
-		//	}
-
-		//	return devices;
-		//}
-
 
 
 		/// <summary>
@@ -299,13 +211,20 @@ namespace Switches
 				&& deviceFromRouter.DeviceType == device.DeviceType;
 		}
 
-		//private async Task<IResultOperationSave> SaveDevices(IEnumerable<IDeviceBase> devices, ISwitchesLoader loader)
-		//{
-		//	IDeviceInfo[] deviceInfos = ConvertToDeviceInfos(devices);
-		//	return  await loader.SaveDevices(deviceInfos);
-		//}
+		private async Task<bool> SaveDevices(IEnumerable<IBaseSwitch> devices, ISwitchesLoader loader, DBConvertor convertor)
+		{
+			IDeviceInfo[] deviceInfos = convertor.ConvertToDeviceInfos(devices);
+			IResultOperationSave result = await loader.SaveDevices(deviceInfos);
 
-		private async Task FillIDs(IDeviceBase[] newDevices, int[] newIDs)
+			if(result.Success)
+			{
+				await FillIDs(devices.ToArray(), result.NewIDs);
+			}
+
+			return result.Success;
+		}
+
+		private async Task FillIDs(IBaseSwitch[] newDevices, int[] newIDs)
 		{
 			Communicator communicator = new Communicator();
 
@@ -315,11 +234,7 @@ namespace Switches
 				IDeviceBase device = newDevices[i];
 				int newID = newIDs[i];
 
-				if (device is Switch sO)
-				{
-					sO.ID = newID;
-				}
-
+				(device as BaseSwitch).ID = newID;
 
 				if (device.ID > 0)
 				{
@@ -332,17 +247,29 @@ namespace Switches
 				}
 				else
 				{
-					throw new Exception("Передаваемый ID не может быть равен и меньше 0");
+					throw new Exception("Передаваемый ID не может быть равен или меньше 0");
 				}
 			}
 		}
 
-		private IDeviceBase GetDevice(int id)
+		private IBaseSwitch GetDevice(int id)
 		{
-			IDeviceBase device = _switches.GetByKey(id);
+			IBaseSwitch device = null;
 
-			if (device == null)
-				device = _outlets.GetByKey(id);
+			foreach (LoadableList list in _lists)
+			{
+				device = list.GetByKey(id);
+				if(device != null)
+				{
+					break;
+				}
+			}
+
+
+			//IDeviceBase device = _switches.GetByKey(id);
+
+			//if (device == null)
+			//	device = _outlets.GetByKey(id);
 
 			return device;
 		}

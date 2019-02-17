@@ -49,10 +49,11 @@ namespace SHBase.Communication
 					device = new DeviceBase(ip)
 					{
 						ID = ushort.Parse(info[0]),
-						FirmwareType = (FirmwareType)int.Parse(info[1]),					
+						FirmwareType = (FirmwareType)int.Parse(info[1]),
 						Mac = new MacAddress(info[2]),
 						Name = info[3],
-						DeviceType = (DeviceType)int.Parse(info[4])
+						DeviceType = (DeviceType)int.Parse(info[4]),
+						IsConnected = true
 					};
 				}
 

@@ -157,7 +157,7 @@ namespace DevicesPresenter
 
 					foreach (Devices devList in _deviceCommonList)
 					{
-						await devList.Synchronization(toSynchronize);
+						await devList.Synchronization(toSynchronize, communicator);
 					}
 				}
 

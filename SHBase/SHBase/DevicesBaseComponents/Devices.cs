@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SHBase.Communication;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,7 +38,7 @@ namespace SHBase.DevicesBaseComponents
 		/// </summary>
 		/// <param name="deviceInfos"></param>
 		/// <returns></returns>
-		public abstract Task Synchronization(IEnumerable<IDeviceBase> deviceInfos);
+		public abstract Task Synchronization(IEnumerable<IDeviceBase> deviceInfos, Communicator communicator);
 
 		///// <summary>
 		///// Получить все устройства

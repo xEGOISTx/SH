@@ -56,6 +56,6 @@ namespace Switches
 			return res;
 		}
 
-		//TODO: добавить абстрактный метод GetOwnInfo
+		//TODO: добавить абстрактный метод GetOwnPrams
 	}
 }
