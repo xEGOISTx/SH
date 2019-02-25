@@ -106,6 +106,7 @@ namespace SHBase.Communication
 
 		}
 
+		
 		/// <summary>
 		/// Отпрпавить id устройству
 		/// </summary>

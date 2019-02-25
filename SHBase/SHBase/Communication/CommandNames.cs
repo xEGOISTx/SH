@@ -13,6 +13,7 @@ namespace SHBase.Communication
 		GetIP,
 		GetID,
 		SetID,
-		ConnectionParams
+		ConnectionParams,
+		SetHostIP
 	}
 }

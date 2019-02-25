@@ -121,27 +121,58 @@ namespace SHBase.Communication
 		/// <returns></returns>
 		public async Task<bool> SendIdToDeviceAsAP(ushort id)
 		{
-			if (_ip != null && _ip != Consts.ZERO_IP)
+			return await Task.Run(async () =>
 			{
-				byte[] bytes = BitConverter.GetBytes(id);
-				string byte1value = bytes[0].ToString();
-				string byte2value = bytes[1].ToString();
+				if (_ip != null && _ip != Consts.ZERO_IP)
+				{
+					byte[] bytes = BitConverter.GetBytes(id);
+					string byte1value = bytes[0].ToString();
+					string byte2value = bytes[1].ToString();
 
-				List<CommandParameter> content = new List<CommandParameter>
+					List<CommandParameter> content = new List<CommandParameter>
 				{
 					new CommandParameter("b1", byte1value),
 					new CommandParameter("b2", byte2value)
 				};
 
-				Communicator communicator = new Communicator();
-				OperationResult result = await communicator.SendToDevice(_ip, CommandNames.SetID, content);
+					Communicator communicator = new Communicator();
+					OperationResult result = await communicator.SendToDevice(_ip, CommandNames.SetID, content);
 
-				return result.Success;
-			}
-			else
+					return result.Success;
+				}
+				else
+				{
+					return false;
+				}
+			});
+		}
+
+		public Task<bool> SendHostIPToDeviceAsAP(IPAddress iP)
+		{
+			return Task.Run(async () =>
 			{
-				return false;
-			}
+				if (_ip != null && _ip != Consts.ZERO_IP)
+				{
+					List<CommandParameter> content = new List<CommandParameter>(4);
+					byte[] bytes = iP.GetAddressBytes();
+					byte bNumber = 1;
+
+					foreach(byte b in bytes)
+					{					
+						content.Add(new CommandParameter($"b{bNumber}", b.ToString()));
+						bNumber++;
+					}
+
+					Communicator communicator = new Communicator();
+					OperationResult result = await communicator.SendToDevice(_ip, CommandNames.SetHostIP, content);
+
+					return result.Success;
+				}
+				else
+				{
+					return false;
+				}
+			});
 		}
 
 		/// <summary>

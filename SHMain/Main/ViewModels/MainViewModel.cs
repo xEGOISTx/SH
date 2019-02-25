@@ -8,6 +8,7 @@ using DevicesPresenterControls.ViewModels;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml;
 using DevicesPresenter;
+using SHBase;
 
 
 namespace SHMain.Main.ViewModels
@@ -18,6 +19,7 @@ namespace SHMain.Main.ViewModels
 		{
 			DataManager.DataManager dataManager = new DataManager.DataManager();
 			dataManager.InitializeDatabase();
+			Server server = new Server();
 			Init();
 		}
 
