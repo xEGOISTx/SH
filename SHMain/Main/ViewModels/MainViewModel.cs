@@ -7,6 +7,9 @@ using UWPHelper;
 using DevicesPresenterControls.ViewModels;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml;
+using DevicesPresenter;
+using SHBase;
+
 
 namespace SHMain.Main.ViewModels
 {
@@ -16,18 +19,32 @@ namespace SHMain.Main.ViewModels
 		{
 			DataManager.DataManager dataManager = new DataManager.DataManager();
 			dataManager.InitializeDatabase();
-			
-			DevicesVM = new DevicesViewModel(new DevicesPresenter.DevicesManager());
-			GoToDevices = new RelayCommand(ExecuteGoToDevices);
+			Server server = new Server();
+			Init();
 		}
- 
-		public DevicesViewModel DevicesVM { get;private set; }
 
 
-		public RelayCommand GoToDevices { get; private set; }
-		private void ExecuteGoToDevices(object param)
+		public DevicePresenterViewModel DevicePresenterVM { get; private set; }
+
+		private async void Init()
 		{
-			(Window.Current.Content as Frame).Navigate(typeof(DevicesPresenterControls.Views.DevicesView), DevicesVM);
+			DevicesManager devicesManager = new DevicesManager(new DeviceCommonList());
+			DevicePresenterVM = new DevicePresenterViewModel(devicesManager);
+			OnPropertyChanged(nameof(DevicePresenterVM));
+
+			await devicesManager.LoadDevicesAsync();
+			await devicesManager.SynchronizationWithDevicesAsync();
+
+			DevicePresenterVM.RefreshPresenter();
+			DevicePresenterVM.DevicePresenterVisibility = true;
 		}
 	}
 }
+
+
+		//public DevicesViewModel DevicesVM { get; private set; }
+		//public RelayCommand GoToDevices { get; private set; }
+		//private void ExecuteGoToDevices(object param)
+		//{
+		//	(Window.Current.Content as Frame).Navigate(typeof(DevicesPresenterControls.Views.DevicesView), DevicesVM);
+		//}

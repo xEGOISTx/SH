@@ -1,4 +1,4 @@
-﻿using SHBase.DeviceBase;
+﻿using SHBase.DevicesBaseComponents;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,29 +32,63 @@ namespace SHBase.Communication
 		/// Возвращает базовую инфу об устройстве
 		/// </summary>
 		/// <returns></returns>
-		public async Task<DeviceBaseInfo> GetDeviceInfoFromDeviceAsAP()
+		public async Task<IDeviceBase> GetDeviceInfoFromDeviceAsAP()
 		{
 			return await Task.Run(async () =>
 			{
-				DeviceBaseInfo device = null;
+				DeviceBase device = null;
 				Communicator communicator = new Communicator();
 
 				OperationResult result = await communicator.SendToDevice(_ip, CommandNames.GetInfo);
+				IPAddress ip = await GetLocalIPFromDeviceAsAP(); 
 
 				if (result.Success)
 				{
 					string[] info = result.ResponseMessage.Split('&');
 
-					ushort id = ushort.Parse(info[0]);
-					FirmwareType firmwareType = (FirmwareType)int.Parse(info[1]);
-					string mac = info[2];
-					string name = info[3];
-
-					device = new DeviceBaseInfo(id, name, new MacAddress(mac), firmwareType);
+					device = new DeviceBase(ip)
+					{
+						ID = ushort.Parse(info[0]),
+						FirmwareType = (FirmwareType)int.Parse(info[1]),
+						Mac = new MacAddress(info[2]),
+						Name = info[3],
+						DeviceType = (DeviceType)int.Parse(info[4]),
+						IsConnected = true
+					};
 				}
 
 				return device;
 			});
+		}
+
+		/// <summary>
+		/// Получить ID устройства
+		/// </summary>
+		/// <param name="device"></param>
+		/// <returns></returns>
+		public async Task<int> GetDeviceIDAsAP()
+		{
+			return await Task.Run(async () =>
+			{
+				if (_ip != null && _ip != Consts.ZERO_IP)
+				{
+					Communicator communicator = new Communicator();
+
+					OperationResult result = await communicator.SendToDevice(_ip, CommandNames.GetID);
+
+					if (result.Success && result.ResponseMessage != "0")
+					{
+						return ushort.Parse(result.ResponseMessage);
+					}
+					else
+					{
+						return -1;
+					}
+				}
+
+				return -1;
+			});
+
 		}
 
 		/// <summary>
@@ -87,27 +121,58 @@ namespace SHBase.Communication
 		/// <returns></returns>
 		public async Task<bool> SendIdToDeviceAsAP(ushort id)
 		{
-			if (_ip != null && _ip != Consts.ZERO_IP)
+			return await Task.Run(async () =>
 			{
-				byte[] bytes = BitConverter.GetBytes(id);
-				string byte1value = bytes[0].ToString();
-				string byte2value = bytes[1].ToString();
+				if (_ip != null && _ip != Consts.ZERO_IP)
+				{
+					byte[] bytes = BitConverter.GetBytes(id);
+					string byte1value = bytes[0].ToString();
+					string byte2value = bytes[1].ToString();
 
-				List<ICommandParameter> content = new List<ICommandParameter>
+					List<CommandParameter> content = new List<CommandParameter>
 				{
 					new CommandParameter("b1", byte1value),
 					new CommandParameter("b2", byte2value)
 				};
 
-				Communicator communicator = new Communicator();
-				OperationResult result = await communicator.SendToDevice(_ip, CommandNames.SetID, content);
+					Communicator communicator = new Communicator();
+					OperationResult result = await communicator.SendToDevice(_ip, CommandNames.SetID, content);
 
-				return result.Success;
-			}
-			else
+					return result.Success;
+				}
+				else
+				{
+					return false;
+				}
+			});
+		}
+
+		public Task<bool> SendHostIPToDeviceAsAP(IPAddress iP)
+		{
+			return Task.Run(async () =>
 			{
-				return false;
-			}
+				if (_ip != null && _ip != Consts.ZERO_IP)
+				{
+					List<CommandParameter> content = new List<CommandParameter>(4);
+					byte[] bytes = iP.GetAddressBytes();
+					byte bNumber = 1;
+
+					foreach(byte b in bytes)
+					{					
+						content.Add(new CommandParameter($"b{bNumber}", b.ToString()));
+						bNumber++;
+					}
+
+					Communicator communicator = new Communicator();
+					OperationResult result = await communicator.SendToDevice(_ip, CommandNames.SetHostIP, content);
+
+					return result.Success;
+				}
+				else
+				{
+					return false;
+				}
+			});
 		}
 
 		/// <summary>
@@ -125,7 +190,6 @@ namespace SHBase.Communication
 					new CommandParameter("password", connectionParams.Password)
 				};
 
-				//TODO: изменить на устройстве код приёма параметров подключения
 				Communicator communicator = new Communicator();
 				OperationResult result = await communicator.SendToDevice(_ip, CommandNames.ConnectionParams, content);
 

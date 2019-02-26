@@ -49,9 +49,9 @@ namespace SHMain.Main.Views
 
 		private async void Parserrrrr()
 		{
-			Parser parser = new Parser("http://192.168.1.254", "admin", "admin");
-			parser.LoadDeviceInfosComplete += Parser_LoadDeviceInfosComplete;
-			parser.LoadDeviceInfosAsync();
+			//Parser parser = new Parser("http://192.168.1.254", "admin", "admin");
+			//parser.LoadDeviceInfosComplete += Parser_LoadDeviceInfosComplete;
+			//parser.LoadDeviceInfosAsync();
 
 			//Parser parser2 = new Parser("http://192.168.1.254", "admin", "admin");
 		}
@@ -63,7 +63,7 @@ namespace SHMain.Main.Views
 
 		private async void Button_Click_1(object sender, RoutedEventArgs e)
 		{
-			Parserrrrr();
+			//Parserrrrr();
 		}
 
 	}

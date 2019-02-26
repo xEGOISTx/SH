@@ -106,9 +106,13 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="DBDeviceInfo.cs" />
+    <Compile Include="Consts.cs" />
+    <Compile Include="DeviceInfo.cs" />
     <Compile Include="DataManager.cs" />
+    <Compile Include="DBOperationResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ResultOperationLoad.cs" />
+    <Compile Include="ResultOperationSave.cs" />
     <EmbeddedResource Include="Properties\DataManagerImpl.rd.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -118,6 +122,12 @@
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.1.7</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IDataManager\IDataManager.csproj">
+      <Project>{d47ad259-430a-4a84-8ac2-fced700fb4ad}</Project>
+      <Name>IDataManager</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

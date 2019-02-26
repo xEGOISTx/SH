@@ -4,8 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Security.Credentials;
+using Windows.UI.Core;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+
+
 
 namespace RouterParser
 {
@@ -15,7 +19,9 @@ namespace RouterParser
 		private readonly string _login;
 		private readonly string _password;
 		private static WebView _webView;
-		//private static bool _isPreparigWebView = true;
+		private static bool _loadComplete = true;
+		private static bool _parseComplete = true;
+		private string _content;
 
 		public Parser(string ip,string login,string password)
 		{
@@ -31,12 +37,58 @@ namespace RouterParser
 
 
 
-		public async void LoadDeviceInfosAsync()
+		public async Task<ParseResult> LoadDeviceInfosAsync()
 		{
-			OperationResult authorizationResult = await Authorization();
+			ParseResult result = new ParseResult();
 
-			_webView.LoadCompleted += WebView_LoadCompleted;
-			_webView.Navigate(new Uri(_ip));
+			if (_parseComplete)
+			{
+				_parseComplete = false;
+				_loadComplete = false;
+
+				OperationResult authorizationResult = await Authorization();
+
+				_webView.LoadCompleted += WebView_LoadCompleted;
+
+				await Window.Current.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+				{
+					 _webView.Navigate(new Uri(_ip));
+				});
+
+
+				await Task.Run(() =>
+				{
+					while (!_loadComplete)
+					{ }
+
+					if (_content != null)
+					{
+						result.Success = true;
+						result.DeviceInfos = GetDivInfo(_content).ToArray();
+					}
+					else
+					{
+						result.ErrorText = "Не удалось загрузить контент";
+					}
+				});
+
+				_webView.LoadCompleted -= WebView_LoadCompleted;
+
+				await Window.Current.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+				{
+					_webView.NavigateToString("");
+				});
+
+
+				_parseComplete = true;
+			}
+			else
+			{
+				result.ErrorText = "Предыдущий процесс загрузки устройств ещё не завершен!";
+			}
+
+			_content = null;
+			return result;
 		}
 
 
@@ -61,7 +113,6 @@ namespace RouterParser
 			{
 				string[] colStrs = str.Split(new string[] { "td" }, StringSplitOptions.RemoveEmptyEntries);
 				List<string> temp = new List<string>();
-
 
 				foreach (string colStr in colStrs)
 				{
@@ -140,23 +191,8 @@ namespace RouterParser
 
 		private async void WebView_LoadCompleted(object sender, NavigationEventArgs e)
 		{
-			string content = await (sender as WebView).InvokeScriptAsync("eval", new string[] { "document.documentElement.outerHTML;" });
-
-			await Task.Run(() =>
-			{
-				IEnumerable<RDeviceInfo> deviceInfos = GetDivInfo(content);
-				OnLoadDeviceInfosComplete(deviceInfos);
-			});
-
-			_webView.LoadCompleted -= WebView_LoadCompleted;
-			_webView.NavigateToString("");
+			_content = await (sender as WebView).InvokeScriptAsync("eval", new string[] { "document.documentElement.outerHTML;" });
+			_loadComplete = true;
 		}
-
-		private void OnLoadDeviceInfosComplete(IEnumerable<RDeviceInfo> deviceInfos)
-		{
-			LoadDeviceInfosComplete?.Invoke(this, new DeviceInfosEventArgs(deviceInfos));
-		}
-
-		public event LoadDeviceInfosEventHandler LoadDeviceInfosComplete;
 	}
 }

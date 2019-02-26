@@ -124,11 +124,16 @@
     <Compile Include="Communication\Communicator.cs" />
     <Compile Include="Communication\CommunicatorAP.cs" />
     <Compile Include="Communication\ConnectorByWiFi.cs" />
-    <Compile Include="DeviceBase\CommandParameter.cs" />
-    <Compile Include="DeviceBase\DeviceBaseInfo.cs" />
+    <Compile Include="Communication\CommandParameter.cs" />
+    <Compile Include="Communication\GetBaseInfoResult.cs" />
+    <Compile Include="DevicesBaseComponents\DeviceBase.cs" />
     <Compile Include="Communication\OperationResult.cs" />
     <Compile Include="Consts.cs" />
+    <Compile Include="DevicesBaseComponents\DeviceBasicInfo.cs" />
+    <Compile Include="DevicesBaseComponents\DeviceCommonBaseList.cs" />
+    <Compile Include="DevicesBaseComponents\Devices.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Server.cs" />
     <EmbeddedResource Include="Properties\SHBase.rd.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -142,6 +147,7 @@
       <Name>ISHBase</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

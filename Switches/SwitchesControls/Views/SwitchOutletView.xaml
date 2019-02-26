@@ -1,0 +1,49 @@
+﻿<UserControl
+    x:Class="SwitchesControls.Views.SwitchOutletView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:SwitchesControls.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Height="200"
+    Width="200">
+    <UserControl.Resources>
+
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="{Binding Path=Description, Mode=OneWay}" TextAlignment="Center" Margin="0,5"/>
+
+        <ContentControl Grid.Row="1" Content="{Binding Img}"/>
+
+        <TextBox Grid.Row="1" Text="{Binding Path=Description, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding Path=EditsDescription}"
+                 VerticalAlignment="Bottom" />
+
+        <Grid Grid.Row="2">
+
+            <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
+                <AppBarButton Width="35" Height="35" Command="{Binding EditDescription}">
+                    <AppBarButton.Icon>
+                        <SymbolIcon  Symbol="Edit" Margin="0,-10,0,0"/>
+                    </AppBarButton.Icon>
+                </AppBarButton>
+
+                <AppBarButton Width="35" Height="35" >
+                    <AppBarButton.Icon>
+                        <SymbolIcon  Symbol="Setting" Margin="0,-10,0,0" />
+                    </AppBarButton.Icon>
+                </AppBarButton>
+            </StackPanel>
+
+            <ToggleSwitch Grid.Row="2" Margin="5,0,0,5" Height="31" IsOn="{Binding Path=TurnOnOff,Mode=TwoWay}" 
+                          IsHitTestVisible="{Binding Path=IsNotBlockOnOff,Mode=OneWay}"/>
+        </Grid>
+    </Grid>
+</UserControl>

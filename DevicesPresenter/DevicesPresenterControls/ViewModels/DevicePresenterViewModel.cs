@@ -1,195 +1,71 @@
 ﻿using DevicesPresenter;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SwitchesControls.ViewModels;
 using UWPHelper;
-using Windows.UI.Popups;
-using Windows.UI.Xaml.Controls;
-using SC = DevicesPresenterControls.Resources.StringConsts;
 
 namespace DevicesPresenterControls.ViewModels
 {
 	public class DevicePresenterViewModel : BaseViewModel
 	{
-		private readonly IDeviceEditor _deviceEditor;
-		private DeviceViewModel _originalDeviceVM;
-		private DeviceViewModel _currentDeviceVM;
-		private IDevice _deviceCopy;
-		private bool _isEditing;
-		private DeviceTaskViewModel _selectedTask;
+		private readonly IDevicesManager _manager;
+		private bool _devicePresenterVisibility;
 
-		public DevicePresenterViewModel(DeviceViewModel device, IDeviceEditor deviceEditor)
-		{			
-			_deviceEditor = deviceEditor;
-			_currentDeviceVM = device;
-			Description = device.Description;
-			Edit = new RelayCommand(ExecuteEdit);
-			AddTask = new RelayCommand(ExecuteAddTask);
-			RemoveTask = new RelayCommand(ExecuteRemoveTask);
+		public DevicePresenterViewModel(IDevicesManager manager)
+		{
+			_manager = manager;
+			FindDevices = new RelayCommand(ExecuteFindDevices);
+			Update = new RelayCommand(ExecuteUpdate);
 
-			RefreshTaskList();
+			Switches = new SwitchesViewModel(_manager.GetSwitches());
 		}
 
+		public SwitchesViewModel Switches { get; }
 
-		//public SymbolIcon Icon
-		//{
-		//	get
-		//	{
-		//		if(IsEditing)
-		//		{
-		//			return new SymbolIcon(Symbol.Accept);
-		//		}
-		//		else
-		//		{
-		//			return new SymbolIcon(Symbol.Edit);
-		//		}
-		//	}
-		//}
-
-		public ObservableCollection<DeviceTaskViewModel> Tasks => _currentDeviceVM.Tasks;
-
-		public IEnumerable<ActionGPIOViewModel> Actions { get; private set; }
-
-		public DeviceTaskViewModel SelectedTask
+		public bool DevicePresenterVisibility
 		{
-			get { return _selectedTask; }
+			get { return _devicePresenterVisibility; }
 			set
 			{
-				if (_selectedTask != null)
-					_selectedTask.IsSelected = false;
-
-				_selectedTask = value;
-
-				if (_selectedTask != null)
-					_selectedTask.IsSelected = true;
-				OnPropertyChanged(nameof(SelectedTask));
+				_devicePresenterVisibility = value;
+				OnPropertyChanged(nameof(DevicePresenterVisibility));
+				OnPropertyChanged(nameof(PBIsActive));
 			}
 		}
 
-		public string IsConnected
+		public bool PBIsActive
 		{
-			get { return _currentDeviceVM != null ? _currentDeviceVM.IsConnected.ToString() : string.Empty; }
+			get { return !_devicePresenterVisibility; }
 		}
 
 
-		public bool IsEditing
+		public RelayCommand FindDevices { get; private set; }
+		private async void ExecuteFindDevices(object param)
 		{
-			get { return _isEditing; }
-			set
-			{
-				_isEditing = value;
-				OnPropertyChanged(nameof(IsEditing));				
-			}
+			await ExecuteProcess(_manager.FindAndConnectDevicesAsync());
 		}
 
-		public string Description
+		public RelayCommand Update { get; private set; }
+		private async void ExecuteUpdate(object param)
 		{
-			get { return _currentDeviceVM.Description; }
-			set
-			{
-				_currentDeviceVM.Description = value;
-				OnPropertyChanged(nameof(Description));
-			}
+			await ExecuteProcess(_manager.SynchronizationWithDevicesAsync());
 		}
 
-		#region Commands
-		public RelayCommand AddTask { get; private set; }
-		private void ExecuteAddTask(object param)
+		public void RefreshPresenter()
 		{
-			if (_deviceCopy != null && _isEditing)
-			{
-				IDeviceTask newTask = _deviceEditor.CreateNewTaskFor(_deviceCopy);
-				_currentDeviceVM.Tasks.Add(new DeviceTaskViewModel(newTask));
-			}
+			Switches.Refresh();
 		}
 
-		public RelayCommand Edit { get; private set; }
-		private void ExecuteEdit(object param)
+		private async Task<bool> ExecuteProcess(Task<bool> process)
 		{
-			if (_currentDeviceVM != null)
-			{
-				if (IsEditing)
-				{
-					ShowMessageDialog();				
-				}
-				else
-				{
-					PreparingDeviceCopy();
-					IsEditing = true;
-				}
-			}
-		}
-
-		public RelayCommand RemoveTask { get; private set; }
-		private void ExecuteRemoveTask(object param)
-		{
-			_deviceEditor.MarkTaskForDelete(_deviceCopy, _selectedTask.ID);
-			_currentDeviceVM.Tasks.Remove(_selectedTask);
-		}
-		#endregion Commands
-
-		private async void  ShowMessageDialog()
-		{
-			MessageDialog messageDialog = new MessageDialog(SC.SaveChanges);
-			messageDialog.Commands.Add(new UICommand(SC.Yes, new UICommandInvokedHandler(CommandInvokedHandler)));
-			messageDialog.Commands.Add(new UICommand(SC.No, new UICommandInvokedHandler(CommandInvokedHandler)));
-			messageDialog.Commands.Add(new UICommand(SC.Cancel, new UICommandInvokedHandler(CommandInvokedHandler)));
-			await messageDialog.ShowAsync();
-		}
-
-		private void CommandInvokedHandler(IUICommand command)
-		{
-			if(command.Label == SC.Yes)
-			{
-				_currentDeviceVM.ApplyChanges();
-				_deviceEditor.ApplyAndSaveChanges(_deviceCopy);
-				_originalDeviceVM.FullRefresh();
-				_currentDeviceVM = _originalDeviceVM;
-				OnPropertyChanged(nameof(Description));
-				RefreshTaskList();
-
-				_deviceCopy = null;
-				IsEditing = false;
-			}
-
-			if (command.Label == SC.No)
-			{
-				_deviceCopy = null;
-				_currentDeviceVM = _originalDeviceVM;
-				OnPropertyChanged(nameof(Description));
-				RefreshTaskList();
-
-				IsEditing = false;
-			}
-		}
-
-		private void RefreshTaskList()
-		{
-			int taskIDForSelect = int.MinValue;
-			if (SelectedTask != null)
-			{
-				taskIDForSelect = SelectedTask.ID;
-			}
-
-			OnPropertyChanged(nameof(Tasks));
-
-			if (taskIDForSelect > int.MinValue)
-			{
-				DeviceTaskViewModel task = Tasks.Where(t => t.ID == taskIDForSelect).FirstOrDefault();
-				SelectedTask = task;
-			}
-		}
-
-
-		private void PreparingDeviceCopy()
-		{
-			_originalDeviceVM = _currentDeviceVM;
-			_deviceCopy = _deviceEditor.GetDeviceCopy(_originalDeviceVM.ID);
-			_currentDeviceVM = new DeviceViewModel(_deviceCopy);
-			RefreshTaskList();
+			DevicePresenterVisibility = false;
+			bool res = await process;
+			RefreshPresenter();
+			DevicePresenterVisibility = true;
+			return res;
 		}
 
 	}

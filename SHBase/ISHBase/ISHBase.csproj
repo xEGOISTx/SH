@@ -120,13 +120,15 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="DeviceBase\IDeviceBaseTask.cs" />
-    <Compile Include="DeviceBase\IDeviceBaseTaskType.cs" />
-    <Compile Include="DeviceBase\IGPIOActionTask.cs" />
+    <Compile Include="BaseContainers\IContainer.cs" />
+    <Compile Include="DevicesBaseComponents\IDeviceBaseTask.cs" />
+    <Compile Include="DevicesBaseComponents\IDeviceBaseTaskType.cs" />
+    <Compile Include="DevicesBaseComponents\IGPIOActionTask.cs" />
+    <Compile Include="BaseContainers\ICommonContainer.cs" />
+    <Compile Include="DevicesBaseComponents\IDeviceBaseList.cs" />
     <Compile Include="IConnectionParams.cs" />
-    <Compile Include="DeviceBase\IDeviceBase.cs" />
-    <Compile Include="DeviceBase\IGPIOAction.cs" />
-    <Compile Include="DeviceBase\ICommandParameter.cs" />
+    <Compile Include="DevicesBaseComponents\IDeviceBase.cs" />
+    <Compile Include="DevicesBaseComponents\IBaseGPIOAction.cs" />
     <Compile Include="MacAddress.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\ISHBase.rd.xml" />
@@ -136,6 +138,7 @@
       <Version>6.2.2</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

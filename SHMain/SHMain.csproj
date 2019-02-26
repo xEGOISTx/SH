@@ -149,6 +149,10 @@
       <Project>{469fce32-1d2a-4cc9-bfa9-dba0114fd551}</Project>
       <Name>IDevicesPresenter</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SHBase\SHBase\SHBase.csproj">
+      <Project>{56a497fa-3a32-49f2-95dd-66d2d24b3d9d}</Project>
+      <Name>SHBase</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Utils\RouterParser\RouterParser.csproj">
       <Project>{537e7400-e8f3-485c-a746-97c83e3e6a9f}</Project>
       <Name>RouterParser</Name>

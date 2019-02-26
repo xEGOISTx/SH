@@ -1,34 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
+﻿using Switches;
 using System.Threading.Tasks;
-using Windows.Devices.WiFi;
 
 namespace DevicesPresenter
 {
 	public interface IDevicesManager
 	{
-
-		IReadOnlyDictionary<ushort,IDevice> Devices { get; }
-
 		IConnectionSettings ConnectionSettings { get; }
-
-		IDeviceEditor GetDeviceEditor();
 
 		Task<bool> FindAndConnectDevicesAsync();
 
-		Task UpdateConnectedDevicesAsync();
+		Task<bool> SynchronizationWithDevicesAsync();
 
-
-		//Task<IEnumerable<WiFiAvailableNetwork>> GetAvailableDevices(string ssid);
-
-		//Task<bool> ConnectAndSendConnectionSettingAsync(IEnumerable<WiFiAvailableNetwork> availableNetworks, 
-		//	IConnectionParams deviceConnectionParams, IConnectionParams routerConnectionParams);
-
-		//Task<bool> SendIdTo(IPAddress iPAddress, ushort id);
-
-		//Task<ushort> GetId(IPAddress iPAddress);
+		ISwitches GetSwitches();
 	}
 }
