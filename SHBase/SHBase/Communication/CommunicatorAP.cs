@@ -73,10 +73,9 @@ namespace SHBase.Communication
 				if (_ip != null && _ip != Consts.ZERO_IP)
 				{
 					Communicator communicator = new Communicator();
-
 					OperationResult result = await communicator.SendToDevice(_ip, CommandNames.GetID);
 
-					if (result.Success && result.ResponseMessage != "0")
+					if (result.Success)
 					{
 						return ushort.Parse(result.ResponseMessage);
 					}

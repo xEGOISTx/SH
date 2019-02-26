@@ -129,7 +129,6 @@
     <Compile Include="DevicesBaseComponents\DeviceBase.cs" />
     <Compile Include="Communication\OperationResult.cs" />
     <Compile Include="Consts.cs" />
-    <Compile Include="DevicesBaseComponents\DeviceBasicInfo.cs" />
     <Compile Include="DevicesBaseComponents\DeviceCommonBaseList.cs" />
     <Compile Include="DevicesBaseComponents\Devices.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

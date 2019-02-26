@@ -91,7 +91,7 @@ namespace SHBase.Communication
 				{
 					OperationResult result = await SendToDevice(iP, CommandNames.GetID);
 
-					if (result.Success && result.ResponseMessage != "0")
+					if (result.Success)
 					{
 						return ushort.Parse(result.ResponseMessage);
 					}

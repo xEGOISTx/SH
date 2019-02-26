@@ -48,7 +48,7 @@ namespace DevicesPresenter
 				{		
 					//получаем инфу устройства из него самого
 					int id = await communicatorAP.GetDeviceIDAsAP();
-					if (id == -1)
+					if (id == 0)
 					{
 						//отправляем параметры для подключения к роутеру и ждём пока подключится
 						bool postRes = await communicatorAP.SendConnectionParamsToDeviceAsAP(ConnectionSettings.RouterConnParams);
@@ -147,10 +147,9 @@ namespace DevicesPresenter
 					foreach (RDeviceInfo rDeviceInfo in pResult.DeviceInfos)
 					{						
 						GetBaseInfoResult infoResult = await communicator.GetDeviceInfo(rDeviceInfo.Ip);
-						//TODO: убрать(уничтожить) тип BaseInfo
+
 						if (infoResult.Success && devices.ContainsKey(infoResult.BasicInfo.ID))
 						{
-
 							toSynchronize.Add(infoResult.BasicInfo);
 						}
 					}
