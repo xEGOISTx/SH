@@ -40,12 +40,9 @@ namespace SHBase.DevicesBaseComponents
 		/// <returns></returns>
 		public abstract Task Synchronization(IEnumerable<IDeviceBase> deviceInfos, Communicator communicator);
 
-		///// <summary>
-		///// Получить все устройства
-		///// </summary>
-		///// <returns></returns>
-		//public abstract IEnumerable<IDeviceBase> GetAllDevices();
-
 		public abstract IEnumerator GetEnumerator();
+
+		public abstract Task<IEnumerable<IDeviceBase>> GetNotConnectedDevicesAsync(Communicator communicator);
+
 	}
 }

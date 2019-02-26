@@ -138,12 +138,19 @@ namespace SHBase.Communication
 
 		public async Task<bool> CheckConnection(IDeviceBase device)
 		{
-			return await Task.Run(() =>
+			return await Task.Run(async () =>
 			{
 				if (device.IP != null && device.IP != Consts.ZERO_IP)
 				{
-					//TODO:до делать проверку на соединение
-					return true;
+					GetBaseInfoResult result = await GetDeviceInfo(device.IP);
+
+					if(result.Success && 
+					result.BasicInfo.ID == device.ID && 
+					result.BasicInfo.Mac == device.Mac && 
+					result.BasicInfo.DeviceType == device.DeviceType)
+					{
+						return true;
+					}
 				}
 
 				return false;
@@ -191,13 +198,11 @@ namespace SHBase.Communication
 
 									result.Success = true;
 									result.ResponseMessage = response.Replace("\r\n", string.Empty);
-									System.Diagnostics.Debug.WriteLine("Post success!");
 									break;
 								}
 								else
 								{
 									result.ErrorMessage = "Post failed!";
-									System.Diagnostics.Debug.WriteLine("Post failed!");
 								}
 							}
 						}

@@ -197,6 +197,23 @@ namespace Switches
 			return allDevices.GetEnumerator();
 		}
 
+		public override async Task<IEnumerable<IDeviceBase>> GetNotConnectedDevicesAsync(Communicator communicator)
+		{
+			List<IDeviceBase> devs = new List<IDeviceBase>();
+
+			foreach (IDeviceBase device in this)
+			{
+				bool result = await communicator.CheckConnection(device);
+
+				if (!result)
+				{
+					(device as BaseSwitch).IsConnected = false;
+					devs.Add(device);
+				}
+			}
+
+			return devs;
+		}
 
 		/// <summary>
 		/// Проверить соответствие устройства с роутера с имеющимся устройсвом

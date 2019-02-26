@@ -43,5 +43,19 @@ namespace SHBase.DevicesBaseComponents
 		{
 			return _list.GetEnumerator();
 		}
+
+		public async Task<IEnumerable<IDeviceBase>> GetNotConnectedDevicesAsync()
+		{
+			List<IDeviceBase> devs = new List<IDeviceBase>();
+			Communication.Communicator communicator = new Communication.Communicator();
+
+			foreach(Devices devices in _list)
+			{
+				IEnumerable<IDeviceBase> notConDevs = await devices.GetNotConnectedDevicesAsync(communicator);
+				devs.AddRange(notConDevs);
+			}
+
+			return devs;
+		}
 	}
 }
