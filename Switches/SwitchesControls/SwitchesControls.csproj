@@ -154,12 +154,7 @@
       <Name>ISwitches</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <Page Include="Resources\StringDictionary.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Resources\StylesOfSwitches.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -175,6 +170,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\Imgs\NoImage.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <PRIResource Include="Resources\Strings\ru-RU\Resources.resw" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

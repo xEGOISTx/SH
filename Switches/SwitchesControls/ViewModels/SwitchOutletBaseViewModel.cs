@@ -16,10 +16,12 @@ namespace SwitchesControls.ViewModels
 		private string _description;
 		private bool _editsDescription;
 		private bool _isNotBlockOnOff = true;
+		private readonly ISwitchEditor _editor;
 
-		public SwitchOutletBaseViewModel(IBaseSwitch baseSwitch)
+		public SwitchOutletBaseViewModel(IBaseSwitch baseSwitch, ISwitchEditor switchEditor)
 		{
 			_device = baseSwitch;
+			_editor = switchEditor;
 
 			Description = _device.Description;
 			InitCommands();
@@ -35,6 +37,9 @@ namespace SwitchesControls.ViewModels
 			}
 		}
 
+		public bool IsConnected { get { return _device.IsConnected; } }
+
+
 
 		public bool TurnOnOff
 		{
@@ -49,7 +54,7 @@ namespace SwitchesControls.ViewModels
 
 		public string Description
 		{
-			get { return _description; }
+			get { return _device.Description; }
 			set
 			{
 				_description = value;
@@ -68,11 +73,19 @@ namespace SwitchesControls.ViewModels
 		{
 			if (EditsDescription)
 			{
-				OnPropertyChanged(nameof(Description));
+				_editor.Rename(_device, _description);				
 			}
 
+			OnPropertyChanged(nameof(Description));
 			_editsDescription = !_editsDescription;
 			OnPropertyChanged(nameof(EditsDescription));
+		}
+
+
+		public virtual void RefreshState()
+		{
+			OnPropertyChanged(nameof(IsConnected));
+			OnPropertyChanged(nameof(TurnOnOff));
 		}
 
 		private async void OnOff(bool value)
@@ -87,6 +100,7 @@ namespace SwitchesControls.ViewModels
 				await _device.TurnOff();
 			}
 
+			//задержка, чтобы успела отработать анимация 
 			await Task.Delay(200);
 			OnPropertyChanged(nameof(TurnOnOff));
 

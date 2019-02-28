@@ -122,6 +122,7 @@
   <ItemGroup>
     <Compile Include="IBaseSwitch.cs" />
     <Compile Include="IGPIOAction.cs" />
+    <Compile Include="ISwitchEditor.cs" />
     <Compile Include="Outlets\IOutlet.cs" />
     <Compile Include="Outlets\IOutletList.cs" />
     <Compile Include="Switches\ISwitchList.cs" />

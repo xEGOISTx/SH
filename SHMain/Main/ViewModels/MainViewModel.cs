@@ -33,10 +33,11 @@ namespace SHMain.Main.ViewModels
 			OnPropertyChanged(nameof(DevicePresenterVM));
 
 			await devicesManager.LoadDevicesAsync();
-			await devicesManager.SynchronizationWithDevicesAsync();
+			DevicePresenterVM.Update.Execute(null);
+			//await devicesManager.SynchronizationWithDevicesAsync();
 
-			DevicePresenterVM.RefreshPresenter();
-			DevicePresenterVM.DevicePresenterVisibility = true;
+			//DevicePresenterVM.FullRefresh();
+			//DevicePresenterVM.DevicePresenterVisibility = true;
 		}
 	}
 }

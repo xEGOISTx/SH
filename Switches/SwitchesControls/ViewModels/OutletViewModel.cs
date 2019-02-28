@@ -11,7 +11,7 @@ namespace SwitchesControls.ViewModels
 	{
 		public readonly IOutlet _outlet;
 
-		public OutletViewModel(IOutlet outlet) : base(outlet)
+		public OutletViewModel(IOutlet outlet, ISwitchEditor switchEditor) : base(outlet, switchEditor)
 		{
 			_outlet = outlet;
 		}

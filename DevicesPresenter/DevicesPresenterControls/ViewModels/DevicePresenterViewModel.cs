@@ -11,6 +11,13 @@ namespace DevicesPresenterControls.ViewModels
 {
 	public class DevicePresenterViewModel : BaseViewModel
 	{
+		private enum RefreshMode
+		{
+			Full,
+			State
+		}
+
+
 		private readonly IDevicesManager _manager;
 		private bool _devicePresenterVisibility;
 
@@ -45,25 +52,35 @@ namespace DevicesPresenterControls.ViewModels
 		public RelayCommand FindDevices { get; private set; }
 		private async void ExecuteFindDevices(object param)
 		{
-			await ExecuteProcess(_manager.FindAndConnectDevicesAsync());
+			await ExecuteProcess(_manager.FindAndConnectDevicesAsync(), RefreshMode.Full);
 		}
 
 		public RelayCommand Update { get; private set; }
 		private async void ExecuteUpdate(object param)
 		{
-			await ExecuteProcess(_manager.SynchronizationWithDevicesAsync());
+			await ExecuteProcess(_manager.SynchronizationWithDevicesAsync(), RefreshMode.State);
 		}
 
-		public void RefreshPresenter()
+		public void FullRefresh()
 		{
-			Switches.Refresh();
+			Switches.FullRefresh();
 		}
 
-		private async Task<bool> ExecuteProcess(Task<bool> process)
+		public void RefreshState()
+		{
+			Switches.RefreshState();
+		}
+
+		private async Task<bool> ExecuteProcess(Task<bool> process, RefreshMode mode)
 		{
 			DevicePresenterVisibility = false;
 			bool res = await process;
-			RefreshPresenter();
+
+			if (mode == RefreshMode.Full || Switches.CommonCount == 0)
+				FullRefresh();
+			else
+				RefreshState();
+			
 			DevicePresenterVisibility = true;
 			return res;
 		}

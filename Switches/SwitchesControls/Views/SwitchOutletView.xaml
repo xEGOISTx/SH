@@ -30,12 +30,31 @@
 
             <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
                 <AppBarButton Width="35" Height="35" Command="{Binding EditDescription}">
+                    <AppBarButton.Style>
+                        <Style TargetType="AppBarButton">
+                            <Setter Property="ToolTipService.ToolTip">
+                                <Setter.Value>
+                                    <ToolTip x:Uid="Rename"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </AppBarButton.Style>
                     <AppBarButton.Icon>
                         <SymbolIcon  Symbol="Edit" Margin="0,-10,0,0"/>
                     </AppBarButton.Icon>
                 </AppBarButton>
 
-                <AppBarButton Width="35" Height="35" >
+                <AppBarButton Width="35" Height="35">
+                    <AppBarButton.Style>
+                        <Style TargetType="AppBarButton"> 
+                            <Setter Property="ToolTipService.ToolTip">
+                                <Setter.Value>
+                                    <ToolTip x:Uid="Setting"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </AppBarButton.Style>
+                    
                     <AppBarButton.Icon>
                         <SymbolIcon  Symbol="Setting" Margin="0,-10,0,0" />
                     </AppBarButton.Icon>

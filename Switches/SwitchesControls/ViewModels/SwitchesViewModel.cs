@@ -24,10 +24,18 @@ namespace SwitchesControls.ViewModels
 
 		public OutletListViewModel Outlets { get; }
 
-		public void Refresh()
+		public int CommonCount => Switches.List.Count() + Outlets.List.Count();
+
+		public void FullRefresh()
 		{
-			Switches.Refresh();
-			Outlets.Refresh();
+			Switches.FullRefresh();
+			Outlets.FullRefresh();
+		}
+
+		public void RefreshState()
+		{
+			Switches.RefreshState();
+			Outlets.RefreshState();
 		}
 	}
 }

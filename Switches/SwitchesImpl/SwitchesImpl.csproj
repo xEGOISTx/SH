@@ -128,6 +128,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GPIOAction.cs" />
     <Compile Include="Outlets\OutletList.cs" />
+    <Compile Include="SwitchEditor.cs" />
     <Compile Include="SwitchesOutlets\SwitchesConvertor.cs" />
     <Compile Include="SwitchesAndOutletsBaseList.cs" />
     <Compile Include="SwitchesOutlets\SwitchList.cs" />

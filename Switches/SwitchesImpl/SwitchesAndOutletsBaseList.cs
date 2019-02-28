@@ -42,5 +42,7 @@ namespace Switches
 			}
 		}
 
+		public ISwitchEditor SwitchEditor { get; } = new SwitchEditor();
+
 	}
 }
