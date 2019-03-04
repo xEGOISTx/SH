@@ -34,37 +34,6 @@ namespace SHMain.Main.Views
 		{
 			this.InitializeComponent();
 			DataContext = new Main.ViewModels.MainViewModel();
-
-			HttpClientHandler clientHandler = new HttpClientHandler { AllowAutoRedirect = true };
-			HttpClient httpClient = new HttpClient(clientHandler);
 		}
-
-
-
-		private  void Button_Click(object sender, RoutedEventArgs e)
-		{
-
-		}
-
-
-		private async void Parserrrrr()
-		{
-			//Parser parser = new Parser("http://192.168.1.254", "admin", "admin");
-			//parser.LoadDeviceInfosComplete += Parser_LoadDeviceInfosComplete;
-			//parser.LoadDeviceInfosAsync();
-
-			//Parser parser2 = new Parser("http://192.168.1.254", "admin", "admin");
-		}
-
-		private void Parser_LoadDeviceInfosComplete(object sender, DeviceInfosEventArgs e)
-		{
-			
-		}
-
-		private async void Button_Click_1(object sender, RoutedEventArgs e)
-		{
-			//Parserrrrr();
-		}
-
 	}
 }
