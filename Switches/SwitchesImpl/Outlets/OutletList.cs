@@ -9,9 +9,7 @@ namespace Switches
 {
 	public class OutletList : SwitchesAndOutletsBaseList<IOutlet>, IOutletList
 	{
-		public OutletList() : base(DeviceType.Outlet) { }
-
-		//internal override ISwitchesLoader Loader => new SwitchesLoader(DevicesType);
+		public OutletList() : base(DeviceTypes.OUTLET) { }
 
 		internal override DBConvertor Convertor => new OutletsConvertor();
 

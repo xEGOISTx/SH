@@ -10,10 +10,7 @@ namespace Switches
 {
 	public class SwitchList : SwitchesAndOutletsBaseList<ISwitch>, ISwitchList
 	{
-		public SwitchList() : base(DeviceType.Switch) { }
-
-
-		//internal override ISwitchesLoader Loader => new SwitchesLoader(DevicesType);
+		public SwitchList() : base(DeviceTypes.SWITCH) { }
 
 		internal override DBConvertor Convertor => new SwitchesConvertor();
 	}

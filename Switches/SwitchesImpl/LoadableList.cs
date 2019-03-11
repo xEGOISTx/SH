@@ -14,7 +14,7 @@ namespace Switches
 		protected readonly Dictionary<int, IBaseSwitch> _devices = new Dictionary<int, IBaseSwitch>();
 
 
-		public LoadableList(DeviceType deviceType)
+		public LoadableList(int deviceType)
 		{
 			DevicesType = deviceType;
 		}
@@ -26,7 +26,7 @@ namespace Switches
 
 		public int Count => _devices.Count;
 
-		public DeviceType DevicesType { get;}
+		public int DevicesType { get;}
 
 
 		public void Add(IBaseSwitch device)

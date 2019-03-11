@@ -17,18 +17,18 @@ namespace SHBase.DevicesBaseComponents
 	/// <summary>
 	/// Тип устройства
 	/// </summary>
-	public enum DeviceType
-	{
-		/// <summary>
-		/// Выключатель
-		/// </summary>
-		Switch = 1,
+	//public enum DeviceType
+	//{
+	//	/// <summary>
+	//	/// Выключатель
+	//	/// </summary>
+	//	Switch = 1,
 
-		/// <summary>
-		/// Розетка
-		/// </summary>
-		Outlet
-	}
+	//	/// <summary>
+	//	/// Розетка
+	//	/// </summary>
+	//	Outlet
+	//}
 
 	public interface IDeviceBase
 	{
@@ -44,7 +44,7 @@ namespace SHBase.DevicesBaseComponents
 
 		MacAddress Mac { get; }
 
-		DeviceType DeviceType { get; }
+		int DeviceType { get; }
 
 		FirmwareType FirmwareType { get; }
 	}

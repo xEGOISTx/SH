@@ -10,6 +10,6 @@ namespace SHBase.DevicesBaseComponents
 	public interface IDeviceBaseList<DeviceType> : BaseContainers.IContainer<int,DeviceType>
 		where DeviceType : IDeviceBase
 	{
-		DevicesBaseComponents.DeviceType DevicesType { get; }
+
 	}
 }

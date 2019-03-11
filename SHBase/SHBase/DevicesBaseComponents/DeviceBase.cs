@@ -24,7 +24,7 @@ namespace SHBase.DevicesBaseComponents
 
 		public bool IsConnected { get; set; }
 
-		public DeviceType DeviceType { get; set; }
+		public int DeviceType { get; set; }
 
 		public FirmwareType FirmwareType { get; set; }
 

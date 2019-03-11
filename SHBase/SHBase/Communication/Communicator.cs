@@ -70,7 +70,8 @@ namespace SHBase.Communication
 						FirmwareType = (FirmwareType)int.Parse(info[1]),
 						Mac = new MacAddress(info[2]),
 						Name = info[3],
-						DeviceType = (DeviceType)int.Parse(info[4])
+						DeviceType = int.Parse(info[4]),
+						IsConnected = true
 					};
 				}
 

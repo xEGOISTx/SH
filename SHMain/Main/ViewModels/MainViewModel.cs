@@ -34,10 +34,6 @@ namespace SHMain.Main.ViewModels
 
 			await devicesManager.LoadDevicesAsync();
 			DevicePresenterVM.Update.Execute(null);
-			//await devicesManager.SynchronizationWithDevicesAsync();
-
-			//DevicePresenterVM.FullRefresh();
-			//DevicePresenterVM.DevicePresenterVisibility = true;
 		}
 	}
 }

@@ -42,7 +42,7 @@ namespace Switches
 		/// <returns></returns>
 		public override bool CheckForComplianceDevice(IDeviceBase device)
 		{
-			return device.DeviceType == DeviceType.Outlet || device.DeviceType == DeviceType.Switch;
+			return device.DeviceType == DeviceTypes.OUTLET || device.DeviceType == DeviceTypes.SWITCH;
 		}
 
 		/// <summary>
@@ -61,10 +61,10 @@ namespace Switches
 				{
 					if (CheckForComplianceDevice(device))
 					{
-						if (device.DeviceType == DeviceType.Switch)
+						if (device.DeviceType == DeviceTypes.SWITCH)
 						{
 
-							Switch sw = new Switch(device.Mac, device.FirmwareType, device.DeviceType)
+							Switch sw = new Switch(device.Mac, device.FirmwareType)
 							{
 								Description = device.Name,
 								IP = device.IP,
@@ -75,9 +75,9 @@ namespace Switches
 
 							switches.Add(sw);
 						}
-						else if(device.DeviceType == DeviceType.Outlet)
+						else if(device.DeviceType == DeviceTypes.OUTLET)
 						{
-							Outlet ou = new Outlet(device.Mac, device.FirmwareType, device.DeviceType)
+							Outlet ou = new Outlet(device.Mac, device.FirmwareType)
 							{
 								Description = device.Name,
 								IP = device.IP,

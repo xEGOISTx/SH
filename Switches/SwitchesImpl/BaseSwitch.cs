@@ -21,13 +21,13 @@ namespace Switches
 
 		public string Description { get; internal set; }
 
-		public bool IsConnected { get; set; }
+		public bool IsConnected { get; internal set; }
 
 		public IPAddress IP { get; internal set; }
 
 		public MacAddress Mac { get; internal set; }
 
-		public DeviceType DeviceType { get; internal set; }
+		public int DeviceType { get; internal set; }
 
 		public FirmwareType FirmwareType { get; internal set; }
 

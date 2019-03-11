@@ -16,9 +16,9 @@ namespace Switches
 			{
 				var mac = new MacAddress(deviceInfo.MacAddress);
 				var fType = (FirmwareType)deviceInfo.FirmwareType;
-				var dType = (DeviceType)deviceInfo.DeviceType;
+				//var dType = (DeviceTypes)deviceInfo.DeviceType;
 
-				Outlet ou = new Outlet(mac, fType, dType)
+				Outlet ou = new Outlet(mac, fType)
 				{
 					ID = deviceInfo.ID,
 					Description = deviceInfo.Description

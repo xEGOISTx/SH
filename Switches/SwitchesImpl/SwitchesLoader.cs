@@ -11,9 +11,9 @@ namespace Switches
 	internal class SwitchesLoader : ISwitchesLoader
 	{
 		private readonly DataManager.DataManager _dataManager = new DataManager.DataManager();
-		private readonly DeviceType _deviceType;
+		private readonly int _deviceType;
 
-		public SwitchesLoader(DeviceType deviceType)
+		public SwitchesLoader(int deviceType)
 		{
 			_deviceType = deviceType;
 		}
@@ -22,7 +22,7 @@ namespace Switches
 		{
 			return await Task.Run(() =>
 			{
-				return _dataManager.LoadDevices((int)_deviceType);
+				return _dataManager.LoadDevices(_deviceType);
 			});
 		}
 

@@ -120,6 +120,7 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="DeviceTypes.cs" />
     <Compile Include="IBaseSwitch.cs" />
     <Compile Include="IGPIOAction.cs" />
     <Compile Include="ISwitchEditor.cs" />

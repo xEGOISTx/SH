@@ -40,7 +40,7 @@ namespace SHBase.Communication
 				Communicator communicator = new Communicator();
 
 				OperationResult result = await communicator.SendToDevice(_ip, CommandNames.GetInfo);
-				IPAddress ip = await GetLocalIPFromDeviceAsAP(); 
+				IPAddress ip = await GetLocalIPFromDeviceAsAP();
 
 				if (result.Success)
 				{
@@ -52,8 +52,8 @@ namespace SHBase.Communication
 						FirmwareType = (FirmwareType)int.Parse(info[1]),
 						Mac = new MacAddress(info[2]),
 						Name = info[3],
-						DeviceType = (DeviceType)int.Parse(info[4]),
-						IsConnected = true
+						DeviceType = int.Parse(info[4]),
+						IsConnected = (ip != null && ip != Consts.ZERO_IP)
 					};
 				}
 
@@ -108,8 +108,12 @@ namespace SHBase.Communication
 					byte[] byteArr = BitConverter.GetBytes(int.Parse(result.ResponseMessage));
 					ip = new IPAddress(byteArr);
 				}
+				else
+				{
+					return null;
+				}
 
-				return ip == Consts.ZERO_IP ? null : ip;
+				return ip;
 			});
 		}
 

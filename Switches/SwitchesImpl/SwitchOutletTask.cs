@@ -15,16 +15,9 @@ namespace Switches
 		{
 			Owner = owner;
 			TaskType = taskType;
-			GPIOAction action;
 
-			if (taskType == SwitchOutletTaskType.TurnOn)
-			{
-				action = new GPIOAction(pinNumber, GPIOMode.Output, GPIOLevel.High);
-			}
-			else
-			{
-				action = new GPIOAction(pinNumber, GPIOMode.Output, GPIOLevel.Low);
-			}
+			GPIOLevel gPIOLevel = taskType == SwitchOutletTaskType.TurnOn ? GPIOLevel.High : GPIOLevel.Low;
+			GPIOAction action = new GPIOAction(pinNumber, GPIOMode.Output, gPIOLevel);
 
 			_actions.Add(action);
 		}
@@ -40,7 +33,7 @@ namespace Switches
 
 		public string VoiceCommand { get; set; }
 
-		public IDeviceBase Owner { get; set; }
+		public IDeviceBase Owner { get;}
 
 		public async Task<bool> Execute()
 		{

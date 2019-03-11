@@ -9,7 +9,7 @@ namespace Switches
 	public abstract class SwitchesAndOutletsBaseList<TValue> : LoadableList
 		where TValue : IBaseSwitch
 	{
-		public SwitchesAndOutletsBaseList(DeviceType devicesType) : base(devicesType)
+		public SwitchesAndOutletsBaseList(int devicesType) : base(devicesType)
 		{
 		}
 
