@@ -120,9 +120,12 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="DevicesBaseComponents\IDevicesGetter.cs" />
+    <Compile Include="DevicesBaseComponents\IDevicesLoader.cs" />
     <Compile Include="BaseContainers\IContainer.cs" />
     <Compile Include="DevicesBaseComponents\IDeviceBaseTask.cs" />
     <Compile Include="DevicesBaseComponents\IDeviceBaseTaskType.cs" />
+    <Compile Include="DevicesBaseComponents\IDevicesManager.cs" />
     <Compile Include="DevicesBaseComponents\IGPIOActionTask.cs" />
     <Compile Include="BaseContainers\ICommonContainer.cs" />
     <Compile Include="DevicesBaseComponents\IDeviceBaseList.cs" />
@@ -135,7 +138,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>6.2.2</Version>
+      <Version>6.2.3</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup />

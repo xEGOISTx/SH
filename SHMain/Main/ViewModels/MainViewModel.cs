@@ -28,7 +28,10 @@ namespace SHMain.Main.ViewModels
 
 		private async void Init()
 		{
-			DevicesManager devicesManager = new DevicesManager(new DeviceCommonList());
+			DevicesManager devicesManager = new DevicesManager();
+			devicesManager.AddForManagement(new Switches.SwitchList());
+			devicesManager.AddForManagement(new Switches.OutletList());
+
 			DevicePresenterVM = new DevicePresenterViewModel(devicesManager);
 			OnPropertyChanged(nameof(DevicePresenterVM));
 

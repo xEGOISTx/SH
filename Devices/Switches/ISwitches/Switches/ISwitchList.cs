@@ -4,8 +4,6 @@ namespace Switches
 {
 	public interface ISwitchList : IDeviceBaseList<ISwitch>
 	{
-		ISwitchEditor SwitchEditor { get; }
-
-		int DevicesType { get; }
+		ISwitchEditor SwitchEditor { get; }		
 	}
 }

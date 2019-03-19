@@ -5,19 +5,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Switches;
+using SHBase.DevicesBaseComponents;
 
 namespace SwitchesControls.ViewModels
 {
 	public class SwitchesViewModel
 	{
-		private readonly ISwitches _switches;
-
-		public SwitchesViewModel(ISwitches switches)
+		public SwitchesViewModel(IDevicesManager devicesManager)
 		{
-			_switches = switches;
-
-			Switches = new SwitchListViewModel(_switches.SwitchList);
-			Outlets = new OutletListViewModel(_switches.OutletList);
+			Switches = new SwitchListViewModel(devicesManager);
+			Outlets = new OutletListViewModel(devicesManager);
 		}
 
 		public SwitchListViewModel Switches { get; }

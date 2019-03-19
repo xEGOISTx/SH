@@ -1,4 +1,9 @@
-﻿using SHBase.DevicesBaseComponents;
+﻿/*======================================================================
+ * Класс содержит методы передачи/получения информации и управления уже
+ * подключенным устойствам.
+ ======================================================================*/
+
+using SHBase.DevicesBaseComponents;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +15,7 @@ using Windows.Web.Http;
 namespace SHBase.Communication
 {
 	/// <summary>
-	/// Класс для общения с устройством через роутер
+	/// Класс для общения с устройством
 	/// </summary>
 	public class Communicator
 	{
@@ -137,6 +142,11 @@ namespace SHBase.Communication
 			}
 		}
 
+		/// <summary>
+		/// Проверить соединение с устройством
+		/// </summary>
+		/// <param name="device"></param>
+		/// <returns></returns>
 		public async Task<bool> CheckConnection(IDeviceBase device)
 		{
 			return await Task.Run(async () =>

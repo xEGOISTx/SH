@@ -33,17 +33,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SHBase", "SHBase\SHBase\SHB
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ISHBase", "SHBase\ISHBase\ISHBase.csproj", "{31E8465C-6BC2-46D5-834D-0E940C3C33EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ISwitches", "Switches\ISwitches\ISwitches.csproj", "{2C13FEAB-0284-45D6-A4D2-9E5B58D68EBE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ISwitches", "Devices\Switches\ISwitches\ISwitches.csproj", "{2C13FEAB-0284-45D6-A4D2-9E5B58D68EBE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Devices", "Devices", "{5E7D595F-3FCE-4DB1-AF7E-FDCAA549696E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Switches", "Switches", "{E7408A93-EA7B-4EE3-8203-47D19101E8D3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwitchesImpl", "Switches\SwitchesImpl\SwitchesImpl.csproj", "{0F48F833-5A2C-4C19-85DA-296A6EA5554C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwitchesImpl", "Devices\Switches\SwitchesImpl\SwitchesImpl.csproj", "{0F48F833-5A2C-4C19-85DA-296A6EA5554C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDataManager", "DataManager\IDataManager\IDataManager.csproj", "{D47AD259-430A-4A84-8AC2-FCED700FB4AD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwitchesControls", "Switches\SwitchesControls\SwitchesControls.csproj", "{421990D9-1026-42A7-AD34-7CC97A65CB53}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwitchesControls", "Devices\Switches\SwitchesControls\SwitchesControls.csproj", "{421990D9-1026-42A7-AD34-7CC97A65CB53}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SHBaseControls", "SHBase\SHBaseControls\SHBaseControls.csproj", "{8B4509DC-2135-45E1-946B-D1943A434EF2}"
 EndProject

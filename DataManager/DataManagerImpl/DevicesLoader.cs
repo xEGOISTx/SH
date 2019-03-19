@@ -3,17 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SHBase.DevicesBaseComponents;
-using DataManager;
 
-namespace Switches
+namespace DataManager
 {
-	internal class SwitchesLoader : ISwitchesLoader
+	public class DevicesLoader
 	{
-		private readonly DataManager.DataManager _dataManager = new DataManager.DataManager();
+		private readonly DataManager _dataManager = new DataManager();
 		private readonly int _deviceType;
 
-		public SwitchesLoader(int deviceType)
+		public DevicesLoader(int deviceType)
 		{
 			_deviceType = deviceType;
 		}

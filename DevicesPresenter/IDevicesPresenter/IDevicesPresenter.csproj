@@ -107,7 +107,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="IConnectionSettings.cs" />
-    <Compile Include="IDevicesManager.cs" />
     <Compile Include="IConnectionParams.cs" />
     <Compile Include="ILoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -115,17 +114,17 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>6.1.7</Version>
+      <Version>6.2.3</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Devices\Switches\ISwitches\ISwitches.csproj">
+      <Project>{2c13feab-0284-45d6-a4d2-9e5b58d68ebe}</Project>
+      <Name>ISwitches</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\SHBase\ISHBase\ISHBase.csproj">
       <Project>{31e8465c-6bc2-46d5-834d-0e940c3c33ea}</Project>
       <Name>ISHBase</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Switches\ISwitches\ISwitches.csproj">
-      <Project>{2c13feab-0284-45d6-a4d2-9e5b58d68ebe}</Project>
-      <Name>ISwitches</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

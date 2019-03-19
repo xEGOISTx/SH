@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SHBase.BaseContainers
 {
-	public interface IContainer<TKey, TValue> : IEnumerable
+	public interface IContainer<TKey,out TValue> : IEnumerable
 	{
 		int Count { get; }
 

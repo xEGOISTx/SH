@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SwitchesControls.ViewModels;
 using UWPHelper;
+using SHBase.DevicesBaseComponents;
 
 namespace DevicesPresenterControls.ViewModels
 {
@@ -27,7 +28,7 @@ namespace DevicesPresenterControls.ViewModels
 			FindDevices = new RelayCommand(ExecuteFindDevices);
 			Update = new RelayCommand(ExecuteUpdate);
 
-			Switches = new SwitchesViewModel(_manager.GetSwitches());
+			Switches = new SwitchesViewModel(manager);
 		}
 
 		public SwitchesViewModel Switches { get; }

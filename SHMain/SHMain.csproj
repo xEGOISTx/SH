@@ -129,7 +129,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>6.1.7</Version>
+      <Version>6.2.3</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
@@ -148,6 +148,14 @@
     <ProjectReference Include="..\DevicesPresenter\IDevicesPresenter\IDevicesPresenter.csproj">
       <Project>{469fce32-1d2a-4cc9-bfa9-dba0114fd551}</Project>
       <Name>IDevicesPresenter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Devices\Switches\SwitchesImpl\SwitchesImpl.csproj">
+      <Project>{0f48f833-5a2c-4c19-85da-296a6ea5554c}</Project>
+      <Name>SwitchesImpl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SHBase\ISHBase\ISHBase.csproj">
+      <Project>{31e8465c-6bc2-46d5-834d-0e940c3c33ea}</Project>
+      <Name>ISHBase</Name>
     </ProjectReference>
     <ProjectReference Include="..\SHBase\SHBaseControls\SHBaseControls.csproj">
       <Project>{8b4509dc-2135-45e1-946b-d1943a434ef2}</Project>

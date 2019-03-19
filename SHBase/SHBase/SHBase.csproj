@@ -129,6 +129,7 @@
     <Compile Include="DevicesBaseComponents\DeviceBase.cs" />
     <Compile Include="Communication\OperationResult.cs" />
     <Compile Include="Consts.cs" />
+    <Compile Include="DevicesBaseComponents\DeviceBaseList.cs" />
     <Compile Include="DevicesBaseComponents\DeviceCommonBaseList.cs" />
     <Compile Include="DevicesBaseComponents\Devices.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -137,7 +138,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>6.2.2</Version>
+      <Version>6.2.3</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

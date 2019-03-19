@@ -120,7 +120,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>6.1.7</Version>
+      <Version>6.2.3</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
@@ -128,11 +128,11 @@
       <Project>{31e8465c-6bc2-46d5-834d-0e940c3c33ea}</Project>
       <Name>ISHBase</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Switches\ISwitches\ISwitches.csproj">
+    <ProjectReference Include="..\..\Devices\Switches\ISwitches\ISwitches.csproj">
       <Project>{2C13FEAB-0284-45D6-A4D2-9E5B58D68EBE}</Project>
       <Name>ISwitches</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Switches\SwitchesControls\SwitchesControls.csproj">
+    <ProjectReference Include="..\..\Devices\Switches\SwitchesControls\SwitchesControls.csproj">
       <Project>{421990d9-1026-42a7-ad34-7cc97a65cb53}</Project>
       <Name>SwitchesControls</Name>
     </ProjectReference>
