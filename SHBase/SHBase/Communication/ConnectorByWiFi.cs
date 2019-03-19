@@ -1,7 +1,11 @@
-﻿using System;
+﻿/*===================================================
+ * Класс предназначен для поиска устройств как точек
+ * доступа и осуществления соединения с ними
+ ==================================================*/
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Windows.Devices.Enumeration;
 using Windows.Devices.WiFi;
@@ -18,7 +22,6 @@ namespace SHBase.Communication
 		private static WiFiAvailableNetwork _currentWiFi;
 		private static PasswordCredential _currentCredential;
 
-		//internal static bool IsConnectedToAP = _wifiAdapter.NetworkAdapter.NetworkItem.GetNetworkTypes() != Windows.Networking.Connectivity.NetworkTypes.None;
 
 		#region Methods
 		/// <summary>

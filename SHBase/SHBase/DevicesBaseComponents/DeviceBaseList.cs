@@ -1,10 +1,7 @@
 ﻿using SHBase.Communication;
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SHBase.DevicesBaseComponents
@@ -18,12 +15,17 @@ namespace SHBase.DevicesBaseComponents
 			DevicesType = devicesType;
 		}
 
+		#region Properties
 		public int DevicesType { get; }
 
 		public bool IsLoaded { get; protected set; }
 
 		public int Count => devices.Count;
+		#endregion Properties
 
+
+
+		#region Methods
 		public bool ContainsKey(int key)
 		{
 			return devices.ContainsKey(key);
@@ -57,17 +59,17 @@ namespace SHBase.DevicesBaseComponents
 
 		public abstract Task<bool> Load();
 
-
 		/// <summary>
 		/// Синхронизация с подключенными к роутеру устройствами
 		/// </summary>
-		/// <param name="deviceInfos"></param>
+		/// <param name="devicesFromRouter"></param>
 		/// <returns></returns>
-		public abstract Task Synchronization(IEnumerable<IDeviceBase> deviceInfos, Communicator communicator);
+		public abstract Task Synchronization(IEnumerable<IDeviceBase> devicesFromRouter, Communicator communicator);
 
 		public abstract Task<IEnumerable<IDeviceBase>> GetNotConnectedDevicesAsync(Communicator communicator);
 
 		public abstract IDeviceBase CreateDevice(int id,string name, IPAddress iP,FirmwareType firmwareType, MacAddress mac);
+		#endregion Methods
 
 	}
 }

@@ -108,7 +108,6 @@
   <ItemGroup>
     <Compile Include="ConnectionParams.cs" />
     <Compile Include="ConnectionSettings.cs" />
-    <Compile Include="DeviceCommonList.cs" />
     <Compile Include="DevicesManager.cs" />
     <Compile Include="Loader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

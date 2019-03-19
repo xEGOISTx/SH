@@ -144,7 +144,7 @@ namespace DevicesPresenter
 			{
 				Dictionary<int,List<IDeviceBase>> devsToSynchronize = new Dictionary<int, List<IDeviceBase>>();
 
-				//прлучаем устойства подключенные к роутеру
+				//получаем устойства подключенные к роутеру
 				Parser parser = new Parser("http://192.168.1.254/", "admin", "admin");
 				ParseResult pResult = await parser.LoadDeviceInfosAsync();
 
@@ -181,8 +181,8 @@ namespace DevicesPresenter
 							{
 								if (devsToSynchronize.ContainsKey(devices.DevicesType))
 								{
-									IEnumerable<IDeviceBase> devs = devsToSynchronize[devices.DevicesType];
-									await devices.Synchronization(devs, communicator);
+									IEnumerable<IDeviceBase> devsFromRouter = devsToSynchronize[devices.DevicesType];
+									await devices.Synchronization(devsFromRouter, communicator);
 								}
 							}
 						}

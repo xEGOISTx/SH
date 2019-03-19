@@ -1,5 +1,7 @@
-﻿using SHBase.DevicesBaseComponents;
-using System;
+﻿/*======================
+ * Основа всех устройств
+ ======================*/
+
 using System.Net;
 
 namespace SHBase.DevicesBaseComponents
