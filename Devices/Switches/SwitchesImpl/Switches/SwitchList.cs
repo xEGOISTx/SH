@@ -79,6 +79,7 @@ namespace Switches
 				}			
 			});
 
+			IsLoaded = result.Success;
 			return result.Success;
 		}
 

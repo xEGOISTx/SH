@@ -110,8 +110,8 @@ namespace SHBase.Communication
 
 				if (result.Success)
 				{
-					byte[] byteArr = BitConverter.GetBytes(int.Parse(result.ResponseMessage));
-					ip = new IPAddress(byteArr);
+					//byte[] byteArr = BitConverter.GetBytes(int.Parse(result.ResponseMessage));
+					ip = IPAddress.Parse(result.ResponseMessage);//new IPAddress(byteArr);
 				}
 				else
 				{

@@ -116,11 +116,11 @@ namespace SHBase.Communication
 		/// <summary>
 		/// Отпрпавить id устройству
 		/// </summary>
-		/// <param name="id"></param>
-		/// <returns></returns>
-		public async Task<OperationResult> SendIdToDevice(int id , IDeviceBase device)
+		/// <param name = "id" ></ param >
+		/// < returns ></ returns >
+		public async Task<OperationResult> SendIdToDevice(int id, IPAddress ip)
 		{
-			if (device != null && device.IP != null && device.IP != Consts.ZERO_IP)
+			if (ip != null && ip != Consts.ZERO_IP)
 			{
 				byte[] bytes = BitConverter.GetBytes(id);
 				string byte1value = bytes[0].ToString();
@@ -132,13 +132,13 @@ namespace SHBase.Communication
 					new CommandParameter("b2", byte2value)
 				};
 
-				OperationResult result = await SendToDevice(device.IP, CommandNames.SetID, content);
+				OperationResult result = await SendToDevice(ip, CommandNames.SetID, content);
 
 				return result;
 			}
 			else
 			{
-				return new OperationResult {Success = false,ErrorMessage = "Не задан IP" };
+				return new OperationResult { Success = false, ErrorMessage = "Не задан IP" };
 			}
 		}
 

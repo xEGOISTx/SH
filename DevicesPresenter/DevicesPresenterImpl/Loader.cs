@@ -17,7 +17,7 @@ namespace DevicesPresenter
 
 		public IConnectionParams LoadRouterConnectionParams()
 		{
-			return new ConnectionParams() {Ssid ="MGTS_GPON_2214", Password ="4AMYNYKM" };
+			return new ConnectionParams() {Ssid ="MGTS_GPON_2303", Password ="SSFR73N6" };
 		}
 	}
 }

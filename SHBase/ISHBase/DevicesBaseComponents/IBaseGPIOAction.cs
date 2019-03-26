@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SHBase.DevicesBaseComponents
+﻿namespace SHBase.DevicesBaseComponents
 {
 	/// <summary>
 	/// Режим GPIO
 	/// </summary>
 	public enum GPIOMode
 	{
+		NotDefined,
 		Input,
-		Output,
-		NotDefined
+		Output
 	}
 
 	/// <summary>
@@ -21,9 +15,9 @@ namespace SHBase.DevicesBaseComponents
 	/// </summary>
 	public enum GPIOLevel
 	{
+		NotDefined,
 		High,
-		Low,
-		NotDefined
+		Low
 	}
 
 	public interface IBaseGPIOAction

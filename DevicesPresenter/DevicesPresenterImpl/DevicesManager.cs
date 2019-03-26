@@ -47,6 +47,7 @@ namespace DevicesPresenter
 		{
 			ConnectorByWiFi connector = new ConnectorByWiFi();
 			CommunicatorAP communicatorAP = new CommunicatorAP(_aPDefaultIP);
+			Communicator communicator = new Communicator();
 
 			//получаем доступные устройства
 			IEnumerable<WiFiAvailableNetwork> wifiAvailableDevices = await connector.GetAvailableDevicesAsAPAsync();
@@ -93,20 +94,30 @@ namespace DevicesPresenter
 				{
 					List<IDeviceBase> newDevs = newDevices[devices.DevicesType];
 
+					//сохраняем устройства в БД
 					DataManager.DevicesLoader loader = new DataManager.DevicesLoader(devices.DevicesType);
 					DataManager.IDeviceInfo[] deviceInfos = MakeInfos(newDevs);
-					DataManager.IResultOperationSave result = await loader.SaveDevices(deviceInfos);
+					DataManager.IResultOperationSave saveResult = await loader.SaveDevices(deviceInfos);
 
-					if(result.Success)
+					if(saveResult.Success)
 					{
+						//создаём и добавляем устройства
 						for (int i = 0; i < newDevs.Count; i++)
 						{
 							IDeviceBase nDev = newDevs[i];
-							int nID = result.NewIDs[i];
+							int nID = saveResult.NewIDs[i];
 
-							IDeviceBase newDev = devices.CreateDevice(nID, nDev.Name, nDev.IP, nDev.FirmwareType, nDev.Mac);
+							IDeviceBase dev = devices.CreateDevice(nID, nDev.Name, nDev.IP, nDev.FirmwareType, nDev.Mac);
 
-							devices.Add(newDev);
+							//отправляем устройству его ID
+							SHBase.Communication.OperationResult result = await communicator.SendIdToDevice(nID, nDev.IP);
+
+							if(!result.Success)
+							{
+								throw new Exception("Сбой отправки ID устройству: " + result.ErrorMessage);
+							}
+
+							devices.Add(dev);
 						}
 					}
 
