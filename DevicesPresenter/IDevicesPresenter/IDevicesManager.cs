@@ -2,16 +2,12 @@
 using System.Threading.Tasks;
 using SHBase.DevicesBaseComponents;
 
-namespace SHBase.DevicesBaseComponents
+namespace DevicesPresenter
 {
 	public interface IDevicesManager : IDevicesGetter
 	{
-		//IConnectionSettings ConnectionSettings { get; }
-
 		Task<bool> FindAndConnectDevicesAsync();
 
 		Task<bool> SynchronizationWithDevicesAsync();
-
-		//object GetDevices<DevsType>();
 	}
 }

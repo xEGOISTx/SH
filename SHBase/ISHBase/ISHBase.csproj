@@ -124,7 +124,6 @@
     <Compile Include="BaseContainers\IContainer.cs" />
     <Compile Include="DevicesBaseComponents\IDeviceBaseTask.cs" />
     <Compile Include="DevicesBaseComponents\IDeviceBaseTaskType.cs" />
-    <Compile Include="DevicesBaseComponents\IDevicesManager.cs" />
     <Compile Include="DevicesBaseComponents\IGPIOActionTask.cs" />
     <Compile Include="DevicesBaseComponents\IDeviceBaseList.cs" />
     <Compile Include="IConnectionParams.cs" />

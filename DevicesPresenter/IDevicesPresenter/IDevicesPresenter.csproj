@@ -107,6 +107,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="IConnectionSettings.cs" />
+    <Compile Include="IDevicesManager.cs" />
     <Compile Include="ILoader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\IDevicesPresenter.rd.xml" />

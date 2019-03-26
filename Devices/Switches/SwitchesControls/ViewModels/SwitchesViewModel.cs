@@ -11,10 +11,10 @@ namespace SwitchesControls.ViewModels
 {
 	public class SwitchesViewModel
 	{
-		public SwitchesViewModel(IDevicesManager devicesManager)
+		public SwitchesViewModel(IDevicesGetter devicesGetter)
 		{
-			Switches = new SwitchListViewModel(devicesManager);
-			Outlets = new OutletListViewModel(devicesManager);
+			Switches = new SwitchListViewModel(devicesGetter);
+			Outlets = new OutletListViewModel(devicesGetter);
 		}
 
 		public SwitchListViewModel Switches { get; }
