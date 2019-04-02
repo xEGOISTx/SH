@@ -81,6 +81,15 @@ namespace Switches
 			return result.Success;
 		}
 
+		public async override Task<int[]> Save(IEnumerable<IDeviceBase> devices)
+		{
+			DevicesLoader loader = new DevicesLoader(DevicesType);
+			IDeviceInfo[] infos = MakeInfos(devices);
+			IResultOperationSave result = await loader.SaveDevices(infos);
+
+			return result.NewIDs;
+		}
+
 		public override async Task Synchronization(IEnumerable<IDeviceBase> devicesFromRouter, Communicator communicator)
 		{
 			if (IsLoaded)
@@ -113,6 +122,26 @@ namespace Switches
 					}
 				});
 			}
+		}
+
+		private IDeviceInfo[] MakeInfos(IEnumerable<IDeviceBase> devices)
+		{
+			List<IDeviceInfo> infos = new List<IDeviceInfo>(devices.Count());
+
+			foreach (IDeviceBase device in devices)
+			{
+				DeviceInfo info = new DeviceInfo
+				{
+					Description = device.Description,
+					DeviceType = device.DeviceType,
+					FirmwareType = (int)device.FirmwareType,
+					MacAddress = device.Mac.ToString()
+				};
+
+				infos.Add(info);
+			}
+
+			return infos.ToArray();
 		}
 
 	}

@@ -95,17 +95,16 @@ namespace DevicesPresenter
 					List<IDeviceBase> newDevs = newDevices[devices.DevicesType];
 
 					//сохраняем устройства в БД
-					DataManager.DevicesLoader loader = new DataManager.DevicesLoader(devices.DevicesType);
-					DataManager.IDeviceInfo[] deviceInfos = MakeInfos(newDevs);
-					DataManager.IResultOperationSave saveResult = await loader.SaveDevices(deviceInfos);
+					int[] newIDs = await devices.Save(newDevs);
 
-					if(saveResult.Success)
+
+					if (newIDs.Count() == devices.Count)
 					{
 						//создаём и добавляем устройства
 						for (int i = 0; i < newDevs.Count; i++)
 						{
 							IDeviceBase nDev = newDevs[i];
-							int nID = saveResult.NewIDs[i];
+							int nID = newIDs[i];
 
 							IDeviceBase dev = devices.CreateDevice(nID, nDev.Name, nDev.IP, nDev.FirmwareType, nDev.Mac);
 
@@ -119,6 +118,10 @@ namespace DevicesPresenter
 
 							devices.Add(dev);
 						}
+					}
+					else
+					{
+						throw new Exception("Колл-во IDs не сответствует кол-ву переданных устройств");
 					}
 
 				}

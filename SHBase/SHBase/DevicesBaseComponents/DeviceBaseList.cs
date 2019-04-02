@@ -38,7 +38,7 @@ namespace SHBase.DevicesBaseComponents
 
 		public virtual void Add(IDeviceBase device)
 		{
-			if(device != null && device.ID > 0 && !devices.ContainsKey(device.ID))
+			if (device != null && device.ID > 0 && !devices.ContainsKey(device.ID))
 			{
 				devices.Add(device.ID, device);
 			}
@@ -58,6 +58,13 @@ namespace SHBase.DevicesBaseComponents
 		}
 
 		public abstract Task<bool> Load();
+
+		/// <summary>
+		/// Сохранить утройства. Возвращает IDs сохранённых устройств в том же порядке как устройсва были переданы!
+		/// </summary>
+		/// <param name="devices"></param>
+		/// <returns></returns>
+		public abstract Task<int[]> Save(IEnumerable<IDeviceBase> devices);
 
 		/// <summary>
 		/// Синхронизация с подключенными к роутеру устройствами
