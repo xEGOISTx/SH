@@ -129,6 +129,9 @@
     <Compile Include="IConnectionParams.cs" />
     <Compile Include="DevicesBaseComponents\IDeviceBase.cs" />
     <Compile Include="DevicesBaseComponents\IBaseGPIOAction.cs" />
+    <Compile Include="IConnectionSettings.cs" />
+    <Compile Include="IDevicesManager.cs" />
+    <Compile Include="IRouterParser.cs" />
     <Compile Include="MacAddress.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\ISHBase.rd.xml" />

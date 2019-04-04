@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SwitchesControls.ViewModels;
 using UWPHelper;
-using SHBase.DevicesBaseComponents;
+using SHBase;
 
 namespace DevicesPresenterControls.ViewModels
 {

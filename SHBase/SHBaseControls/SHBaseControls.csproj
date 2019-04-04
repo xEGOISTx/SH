@@ -120,9 +120,6 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="DevicePane.cs" />
-    <Compile Include="DevicesGroup.cs" />
-    <Compile Include="DevicesManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\SHBaseControls.rd.xml" />
   </ItemGroup>

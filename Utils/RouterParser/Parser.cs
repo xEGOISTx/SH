@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Security.Credentials;
@@ -13,21 +14,21 @@ using Windows.UI.Xaml.Navigation;
 
 namespace RouterParser
 {
-    public  class Parser
+    public class Parser : SHBase.IRouterParser
     {
-		private readonly string _ip;
-		private readonly string _login;
-		private readonly string _password;
+		//private readonly string _ip;
+		//private readonly string _login;
+		//private readonly string _password;
 		private static WebView _webView;
 		private static bool _loadComplete = true;
 		private static bool _parseComplete = true;
 		private string _content;
 
-		public Parser(string ip,string login,string password)
+		public Parser(/*string ip,string login,string password*/)
 		{
-			_ip = ip;
-			_login = login;
-			_password = password;
+			//_ip = ip;
+			//_login = login;
+			//_password = password;
 
 			if(_webView == null)
 			{
@@ -35,24 +36,23 @@ namespace RouterParser
 			}
 		}
 
-
-
-		public async Task<ParseResult> LoadDeviceInfosAsync()
+		public async Task<IEnumerable<IPAddress>> GetDevicesIPs(IPAddress routerIP, string login, string password)
 		{
 			ParseResult result = new ParseResult();
+			string strUrl = $"http://{ routerIP }/";
 
 			if (_parseComplete)
 			{
 				_parseComplete = false;
 				_loadComplete = false;
 
-				OperationResult authorizationResult = await Authorization();
+				OperationResult authorizationResult = await Authorization(strUrl, login, password);
 
 				_webView.LoadCompleted += WebView_LoadCompleted;
 
 				await Window.Current.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
 				{
-					 _webView.Navigate(new Uri(_ip));
+					_webView.Navigate(new Uri(strUrl));
 				});
 
 
@@ -88,8 +88,62 @@ namespace RouterParser
 			}
 
 			_content = null;
-			return result;
+			return result.DeviceInfos.Select(dI => dI.Ip);
 		}
+
+		//public async Task<ParseResult> LoadDeviceInfosAsync()
+		//{
+		//	ParseResult result = new ParseResult();
+
+		//	if (_parseComplete)
+		//	{
+		//		_parseComplete = false;
+		//		_loadComplete = false;
+
+		//		OperationResult authorizationResult = await Authorization();
+
+		//		_webView.LoadCompleted += WebView_LoadCompleted;
+
+		//		await Window.Current.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+		//		{
+		//			 _webView.Navigate(new Uri(_ip));
+		//		});
+
+
+		//		await Task.Run(() =>
+		//		{
+		//			while (!_loadComplete)
+		//			{ }
+
+		//			if (_content != null)
+		//			{
+		//				result.Success = true;
+		//				result.DeviceInfos = GetDivInfo(_content).ToArray();
+		//			}
+		//			else
+		//			{
+		//				result.ErrorText = "Не удалось загрузить контент";
+		//			}
+		//		});
+
+		//		_webView.LoadCompleted -= WebView_LoadCompleted;
+
+		//		await Window.Current.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+		//		{
+		//			_webView.NavigateToString("");
+		//		});
+
+
+		//		_parseComplete = true;
+		//	}
+		//	else
+		//	{
+		//		result.ErrorText = "Предыдущий процесс загрузки устройств ещё не завершен!";
+		//	}
+
+		//	_content = null;
+		//	return result;
+		//}
 
 
 
@@ -143,14 +197,14 @@ namespace RouterParser
 			return deviceInfos;
 		}
 
-		private async Task<OperationResult> Authorization()
+		private async Task<OperationResult> Authorization(string strUrl, string login, string password)
 		{
 			//OperationResult operationResult = null;
 
 			return await Task.Run(async () => 
 			{
 				OperationResult operationResult = new OperationResult();
-				PasswordCredential credential = new PasswordCredential(_ip, _login, _password);
+				PasswordCredential credential = new PasswordCredential(strUrl, login, password);
 				Windows.Web.Http.Filters.HttpBaseProtocolFilter filter = new Windows.Web.Http.Filters.HttpBaseProtocolFilter();
 				filter.ServerCredential = credential;
 
@@ -170,7 +224,7 @@ namespace RouterParser
 					throw new Exception("Invalid header value: " + header);
 				}
 
-				Uri requestUri = new Uri(_ip);
+				Uri requestUri = new Uri(strUrl);
 
 				Windows.Web.Http.HttpResponseMessage httpResponse = new Windows.Web.Http.HttpResponseMessage();
 			 
@@ -194,5 +248,6 @@ namespace RouterParser
 			_content = await (sender as WebView).InvokeScriptAsync("eval", new string[] { "document.documentElement.outerHTML;" });
 			_loadComplete = true;
 		}
+
 	}
 }

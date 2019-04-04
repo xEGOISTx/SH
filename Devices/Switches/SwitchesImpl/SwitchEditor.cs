@@ -9,21 +9,20 @@ namespace Switches
 {
 	public class SwitchEditor : ISwitchEditor
 	{
+		private readonly IDataManager _data;
+
+		public SwitchEditor(IDataManager dataManager)
+		{
+			_data = dataManager;
+		}
 
 		public void Rename(IBaseSwitch sw, string description)
 		{
 			if (sw.Description != description)
 			{
-				DataManager.DataManager dM = new DataManager.DataManager();
+				IDeviceInfo deviceInfo = _data.CreateDeviceInfo(sw.Description, sw.DeviceType, (int)sw.FirmwareType, sw.Mac.ToString(), sw.ID);
 
-
-				IDeviceInfo deviceInfo = new DeviceInfo
-				{
-					ID = sw.ID,
-					Description = description
-				};
-
-				IDBOperationResult result = dM.RenameDevice(deviceInfo);
+				IDBOperationResult result = _data.RenameDevice(deviceInfo);
 
 				if (result.Success)
 					(sw as BaseSwitch).Description = description;

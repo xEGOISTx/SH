@@ -13,9 +13,15 @@ namespace Switches
 {
 	public class OutletList : DeviceBaseList, IOutletList//SwitchesAndOutletsBaseList<IOutlet>, IOutletList
 	{
-		public OutletList() : base(DeviceTypes.OUTLET) { }
+		private readonly IDataManager _data;
 
-		public ISwitchEditor SwitchEditor { get; } = new SwitchEditor();
+		public OutletList(IDataManager dataManager) : base(DeviceTypes.OUTLET)
+		{
+			_data = dataManager;
+			SwitchEditor = new SwitchEditor(_data);
+		}
+
+		public ISwitchEditor SwitchEditor { get; }
 
 		public override IDeviceBase CreateDevice(int id, string name, IPAddress iP, FirmwareType firmwareType, MacAddress mac)
 		{
@@ -55,37 +61,48 @@ namespace Switches
 
 		public override async Task<bool> Load()
 		{
-			DevicesLoader loader = new DevicesLoader(DevicesType);
-			IResultOperationLoad result = await loader.LoadDevices();
 
-			await Task.Run(() =>
+			IResultOperationLoad result = null;
+
+			if (!IsLoaded)
 			{
-				if (result.Success)
+				await Task.Run(() =>
 				{
-					foreach (IDeviceInfo deviceInfo in result.DeviceInfos)
+					result = _data.LoadDevices(DeviceTypes.OUTLET);
+
+					if (result.Success)
 					{
-						var mac = new MacAddress(deviceInfo.MacAddress);
-						var fType = (FirmwareType)deviceInfo.FirmwareType;
-
-						Outlet sw = new Outlet(mac, fType)
+						foreach (IDeviceInfo deviceInfo in result.DeviceInfos)
 						{
-							ID = deviceInfo.ID,
-							Description = deviceInfo.Description
-						};
+							var mac = new MacAddress(deviceInfo.MacAddress);
+							var fType = (FirmwareType)deviceInfo.FirmwareType;
 
-						Add(sw);
+							Outlet sw = new Outlet(mac, fType)
+							{
+								ID = deviceInfo.ID,
+								Description = deviceInfo.Description
+							};
+
+							Add(sw);
+						}
+
+						IsLoaded = result.Success;
 					}
-				}
-			});
+				});
+			}
 
-			return result.Success;
+			return result != null ? result.Success : false;
 		}
 
 		public async override Task<int[]> Save(IEnumerable<IDeviceBase> devices)
 		{
-			DevicesLoader loader = new DevicesLoader(DevicesType);
-			IDeviceInfo[] infos = MakeInfos(devices);
-			IResultOperationSave result = await loader.SaveDevices(infos);
+			IResultOperationSave result = null;
+
+			await Task.Run(() =>
+			{
+				IDeviceInfo[] infos = MakeInfos(devices);
+				result = _data.SaveDevices(infos);
+			});
 
 			return result.NewIDs;
 		}
@@ -130,14 +147,7 @@ namespace Switches
 
 			foreach (IDeviceBase device in devices)
 			{
-				DeviceInfo info = new DeviceInfo
-				{
-					Description = device.Description,
-					DeviceType = device.DeviceType,
-					FirmwareType = (int)device.FirmwareType,
-					MacAddress = device.Mac.ToString()
-				};
-
+				IDeviceInfo info = _data.CreateDeviceInfo(device.Description, device.DeviceType, (int)device.FirmwareType, device.Mac.ToString());
 				infos.Add(info);
 			}
 

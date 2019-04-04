@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SHBase;
 
-namespace DevicesPresenter
+namespace SHBase
 {
 	public class ConnectionSettings : IConnectionSettings
 	{
@@ -39,9 +38,9 @@ namespace DevicesPresenter
 
 		public void Load()
 		{
-			ILoader loader = new Loader();
-			_connectionToDevice = loader.LoadDeviceConnectionParams() as ConnectionParams;
-			_connectionToRouter = loader.LoadRouterConnectionParams() as ConnectionParams;
+			//ILoader loader = new Loader();
+			_connectionToDevice = new ConnectionParams() { Ssid = "Test", Password = "1234567890" };//loader.LoadDeviceConnectionParams() as ConnectionParams;
+			_connectionToRouter = new ConnectionParams() { Ssid = "MGTS_GPON_2303", Password = "SSFR73N6" };//loader.LoadRouterConnectionParams() as ConnectionParams;
 
 		}
 	}

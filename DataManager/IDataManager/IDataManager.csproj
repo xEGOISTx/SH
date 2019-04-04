@@ -120,6 +120,7 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="IDataManager.cs" />
     <Compile Include="IDeviceInfo.cs" />
     <Compile Include="IDBOperationResult.cs" />
     <Compile Include="IResultOperationSave.cs" />

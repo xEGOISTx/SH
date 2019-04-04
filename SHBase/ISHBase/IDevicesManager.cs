@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using SHBase.DevicesBaseComponents;
 
-namespace DevicesPresenter
+namespace SHBase
 {
 	public interface IDevicesManager : IDevicesGetter
 	{

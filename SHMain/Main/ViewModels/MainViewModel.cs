@@ -17,11 +17,10 @@ namespace SHMain.Main.ViewModels
 	{
 		public MainViewModel()
 		{
-			DataManager.DataManager dataManager = new DataManager.DataManager();
-			dataManager.InitializeDatabase();
-			Server server = new Server();
 
-			StorageFolder installedLocation = ApplicationData.Current.LocalFolder;
+			//Server server = new Server();
+
+			//StorageFolder installedLocation = ApplicationData.Current.LocalFolder;
 
 			Init();
 		}
@@ -31,9 +30,12 @@ namespace SHMain.Main.ViewModels
 
 		private async void Init()
 		{
-			DevicesManager devicesManager = new DevicesManager();
-			devicesManager.AddForManagement(new Switches.SwitchList());
-			devicesManager.AddForManagement(new Switches.OutletList());
+			DataManager.DataManager dataManager = new DataManager.DataManager();
+			dataManager.InitializeDatabase();
+
+			DevicesManager devicesManager = new DevicesManager(new RouterParser.Parser());
+			devicesManager.AddForManagement(new Switches.SwitchList(dataManager));
+			devicesManager.AddForManagement(new Switches.OutletList(dataManager));
 
 			DevicePresenterVM = new DevicePresenterViewModel(devicesManager);
 			OnPropertyChanged(nameof(DevicePresenterVM));

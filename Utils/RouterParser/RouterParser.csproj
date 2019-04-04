@@ -119,6 +119,12 @@
       <Version>6.2.3</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\SHBase\ISHBase\ISHBase.csproj">
+      <Project>{31e8465c-6bc2-46d5-834d-0e940c3c33ea}</Project>
+      <Name>ISHBase</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

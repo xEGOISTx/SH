@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace DataManager
 {
-	public class DataManager
+	public class DataManager : IDataManager
     {
 		private const string CONNECTION_STRING = "Filename=Data.db";
 
@@ -28,10 +28,16 @@ namespace DataManager
 			}
 		}
 
-		//public IDataSwitches Switches
-		//{
-		//	get { return new DataSwitches(CONNECTION_STRING); }
-		//}
+		public IDeviceInfo CreateDeviceInfo(string description, int deviceType, int firmwareType, string macAddres, int id = 0)
+		{
+			return new DeviceInfo
+			{
+				Description = description,
+				DeviceType = deviceType,
+				FirmwareType = firmwareType,
+				MacAddress = macAddres
+			};
+		}
 
 		public IResultOperationLoad LoadDevices(int deviceType)
 		{
