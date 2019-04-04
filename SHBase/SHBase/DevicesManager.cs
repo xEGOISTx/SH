@@ -97,7 +97,7 @@ namespace SHBase
 					int[] newIDs = await devices.Save(newDevs);
 
 
-					if (newIDs.Count() == devices.Count)
+					if (newIDs.Count() == newDevs.Count)
 					{
 						//создаём и добавляем устройства
 						for (int i = 0; i < newDevs.Count; i++)
