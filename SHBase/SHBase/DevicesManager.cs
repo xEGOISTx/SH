@@ -12,16 +12,12 @@ namespace SHBase
 {
 	public class DevicesManager : IDevicesManager
 	{
-		//private readonly DeviceCommonList _deviceCommonList;
 		private readonly IPAddress _aPDefaultIP = IPAddress.Parse("192.168.4.1");
 		private readonly Dictionary<int, DeviceBaseList> DevicesLists = new Dictionary<int, DeviceBaseList>();
-		private readonly IRouterParser _routerParser;
-		private readonly IPAddress routeIP = IPAddress.Parse("192.168.1.254");
+		private readonly IPAddress routerIP = IPAddress.Parse("192.168.1.254");
 
-		public DevicesManager(IRouterParser routerParser)
+		public DevicesManager()
 		{
-			//_deviceCommonList = deviceCommonList;
-			_routerParser = routerParser;
 			ConnectionSettings settings = new ConnectionSettings();
 			settings.Load();
 			ConnectionSettings = settings;
@@ -126,17 +122,10 @@ namespace SHBase
 				}
 			}
 
-
-			//добавляем и сохраняем новые устройства. Каждый список сам определит принадлежащие ему устройства
-			//foreach (Devices devList in _deviceCommonList)
-			//{
-			//	await devList.AddAndSaveNewDevices(newDevices);
-			//}
-
 			return true;
 		}
 
-		public async Task<bool> SynchronizationWithDevicesAsync()
+		public async Task<bool> SynchronizationWithDevicesAsync(IRouterParser routerParser)
 		{
 			bool result = false;
 			Dictionary<int, IDeviceBase> notConnectedDevices = new Dictionary<int, IDeviceBase>();
@@ -158,7 +147,7 @@ namespace SHBase
 				Dictionary<int, List<IDeviceBase>> devsToSynchronize = new Dictionary<int, List<IDeviceBase>>();
 
 				//получаем ip устойств подключенных к роутеру
-				IEnumerable<IPAddress> iPsFromRouter = await _routerParser.GetDevicesIPs(routeIP, "admin", "admin");
+				IEnumerable<IPAddress> iPsFromRouter = await routerParser.GetDevicesIPs(routerIP, "admin", "admin");
 
 				await Task.Run(async () =>
 				{
@@ -167,20 +156,28 @@ namespace SHBase
 					{
 						//получаем инфу об устройстве
 						GetBaseInfoResult infoResult = await communicator.GetDeviceInfo(devIP);
-						IDeviceBase devFromRouter = infoResult.BasicInfo;
 
-						//проверяем на успех получения инфы и удостоверяемся, что это устойство было определенно как не подключенное
-						if (infoResult.Success && notConnectedDevices.ContainsKey(devFromRouter.ID))
+						// проверяем на успех получения инфы
+						if (infoResult.Success)
 						{
-							if (!devsToSynchronize.ContainsKey(devFromRouter.DeviceType))
+							IDeviceBase devFromRouter = infoResult.BasicInfo;
+
+							//удостоверяемся, что это устойство было определенно как не подключенное
+							if (notConnectedDevices.ContainsKey(devFromRouter.ID))
 							{
-								devsToSynchronize.Add(devFromRouter.DeviceType, new List<IDeviceBase> { devFromRouter });
-							}
-							else
-							{
-								devsToSynchronize[devFromRouter.DeviceType].Add(devFromRouter);
+								if (!devsToSynchronize.ContainsKey(devFromRouter.DeviceType))
+								{
+									devsToSynchronize.Add(devFromRouter.DeviceType, new List<IDeviceBase> { devFromRouter });
+								}
+								else
+								{
+									devsToSynchronize[devFromRouter.DeviceType].Add(devFromRouter);
+								}
 							}
 						}
+
+
+
 					}
 
 					//синхронизируем

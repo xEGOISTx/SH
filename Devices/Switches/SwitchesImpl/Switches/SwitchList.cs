@@ -12,13 +12,13 @@ using SHBase.DevicesBaseComponents;
 
 namespace Switches
 {
-	public class SwitchList : DeviceBaseList , ISwitchList //SwitchesAndOutletsBaseList<ISwitch>, ISwitchList
+	public class SwitchList : SwitchesBaseList , ISwitchList
 	{
-		private readonly IDataManager _data;
+		//private readonly IDataManager _data;
 
-		public SwitchList(IDataManager dataManager) : base(DeviceTypes.SWITCH)
+		public SwitchList(IDataManager dataManager) : base(DeviceTypes.SWITCH, dataManager)
 		{
-			_data = dataManager;
+			//_data = dataManager;
 			SwitchEditor = new SwitchEditor(_data);
 		}
 
@@ -36,125 +36,138 @@ namespace Switches
 
 		public ISwitch GetByKey(int key)
 		{
-			return devices.ContainsKey(key) ? (ISwitch)devices[key] : null;
+			return _devices.ContainsKey(key) ? (ISwitch)_devices[key] : null;
 		}
 
-		public override async Task<IEnumerable<IDeviceBase>> GetNotConnectedDevicesAsync(Communicator communicator)
+		protected override IBaseSwitch CreteDeviceFromDeviceInfo(IDeviceInfo deviceInfo)
 		{
-			List<IDeviceBase> notConndevices = new List<IDeviceBase>();
+			var mac = new MacAddress(deviceInfo.MacAddress);
+			var fType = (FirmwareType)deviceInfo.FirmwareType;
 
-			await Task.Run(async () =>
+			return new Switch(mac, fType)
 			{
-				foreach (IDeviceBase device in this)
-				{
-					bool result = await communicator.CheckConnection(device);
-
-					if (!result)
-					{
-						(device as Switch).IsConnected = false;
-						notConndevices.Add(device);
-					}
-				}
-			});
-
-			return notConndevices;
+				ID = deviceInfo.ID,
+				Description = deviceInfo.Description
+			};			
 		}
 
-		public override async Task<bool> Load()
-		{
 
-			IResultOperationLoad result = null;
+		//public override async Task<bool> Load()
+		//{
+		//	IResultOperationLoad result = null;
 
-			if (!IsLoaded)
-			{
-				await Task.Run(() =>
-				{
-					result = _data.LoadDevices(DeviceTypes.SWITCH);
+		//	if (!IsLoaded)
+		//	{
+		//		await Task.Run(() =>
+		//		{
+		//			result = _data.LoadDevices(DeviceTypes.SWITCH);
 
-					if (result.Success)
-					{
-						foreach (IDeviceInfo deviceInfo in result.DeviceInfos)
-						{
-							var mac = new MacAddress(deviceInfo.MacAddress);
-							var fType = (FirmwareType)deviceInfo.FirmwareType;
+		//			if (result.Success)
+		//			{
+		//				foreach (IDeviceInfo deviceInfo in result.DeviceInfos)
+		//				{
+		//					var mac = new MacAddress(deviceInfo.MacAddress);
+		//					var fType = (FirmwareType)deviceInfo.FirmwareType;
 
-							Switch sw = new Switch(mac, fType)
-							{
-								ID = deviceInfo.ID,
-								Description = deviceInfo.Description
-							};
+		//					Switch sw = new Switch(mac, fType)
+		//					{
+		//						ID = deviceInfo.ID,
+		//						Description = deviceInfo.Description
+		//					};
 
-							Add(sw);
-						}
+		//					Add(sw);
+		//				}
 
-						IsLoaded = result.Success;
-					}
-				});
-			}
+		//				IsLoaded = result.Success;
+		//			}
+		//		});
+		//	}
 
-			return result != null ? result.Success : false;
-		}
-
-		public async override Task<int[]> Save(IEnumerable<IDeviceBase> devices)
-		{
-			IResultOperationSave result = null;
-
-			await Task.Run(() =>
-			{
-				IDeviceInfo[] infos = MakeInfos(devices);
-				result = _data.SaveDevices(infos);
-			});
+		//	return result != null ? result.Success : false;
+		//}
 
 
-			return result.NewIDs;
-		}
 
-		public override async Task Synchronization(IEnumerable<IDeviceBase> devicesFromRouter, Communicator communicator)
-		{
-			if (IsLoaded)
-			{
-				await Task.Run(() =>
-				{
-					foreach (IDeviceBase deviceFromRouter in devicesFromRouter)
-					{
-						IDeviceBase device = GetByKey(deviceFromRouter.ID);
+		//public override async Task<IEnumerable<IDeviceBase>> GetNotConnectedDevicesAsync(Communicator communicator)
+		//{
+		//	List<IDeviceBase> notConndevices = new List<IDeviceBase>();
 
-						if (device != null && CheckCorresponding(deviceFromRouter, device))
-						{
-							BaseSwitch dev = (device as BaseSwitch);
-							dev.IP = deviceFromRouter.IP;
-							dev.Name = deviceFromRouter.Name;
-							dev.IsConnected = true;
+		//	await Task.Run(async () =>
+		//	{
+		//		foreach (IDeviceBase device in this)
+		//		{
+		//			bool result = await communicator.CheckConnection(device);
 
-							//TODO: здесь будет вызов метода GetOwnParams
-							dev.State = CurrentState.TurnedOff; //статус будем запрашивать отсюда
+		//			if (!result)
+		//			{
+		//				(device as Switch).IsConnected = false;
+		//				notConndevices.Add(device);
+		//			}
+		//		}
+		//	});
 
-						}
-						else if (device == null)
-						{
-							//TODO: обработать случай, если утройство найдено но в базе его нет
-						}
-						else
-						{
-							//не соответствие устройств
-						}
-					}
-				});
-			}
-		}
+		//	return notConndevices;
+		//}
+		//public async override Task<int[]> Save(IEnumerable<IDeviceBase> devices)
+		//{
+		//	IResultOperationSave result = null;
 
-		private IDeviceInfo[] MakeInfos(IEnumerable<IDeviceBase> devices)
-		{
-			List<IDeviceInfo> infos = new List<IDeviceInfo>(devices.Count());
+		//	await Task.Run(() =>
+		//	{
+		//		IDeviceInfo[] infos = MakeInfos(devices);
+		//		result = _data.SaveDevices(infos);
+		//	});
 
-			foreach (IDeviceBase device in devices)
-			{
-				IDeviceInfo info = _data.CreateDeviceInfo(device.Description, device.DeviceType, (int)device.FirmwareType, device.Mac.ToString());
-				infos.Add(info);
-			}
 
-			return infos.ToArray();
-		}
+		//	return result.NewIDs;
+		//}
+
+		//public override async Task Synchronization(IEnumerable<IDeviceBase> devicesFromRouter, Communicator communicator)
+		//{
+		//	if (IsLoaded)
+		//	{
+		//		await Task.Run(() =>
+		//		{
+		//			foreach (IDeviceBase deviceFromRouter in devicesFromRouter)
+		//			{
+		//				IDeviceBase device = GetByKey(deviceFromRouter.ID);
+
+		//				if (device != null && CheckCorresponding(deviceFromRouter, device))
+		//				{
+		//					BaseSwitch dev = (device as BaseSwitch);
+		//					dev.IP = deviceFromRouter.IP;
+		//					dev.Name = deviceFromRouter.Name;
+		//					dev.IsConnected = true;
+
+		//					//TODO: здесь будет вызов метода GetOwnParams
+		//					dev.State = CurrentState.TurnedOff; //статус будем запрашивать отсюда
+
+		//				}
+		//				else if (device == null)
+		//				{
+		//					//TODO: обработать случай, если утройство найдено но в базе его нет
+		//				}
+		//				else
+		//				{
+		//					//не соответствие устройств
+		//				}
+		//			}
+		//		});
+		//	}
+		//}
+
+		//private IDeviceInfo[] MakeInfos(IEnumerable<IDeviceBase> devices)
+		//{
+		//	List<IDeviceInfo> infos = new List<IDeviceInfo>(devices.Count());
+
+		//	foreach (IDeviceBase device in devices)
+		//	{
+		//		IDeviceInfo info = _data.CreateDeviceInfo(device.Description, device.DeviceType, (int)device.FirmwareType, device.Mac.ToString());
+		//		infos.Add(info);
+		//	}
+
+		//	return infos.ToArray();
+		//}
 
 	}
 }

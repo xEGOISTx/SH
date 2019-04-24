@@ -89,7 +89,7 @@ namespace DataManager
 			return result;
 		}
 
-		public IDBOperationResult RenameDevice(IDeviceInfo device)
+		public IDBOperationResult RenameDevice(int devID, string newDescription)
 		{
 			DBOperationResult result = new DBOperationResult();
 
@@ -97,7 +97,7 @@ namespace DataManager
 			{
 				db.Open();
 
-				string rename = $"UPDATE {Consts.DEVICES_TABLE} SET Description = '{device.Description}' WHERE Id = {device.ID}";
+				string rename = $"UPDATE {Consts.DEVICES_TABLE} SET Description = '{newDescription}' WHERE Id = {devID}";
 				SqliteCommand renameDevice = new SqliteCommand(rename, db);
 
 				try

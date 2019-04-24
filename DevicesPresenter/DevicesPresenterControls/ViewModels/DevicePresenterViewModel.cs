@@ -21,10 +21,12 @@ namespace DevicesPresenterControls.ViewModels
 
 		private readonly IDevicesManager _manager;
 		private bool _devicePresenterVisibility;
+		private readonly IRouterParser _routerParser;
 
-		public DevicePresenterViewModel(IDevicesManager manager)
+		public DevicePresenterViewModel(IDevicesManager manager, IRouterParser routerParser)
 		{
 			_manager = manager;
+			_routerParser = routerParser;
 			FindDevices = new RelayCommand(ExecuteFindDevices);
 			Update = new RelayCommand(ExecuteUpdate);
 
@@ -59,7 +61,7 @@ namespace DevicesPresenterControls.ViewModels
 		public RelayCommand Update { get; private set; }
 		private async void ExecuteUpdate(object param)
 		{
-			await ExecuteProcess(_manager.SynchronizationWithDevicesAsync(), RefreshMode.State);
+			await ExecuteProcess(_manager.SynchronizationWithDevicesAsync(_routerParser), RefreshMode.State);
 		}
 
 		public void FullRefresh()

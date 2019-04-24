@@ -9,7 +9,8 @@
     xmlns:controls ="using:SHBaseControls"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-    Name="thisControl">
+    Name="thisControl"
+    Loaded="ThisControl_Loaded">
 
 
     <Grid>

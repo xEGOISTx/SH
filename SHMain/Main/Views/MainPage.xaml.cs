@@ -35,5 +35,10 @@ namespace SHMain.Main.Views
 			this.InitializeComponent();
 			DataContext = new Main.ViewModels.MainViewModel();
 		}
+
+		private void ThisControl_Loaded(object sender, RoutedEventArgs e)
+		{
+			(DataContext as ViewModels.MainViewModel).Init();
+		}
 	}
 }

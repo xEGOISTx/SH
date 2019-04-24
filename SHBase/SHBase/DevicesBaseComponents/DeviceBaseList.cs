@@ -8,7 +8,7 @@ namespace SHBase.DevicesBaseComponents
 {
 	public abstract class DeviceBaseList : IEnumerable
 	{
-		protected readonly Dictionary<int, IDeviceBase> devices = new Dictionary<int, IDeviceBase>();
+		protected readonly Dictionary<int, IDeviceBase> _devices = new Dictionary<int, IDeviceBase>();
 
 		public DeviceBaseList(int devicesType)
 		{
@@ -20,7 +20,7 @@ namespace SHBase.DevicesBaseComponents
 
 		public bool IsLoaded { get; protected set; }
 
-		public int Count => devices.Count;
+		public int Count => _devices.Count;
 		#endregion Properties
 
 
@@ -28,19 +28,19 @@ namespace SHBase.DevicesBaseComponents
 		#region Methods
 		public bool ContainsKey(int key)
 		{
-			return devices.ContainsKey(key);
+			return _devices.ContainsKey(key);
 		}
 
 		public virtual IEnumerator GetEnumerator()
 		{
-			return devices.Values.GetEnumerator();
+			return _devices.Values.GetEnumerator();
 		}
 
 		public virtual void Add(IDeviceBase device)
 		{
-			if (device != null && device.ID > 0 && !devices.ContainsKey(device.ID))
+			if (device != null && device.ID > 0 && !_devices.ContainsKey(device.ID) && device.DeviceType == DevicesType)
 			{
-				devices.Add(device.ID, device);
+				_devices.Add(device.ID, device);
 			}
 		}
 

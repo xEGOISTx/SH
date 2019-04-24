@@ -126,6 +126,7 @@
     <Compile Include="GPIOAction.cs" />
     <Compile Include="Outlets\OutletList.cs" />
     <Compile Include="SwitchEditor.cs" />
+    <Compile Include="SwitchesBaseList.cs" />
     <Compile Include="Switches\SwitchList.cs" />
     <Compile Include="Switches\Switch.cs" />
     <Compile Include="SwitchOutletTask.cs" />

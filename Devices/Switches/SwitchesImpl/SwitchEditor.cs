@@ -19,10 +19,8 @@ namespace Switches
 		public void Rename(IBaseSwitch sw, string description)
 		{
 			if (sw.Description != description)
-			{
-				IDeviceInfo deviceInfo = _data.CreateDeviceInfo(sw.Description, sw.DeviceType, (int)sw.FirmwareType, sw.Mac.ToString(), sw.ID);
-
-				IDBOperationResult result = _data.RenameDevice(deviceInfo);
+			{				
+				IDBOperationResult result = _data.RenameDevice(sw.ID, description);
 
 				if (result.Success)
 					(sw as BaseSwitch).Description = description;

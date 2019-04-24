@@ -13,11 +13,10 @@ namespace Switches
 	{
 		private SwitchOutletTaskList _tasks;
 
-		public Outlet(IPAddress ip, MacAddress mac, FirmwareType firmwareType)
+		public Outlet(IPAddress ip, MacAddress mac, FirmwareType firmwareType) : base(DeviceTypes.OUTLET)
 		{
 			Mac = mac;
 			FirmwareType = firmwareType;
-			DeviceType = DeviceTypes.OUTLET;
 
 			_tasks = new SwitchOutletTaskList(this);
 		}

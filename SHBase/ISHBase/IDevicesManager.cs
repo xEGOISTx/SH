@@ -8,6 +8,6 @@ namespace SHBase
 	{
 		Task<bool> FindAndConnectDevicesAsync();
 
-		Task<bool> SynchronizationWithDevicesAsync();
+		Task<bool> SynchronizationWithDevicesAsync(IRouterParser routerParser);
 	}
 }

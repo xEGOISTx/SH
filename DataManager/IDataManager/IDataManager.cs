@@ -12,7 +12,7 @@ namespace DataManager
 
 		IResultOperationSave SaveDevices(IDeviceInfo[] devices);
 
-		IDBOperationResult RenameDevice(IDeviceInfo device);
+		IDBOperationResult RenameDevice(int devID, string newDescription);
 
 
 		IDeviceInfo CreateDeviceInfo(string description, int deviceType, int firmwareType, string macAddres, int id = 0);

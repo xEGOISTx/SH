@@ -9,9 +9,9 @@ using SHBase.DevicesBaseComponents;
 
 namespace Switches
 {
-	public abstract class BaseSwitch
+	public abstract class BaseSwitch : IDeviceBase
 	{
-		internal BaseSwitch() { }
+		public BaseSwitch(int deviceType) { DeviceType = deviceType; }
 
 		public CurrentState State { get; internal set;}
 
@@ -27,7 +27,7 @@ namespace Switches
 
 		public MacAddress Mac { get; internal set; }
 
-		public int DeviceType { get; internal set; }
+		public int DeviceType { get;}
 
 		public FirmwareType FirmwareType { get; internal set; }
 
