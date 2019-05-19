@@ -120,7 +120,6 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="DevicesBaseComponents\IDevicesGetter.cs" />
     <Compile Include="BaseContainers\IContainer.cs" />
     <Compile Include="DevicesBaseComponents\IDeviceBaseTask.cs" />
     <Compile Include="DevicesBaseComponents\IDeviceBaseTaskType.cs" />
@@ -130,8 +129,6 @@
     <Compile Include="DevicesBaseComponents\IDeviceBase.cs" />
     <Compile Include="DevicesBaseComponents\IBaseGPIOAction.cs" />
     <Compile Include="IConnectionSettings.cs" />
-    <Compile Include="IDevicesManager.cs" />
-    <Compile Include="IRouterParser.cs" />
     <Compile Include="MacAddress.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\ISHBase.rd.xml" />

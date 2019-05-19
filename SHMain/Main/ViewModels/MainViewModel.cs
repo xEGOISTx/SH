@@ -8,7 +8,7 @@ using DevicesPresenterControls.ViewModels;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml;
 using DevicesPresenter;
-using SHBase;
+using SHToolKit.DevicesManagement;
 using Windows.Storage;
 
 namespace SHMain.Main.ViewModels
@@ -31,7 +31,7 @@ namespace SHMain.Main.ViewModels
 			devicesManager.AddForManagement(new Switches.SwitchList(dataManager));
 			devicesManager.AddForManagement(new Switches.OutletList(dataManager));
 
-			DevicePresenterVM = new DevicePresenterViewModel(devicesManager, new RouterParser.Parser());
+			DevicePresenterVM = new DevicePresenterViewModel(devicesManager);
 			OnPropertyChanged(nameof(DevicePresenterVM));
 
 			await devicesManager.LoadDevicesAsync();

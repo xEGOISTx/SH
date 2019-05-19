@@ -3,6 +3,7 @@
  * подключенным устойствам.
  ======================================================================*/
 
+using SHBase;
 using SHBase.DevicesBaseComponents;
 using System;
 using System.Collections.Generic;
@@ -12,12 +13,12 @@ using System.Threading.Tasks;
 using Windows.Devices.WiFi;
 using Windows.Web.Http;
 
-namespace SHBase.Communication
+namespace SHToolKit.Communication
 {
 	/// <summary>
 	/// Класс для общения с устройством
 	/// </summary>
-	public class Communicator
+	public class Communicator : RequestsSender, ICommunicator
 	{
 		/// <summary>
 		/// Отправить устройству задачу действия с пинами
@@ -44,7 +45,7 @@ namespace SHBase.Communication
 
 					if (content.Count() > 0)
 					{
-						OperationResult result = await SendToDevice(task.Owner.IP, CommandNames.GPIOActions, content);
+						IOperationResult result = await SendToDevice(task.Owner.IP, CommandName.GPIOActions, content);
 						return result.Success;
 					}
 				}
@@ -57,19 +58,19 @@ namespace SHBase.Communication
 		/// Возвращает базовую инфу об устройстве
 		/// </summary>
 		/// <returns></returns>
-		public async Task<GetBaseInfoResult> GetDeviceInfo(IPAddress iPAddress)
+		public async Task<IOperationGetBaseInfoResult> GetDeviceInfo(IPAddress deviceIP)
 		{
 			return await Task.Run(async () =>
 			{
-				DeviceBase deviceInfo = null;
+				DeviceInfo deviceInfo = null;
 
-				OperationResult result = await SendToDevice(iPAddress, CommandNames.GetInfo);
+				OperationResult result = await SendToDevice(deviceIP, CommandName.GetInfo) as OperationResult;
 
 				if (result.Success)
 				{
 					string[] info = result.ResponseMessage.Split('&');
 
-					deviceInfo = new DeviceBase(iPAddress)
+					deviceInfo = new DeviceInfo(deviceIP)
 					{
 						ID = ushort.Parse(info[0]),
 						FirmwareType = (FirmwareType)int.Parse(info[1]),
@@ -89,13 +90,13 @@ namespace SHBase.Communication
 		/// </summary>
 		/// <param name="device"></param>
 		/// <returns></returns>
-		public async Task<int> GetDeviceID(IPAddress iP)
+		public async Task<int> GetDeviceID(IPAddress deviceIP)
 		{
 			return await Task.Run(async () =>
 			{
-				if (iP != null && iP != Consts.ZERO_IP)
+				if (deviceIP != null && deviceIP != Consts.ZERO_IP)
 				{
-					OperationResult result = await SendToDevice(iP, CommandNames.GetID);
+					OperationResult result = await SendToDevice(deviceIP, CommandName.GetID) as OperationResult;
 
 					if (result.Success)
 					{
@@ -111,37 +112,7 @@ namespace SHBase.Communication
 			});
 
 		}
-
-		
-		/// <summary>
-		/// Отпрпавить id устройству
-		/// </summary>
-		/// <param name = "id" ></ param >
-		/// < returns ></ returns >
-		public async Task<OperationResult> SendIdToDevice(int id, IPAddress ip)
-		{
-			if (ip != null && ip != Consts.ZERO_IP)
-			{
-				byte[] bytes = BitConverter.GetBytes(id);
-				string byte1value = bytes[0].ToString();
-				string byte2value = bytes[1].ToString();
-
-				List<CommandParameter> content = new List<CommandParameter>
-				{
-					new CommandParameter("b1", byte1value),
-					new CommandParameter("b2", byte2value)
-				};
-
-				OperationResult result = await SendToDevice(ip, CommandNames.SetID, content);
-
-				return result;
-			}
-			else
-			{
-				return new OperationResult { Success = false, ErrorMessage = "Не задан IP" };
-			}
-		}
-
+	
 		/// <summary>
 		/// Проверить соединение с устройством
 		/// </summary>
@@ -153,7 +124,7 @@ namespace SHBase.Communication
 			{
 				if (device.IP != null && device.IP != Consts.ZERO_IP)
 				{
-					GetBaseInfoResult result = await GetDeviceInfo(device.IP);
+					IOperationGetBaseInfoResult result = await GetDeviceInfo(device.IP);
 
 					if(result.Success && 
 					result.BasicInfo.ID == device.ID && 
@@ -167,69 +138,6 @@ namespace SHBase.Communication
 				return false;
 			});
 
-		}
-
-		/// <summary>
-		/// Отправить устройству запрос
-		/// </summary>
-		/// <param name="ip"></param>
-		/// <param name="commandName"></param>
-		/// <param name="content"></param>
-		/// <returns></returns>
-		internal async Task<OperationResult> SendToDevice(IPAddress ip,CommandNames commandName, IEnumerable<CommandParameter> content = null)
-		{
-			return await Task.Run(async () =>
-			{
-				OperationResult result = new OperationResult();
-
-				string strContent = $"&{commandName}&";
-
-				if (content != null)
-				{
-					foreach (var param in content)
-					{
-						strContent += $"{param.Name}={param.Value}&";
-					}
-				}
-
-				Uri uri = new Uri($"http://{ip}/{strContent}");
-
-				while (true)
-				{
-					using (HttpClient httpClient = new HttpClient())
-					{
-						try
-						{
-							using (HttpResponseMessage responseMessage = await httpClient.GetAsync(uri))
-							{
-
-								if (responseMessage.ReasonPhrase == "OK")
-								{
-									string response = await responseMessage.Content.ReadAsStringAsync();
-
-									result.Success = true;
-									result.ResponseMessage = response.Replace("\r\n", string.Empty);
-									break;
-								}
-								else
-								{
-									result.ErrorMessage = "Post failed!";
-								}
-							}
-						}
-						catch(Exception ex)
-						{
-							result.ErrorMessage = ex.Message;
-							result.Success = false;
-							break;
-						}
-
-						//responseMessage.EnsureSuccessStatusCode();
-					};
-				}
-
-				return result;
-			});
 		}
 	}
 }

@@ -1,4 +1,4 @@
-﻿using SHBase.DevicesBaseComponents;
+﻿using SHToolKit.DevicesManagement;
 using Switches;
 using System;
 using System.Collections.Generic;
@@ -16,7 +16,7 @@ namespace SwitchesControls.ViewModels
 
 		public OutletListViewModel(IDevicesGetter devicesGetter)
 		{
-			_devices = (IOutletList)devicesGetter.GetDevices<IOutletList>(); ;
+			_devices = (IOutletList)devicesGetter.GetDevices<IOutletList>();
 			_editor = _devices.SwitchEditor;
 			FullRefresh();
 		}

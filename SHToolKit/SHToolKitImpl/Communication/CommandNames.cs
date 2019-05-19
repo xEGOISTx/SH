@@ -1,6 +1,6 @@
-﻿namespace SHBase.Communication
+﻿namespace SHToolKit.Communication
 {
-	internal enum CommandNames
+	internal enum CommandName
 	{
 		GPIOActions,
 		GetInfo,

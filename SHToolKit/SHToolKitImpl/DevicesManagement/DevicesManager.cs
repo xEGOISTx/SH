@@ -3,25 +3,36 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using SHBase.Communication;
 using SHBase.DevicesBaseComponents;
 using Windows.Devices.WiFi;
 using Windows.Security.Credentials;
+using SHBase;
+using SHToolKit.Communication;
 
-namespace SHBase
+namespace SHToolKit.DevicesManagement
 {
 	public class DevicesManager : IDevicesManager
 	{
 		private readonly IPAddress _aPDefaultIP = IPAddress.Parse("192.168.4.1");
 		private readonly Dictionary<int, DeviceBaseList> DevicesLists = new Dictionary<int, DeviceBaseList>();
 		private readonly IPAddress routerIP = IPAddress.Parse("192.168.1.254");
+		private readonly IRouterParser _routerParser;
 
-		public DevicesManager()
+		public DevicesManager() : this(new RouterParser())
 		{
+
+		}
+
+		public DevicesManager(IRouterParser routerParser)
+		{
+			_routerParser = routerParser;
+
 			ConnectionSettings settings = new ConnectionSettings();
 			settings.Load();
 			ConnectionSettings = settings;
 		}
+
+
 
 
 		public IConnectionSettings ConnectionSettings { get; }
@@ -42,7 +53,6 @@ namespace SHBase
 		{
 			ConnectorByWiFi connector = new ConnectorByWiFi();
 			CommunicatorAP communicatorAP = new CommunicatorAP(_aPDefaultIP);
-			Communicator communicator = new Communicator();
 
 			//получаем доступные устройства
 			IEnumerable<WiFiAvailableNetwork> wifiAvailableDevices = await connector.GetAvailableDevicesAsAPAsync();
@@ -104,7 +114,7 @@ namespace SHBase
 							IDeviceBase dev = devices.CreateDevice(nID, nDev.Name, nDev.IP, nDev.FirmwareType, nDev.Mac);
 
 							//отправляем устройству его ID
-							SHBase.Communication.OperationResult result = await communicator.SendIdToDevice(nID, nDev.IP);
+							IOperationResult result = await communicatorAP.SendIdToDevice(nID, nDev.IP);
 
 							if(!result.Success)
 							{
@@ -125,7 +135,7 @@ namespace SHBase
 			return true;
 		}
 
-		public async Task<bool> SynchronizationWithDevicesAsync(IRouterParser routerParser)
+		public async Task<bool> SynchronizationWithDevicesAsync()
 		{
 			bool result = false;
 			Dictionary<int, IDeviceBase> notConnectedDevices = new Dictionary<int, IDeviceBase>();
@@ -134,7 +144,7 @@ namespace SHBase
 			//ищем не соединённые устройства
 			foreach(DeviceBaseList devices in DevicesLists.Values)
 			{
-				IEnumerable<IDeviceBase> notConnDevs = await devices.GetNotConnectedDevicesAsync(communicator);
+				IEnumerable<IDeviceBase> notConnDevs = await devices.GetNotConnectedDevicesAsync();
 
 				foreach(IDeviceBase device in notConnDevs)
 				{
@@ -147,15 +157,15 @@ namespace SHBase
 				Dictionary<int, List<IDeviceBase>> devsToSynchronize = new Dictionary<int, List<IDeviceBase>>();
 
 				//получаем ip устойств подключенных к роутеру
-				IEnumerable<IPAddress> iPsFromRouter = await routerParser.GetDevicesIPs(routerIP, "admin", "admin");
+				IParseOperationResult iPsFromRouter = await _routerParser.GetDevicesIPs(routerIP, "admin", "admin");
 
 				await Task.Run(async () =>
 				{
 					//идём по устройствам подключенным к роутеру
-					foreach (IPAddress devIP in iPsFromRouter)
+					foreach (IPAddress devIP in iPsFromRouter.IPs)
 					{
 						//получаем инфу об устройстве
-						GetBaseInfoResult infoResult = await communicator.GetDeviceInfo(devIP);
+						IOperationGetBaseInfoResult infoResult = await communicator.GetDeviceInfo(devIP);
 
 						// проверяем на успех получения инфы
 						if (infoResult.Success)
@@ -175,9 +185,6 @@ namespace SHBase
 								}
 							}
 						}
-
-
-
 					}
 
 					//синхронизируем
@@ -188,7 +195,7 @@ namespace SHBase
 							if (devsToSynchronize.ContainsKey(devices.DevicesType))
 							{
 								IEnumerable<IDeviceBase> devsFromRouter = devsToSynchronize[devices.DevicesType];
-								await devices.Synchronization(devsFromRouter, communicator);
+								await devices.Synchronization(devsFromRouter);
 							}
 						}
 					}
@@ -225,58 +232,5 @@ namespace SHBase
 
 			return true;
 		}
-
-		//private DataManager.IDeviceInfo[] MakeInfos(IEnumerable<IDeviceBase> devices)
-		//{
-		//	List<DataManager.DeviceInfo> deviceInfos = new List<DataManager.DeviceInfo>(devices.Count());
-
-		//	foreach(IDeviceBase device in devices)
-		//	{
-		//		DataManager.DeviceInfo deviceInfo = new DataManager.DeviceInfo()
-		//		{
-		//			Description = device.Description,
-		//			DeviceType = device.DeviceType,
-		//			FirmwareType = (int)device.FirmwareType,
-		//			MacAddress = device.Mac.ToString()
-		//		};
-
-		//		deviceInfos.Add(deviceInfo);
-		//	}
-
-		//	return deviceInfos.ToArray();
-		//}
-
-
-
-		//private async Task<bool> SynchronizeAsync(IReadOnlyDictionary<int,IDeviceBase> devices, Communicator communicator)
-		//{
-		//	List<IDeviceBase> toSynchronize = new List<IDeviceBase>();
-
-		//	Parser parser = new Parser("http://192.168.1.254/", "admin", "admin");
-		//	ParseResult pResult = await parser.LoadDeviceInfosAsync();
-
-		//	return await Task.Run(async () =>
-		//	{
-		//		if (pResult.Success)
-		//		{
-		//			foreach (RDeviceInfo rDeviceInfo in pResult.DeviceInfos)
-		//			{						
-		//				GetBaseInfoResult infoResult = await communicator.GetDeviceInfo(rDeviceInfo.Ip);
-
-		//				if (infoResult.Success && devices.ContainsKey(infoResult.BasicInfo.ID))
-		//				{
-		//					toSynchronize.Add(infoResult.BasicInfo);
-		//				}
-		//			}
-
-		//			foreach (Devices devList in _deviceCommonList)
-		//			{
-		//				await devList.Synchronization(toSynchronize, communicator);
-		//			}
-		//		}
-
-		//		return true;
-		//	});
-		//}
 	}
 }

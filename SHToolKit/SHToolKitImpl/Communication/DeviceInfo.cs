@@ -4,21 +4,21 @@
 
 using System.Net;
 
-namespace SHBase.DevicesBaseComponents
+namespace SHToolKit.Communication
 {
 	/// <summary>
 	/// Базовая инфа устройства
 	/// </summary>
-	internal class DeviceBase : IDeviceBase
+	internal class DeviceInfo : SHBase.DevicesBaseComponents.IDeviceBase
 	{
-		public DeviceBase(IPAddress iP)
+		public DeviceInfo(IPAddress iP)
 		{
 			IP = iP;
 		}
 
 		public IPAddress IP { get; set; }
 
-		public MacAddress Mac { get; set; }
+		public SHBase.MacAddress Mac { get; set; }
 
 		public int ID { get; set; }
 
@@ -28,7 +28,7 @@ namespace SHBase.DevicesBaseComponents
 
 		public int DeviceType { get; set; }
 
-		public FirmwareType FirmwareType { get; set; }
+		public SHBase.DevicesBaseComponents.FirmwareType FirmwareType { get; set; }
 
 		public string Description { get; set; }
 	}

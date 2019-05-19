@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
-using SHBase.Communication;
+using SHToolKit.Communication;
 using SHBase.DevicesBaseComponents;
+
 
 namespace Switches
 {

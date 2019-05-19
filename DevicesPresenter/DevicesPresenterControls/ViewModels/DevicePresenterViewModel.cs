@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using SwitchesControls.ViewModels;
 using UWPHelper;
 using SHBase;
+using SHToolKit.DevicesManagement;
 
 namespace DevicesPresenterControls.ViewModels
 {
@@ -21,12 +22,10 @@ namespace DevicesPresenterControls.ViewModels
 
 		private readonly IDevicesManager _manager;
 		private bool _devicePresenterVisibility;
-		private readonly IRouterParser _routerParser;
 
-		public DevicePresenterViewModel(IDevicesManager manager, IRouterParser routerParser)
+		public DevicePresenterViewModel(IDevicesManager manager)
 		{
 			_manager = manager;
-			_routerParser = routerParser;
 			FindDevices = new RelayCommand(ExecuteFindDevices);
 			Update = new RelayCommand(ExecuteUpdate);
 
@@ -61,7 +60,7 @@ namespace DevicesPresenterControls.ViewModels
 		public RelayCommand Update { get; private set; }
 		private async void ExecuteUpdate(object param)
 		{
-			await ExecuteProcess(_manager.SynchronizationWithDevicesAsync(_routerParser), RefreshMode.State);
+			await ExecuteProcess(_manager.SynchronizationWithDevicesAsync(), RefreshMode.State);
 		}
 
 		public void FullRefresh()

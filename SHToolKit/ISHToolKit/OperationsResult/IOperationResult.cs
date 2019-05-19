@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SHBase.DevicesBaseComponents
+namespace SHToolKit
 {
-	public interface IDevicesGetter
+	public interface IOperationResult
 	{
-		object GetDevices<DevsType>();
+		bool Success { get; }
+
+		string ErrorMessage { get; }
 	}
 }

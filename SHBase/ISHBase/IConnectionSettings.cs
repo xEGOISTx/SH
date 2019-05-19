@@ -12,9 +12,9 @@ namespace SHBase
 
 		IConnectionParams RouterConnParams { get; }		
 
-		bool ChangeParamsForDevice(string ssid, string passwird);
+		bool ChangeParamsForDevice(string ssid, string password);
 
-		bool ChangeParamsForRouter(string ssid, string passwird);
+		bool ChangeParamsForRouter(string ssid, string password);
 
 		void Save();
 	}

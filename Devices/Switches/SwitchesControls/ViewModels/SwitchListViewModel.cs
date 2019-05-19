@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using Switches;
 using UWPHelper;
-using SHBase.DevicesBaseComponents;
+using SHToolKit.DevicesManagement;
 
 namespace SwitchesControls.ViewModels
 {
@@ -13,7 +13,7 @@ namespace SwitchesControls.ViewModels
 
 		public SwitchListViewModel(IDevicesGetter devicesGetter)
 		{
-			_devices = (ISwitchList)devicesGetter.GetDevices<ISwitchList>();//switchList;
+			_devices = (ISwitchList)devicesGetter.GetDevices<ISwitchList>();
 			_editor = _devices.SwitchEditor;
 			FullRefresh();
 		}

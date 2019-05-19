@@ -18,7 +18,6 @@ using Windows.Devices.WiFi;
 using System.Threading.Tasks;
 using Windows.Devices.Enumeration;
 using System.Net;
-using RouterParser;
 using DevicesPresenter;
 using Windows.UI.Popups;
 using System.Net.Sockets;

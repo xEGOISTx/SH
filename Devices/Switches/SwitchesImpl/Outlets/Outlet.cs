@@ -22,7 +22,7 @@ namespace Switches
 		}
 
 		internal Outlet(MacAddress mac, FirmwareType firmwareType) :
-			this(Consts.ZERO_IP, mac, firmwareType)
+			this(SHToolKit.Consts.ZERO_IP, mac, firmwareType)
 		{ }
 
 

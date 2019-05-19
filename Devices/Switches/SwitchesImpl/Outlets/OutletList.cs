@@ -1,6 +1,5 @@
 ﻿using DataManager;
 using SHBase;
-using SHBase.Communication;
 using SHBase.DevicesBaseComponents;
 using System;
 using System.Collections.Generic;

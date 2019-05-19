@@ -7,7 +7,6 @@ using System.Text;
 using System.Threading.Tasks;
 using DataManager;
 using SHBase;
-using SHBase.Communication;
 using SHBase.DevicesBaseComponents;
 
 namespace Switches

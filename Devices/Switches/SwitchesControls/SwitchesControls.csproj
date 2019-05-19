@@ -140,6 +140,10 @@
       <Project>{31e8465c-6bc2-46d5-834d-0e940c3c33ea}</Project>
       <Name>ISHBase</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\SHToolKit\ISHToolKit\ISHToolKit.csproj">
+      <Project>{7CBC218C-9C09-4A6A-B115-44C022560B22}</Project>
+      <Name>ISHToolKit</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\UWPHelper\UWPHelper\UWPHelper.csproj">
       <Project>{30070a18-bd50-41c5-80a7-7c28667a78be}</Project>
       <Name>UWPHelper</Name>
@@ -171,7 +175,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>6.2.3</Version>
+      <Version>6.2.8</Version>
     </PackageReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

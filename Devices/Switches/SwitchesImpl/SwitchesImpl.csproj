@@ -146,6 +146,10 @@
       <Project>{56a497fa-3a32-49f2-95dd-66d2d24b3d9d}</Project>
       <Name>SHBase</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\SHToolKit\SHToolKitImpl\SHToolKitImpl.csproj">
+      <Project>{44c0ff7d-0786-4f03-89f5-4e5efa3c190c}</Project>
+      <Name>SHToolKitImpl</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ISwitches\ISwitches.csproj">
       <Project>{2c13feab-0284-45d6-a4d2-9e5b58d68ebe}</Project>
       <Name>ISwitches</Name>
@@ -153,7 +157,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>6.2.3</Version>
+      <Version>6.2.8</Version>
     </PackageReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

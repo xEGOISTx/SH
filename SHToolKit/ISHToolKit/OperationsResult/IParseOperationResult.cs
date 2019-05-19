@@ -5,10 +5,10 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SHBase
+namespace SHToolKit
 {
-	public interface IRouterParser
+	public interface IParseOperationResult : IOperationResult
 	{
-		Task<IEnumerable<IPAddress>> GetDevicesIPs(IPAddress routerIP, string login, string password);
+		IEnumerable<IPAddress> IPs { get; }
 	}
 }

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SHBase.Communication
+namespace SHToolKit.Communication
 {
-	internal class CommandParameter
+	public class CommandParameter
 	{
 		public CommandParameter(string name,string value)
 		{

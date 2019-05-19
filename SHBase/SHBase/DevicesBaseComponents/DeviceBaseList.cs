@@ -1,5 +1,4 @@
-﻿using SHBase.Communication;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
@@ -71,9 +70,9 @@ namespace SHBase.DevicesBaseComponents
 		/// </summary>
 		/// <param name="devicesFromRouter"></param>
 		/// <returns></returns>
-		public abstract Task Synchronization(IEnumerable<IDeviceBase> devicesFromRouter, Communicator communicator);
+		public abstract Task Synchronization(IEnumerable<IDeviceBase> devicesFromRouter);
 
-		public abstract Task<IEnumerable<IDeviceBase>> GetNotConnectedDevicesAsync(Communicator communicator);
+		public abstract Task<IEnumerable<IDeviceBase>> GetNotConnectedDevicesAsync();
 
 		public abstract IDeviceBase CreateDevice(int id,string name, IPAddress iP,FirmwareType firmwareType, MacAddress mac);
 		#endregion Methods

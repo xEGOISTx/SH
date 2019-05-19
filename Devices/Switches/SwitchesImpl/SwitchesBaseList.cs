@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using DataManager;
 using SHBase;
-using SHBase.Communication;
 using SHBase.DevicesBaseComponents;
 
 namespace Switches
@@ -21,9 +20,10 @@ namespace Switches
 		}
 
 
-		public async override Task<IEnumerable<IDeviceBase>> GetNotConnectedDevicesAsync(Communicator communicator)
+		public async override Task<IEnumerable<IDeviceBase>> GetNotConnectedDevicesAsync()
 		{
 			List<IDeviceBase> notConndevices = new List<IDeviceBase>();
+			SHToolKit.Communication.Communicator communicator = new SHToolKit.Communication.Communicator();
 
 			await Task.Run(async () =>
 			{
@@ -57,7 +57,7 @@ namespace Switches
 			return result.NewIDs;
 		}
 
-		public async override Task Synchronization(IEnumerable<IDeviceBase> devicesFromRouter, Communicator communicator)
+		public async override Task Synchronization(IEnumerable<IDeviceBase> devicesFromRouter)
 		{
 			if (IsLoaded)
 			{
