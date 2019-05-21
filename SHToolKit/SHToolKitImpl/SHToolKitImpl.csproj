@@ -134,6 +134,9 @@
     <Compile Include="OperationsResult\ParseOperationResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RouterParser\RouterParser.cs" />
+    <Compile Include="SpeechRecognition\Sharp\RecognizeEventArg.cs" />
+    <Compile Include="SpeechRecognition\Sharp\SpeechRecognizer.cs" />
+    <Compile Include="SpeechRecognition\Sharp\SphinxWrapper.cs" />
     <EmbeddedResource Include="Properties\SHToolKitImpl.rd.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -156,6 +159,55 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <Content Include="SpeechRecognition\arg.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SpeechRecognition\pocketsphinx.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SpeechRecognition\sphinxbase.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SpeechRecognition\SR.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="SpeechRecognition\zero_ru_cont_8k_v3\calc.jsgf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SpeechRecognition\zero_ru_cont_8k_v3\COPYING">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SpeechRecognition\zero_ru_cont_8k_v3\vocabular.dict">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SpeechRecognition\zero_ru_cont_8k_v3\zero_ru.cd_cont_4000\feat.params">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SpeechRecognition\zero_ru_cont_8k_v3\zero_ru.cd_cont_4000\feature_transform">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SpeechRecognition\zero_ru_cont_8k_v3\zero_ru.cd_cont_4000\mdef">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SpeechRecognition\zero_ru_cont_8k_v3\zero_ru.cd_cont_4000\means">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SpeechRecognition\zero_ru_cont_8k_v3\zero_ru.cd_cont_4000\mixture_weights">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SpeechRecognition\zero_ru_cont_8k_v3\zero_ru.cd_cont_4000\noisedict">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SpeechRecognition\zero_ru_cont_8k_v3\zero_ru.cd_cont_4000\transition_matrices">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SpeechRecognition\zero_ru_cont_8k_v3\zero_ru.cd_cont_4000\variances">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
