@@ -36,6 +36,10 @@ namespace Switches
 						(device as BaseSwitch).IsConnected = false;
 						notConndevices.Add(device);
 					}
+					else
+					{
+						(device as BaseSwitch).IsConnected = true;
+					}
 				}
 			});
 
