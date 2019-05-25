@@ -17,8 +17,8 @@ namespace SHMain.Main.ViewModels
 	{
 		public MainViewModel()
 		{
+			
 		}
-
 
 		public DevicePresenterViewModel DevicePresenterVM { get; private set; }
 

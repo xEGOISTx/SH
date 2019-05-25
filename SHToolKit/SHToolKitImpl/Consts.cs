@@ -14,5 +14,10 @@ namespace SHToolKit
 		public static readonly IPAddress ZERO_IP = IPAddress.Parse("0.0.0.0");
 
 		internal const string IS_CONNECTED = "Подключено";
+
+		/// <summary>
+		/// Путь к корню распознавателя речи
+		/// </summary>
+		internal const string SR_ROOT_FOLDER = @"SHToolKitImpl\SpeechRecognition\";
 	}
 }

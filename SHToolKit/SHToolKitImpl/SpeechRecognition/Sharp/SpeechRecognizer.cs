@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Storage;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 
@@ -13,6 +14,7 @@ namespace SHToolKit.SpeechRecognition
 	{
 		private IntPtr _ps = IntPtr.Zero;
 		private IntPtr _ad = IntPtr.Zero;
+		private readonly string[] _dllNames = new string[3] { "SR.dll", "sphinxbase.dll", "pocketsphinx.dll" };
 
 		/// <summary>
 		/// Признак объект инициализирован
@@ -44,6 +46,13 @@ namespace SHToolKit.SpeechRecognition
 		/// <returns></returns>
 		public async Task<bool> Init(string argFile)
 		{
+			bool checkResult = await CheckDLLs();
+
+			if (!checkResult)
+			{
+				await CopyDllsToRootFolder();
+			}
+
 			if (!IsInit)
 			{
 				return await Task.Run(() =>
@@ -169,6 +178,41 @@ namespace SHToolKit.SpeechRecognition
 
 			return result;
 		}
+
+		/// <summary>
+		/// Проверить наличие необходимых dll в корне проэкта
+		/// </summary>
+		/// <returns></returns>
+		private async Task<bool> CheckDLLs()
+		{
+			foreach(string dllName in _dllNames)
+			{
+				IStorageItem f = await Windows.ApplicationModel.Package.Current.InstalledLocation.TryGetItemAsync(dllName);
+				if(f == null)
+				{
+					return false;
+				}
+			}
+
+			return true;
+		}
+
+		private async Task<bool> CopyDllsToRootFolder()
+		{
+			StorageFolder rootFolder = Windows.ApplicationModel.Package.Current.InstalledLocation;
+
+			foreach(string dllName in _dllNames)
+			{
+				string pathToDll = $"{Consts.SR_ROOT_FOLDER}{dllName}";
+
+				StorageFile dll = await Windows.ApplicationModel.Package.Current.InstalledLocation.TryGetItemAsync(pathToDll) as StorageFile;
+
+				await dll.CopyAsync(rootFolder);
+			}
+
+			return true;
+		}
+
 
 		private void OnRecognized(string res)
 		{

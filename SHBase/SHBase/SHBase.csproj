@@ -123,6 +123,7 @@
     <Compile Include="ConnectionParams.cs" />
     <Compile Include="ConnectionSettings.cs" />
     <Compile Include="DevicesBaseComponents\DeviceBaseList.cs" />
+    <Compile Include="DevicesBaseComponents\DeviceConnectionInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Server.cs" />
     <EmbeddedResource Include="Properties\SHBase.rd.xml" />

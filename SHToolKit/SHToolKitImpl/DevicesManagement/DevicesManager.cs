@@ -144,12 +144,31 @@ namespace SHToolKit.DevicesManagement
 			//ищем не соединённые устройства
 			foreach(DeviceBaseList devices in DevicesLists.Values)
 			{
-				IEnumerable<IDeviceBase> notConnDevs = await devices.GetNotConnectedDevicesAsync();
+				//IEnumerable<IDeviceBase> notConnDevs = await devices.GetNotConnectedDevicesAsync();
 
-				foreach(IDeviceBase device in notConnDevs)
+				//foreach(IDeviceBase device in notConnDevs)
+				//{
+				//	notConnectedDevices.Add(device.ID, device);
+				//}
+
+				List<DeviceConnectionInfo> connectionInfos = new List<DeviceConnectionInfo>();
+
+				foreach (IDeviceBase device in devices)
 				{
-					notConnectedDevices.Add(device.ID, device);
+					bool isConnected = await communicator.CheckConnection(device);
+
+					if(device.IsConnected != isConnected)
+					{
+						connectionInfos.Add(new DeviceConnectionInfo(device, isConnected));
+					}
+
+					if(!isConnected && device.IP == Consts.ZERO_IP)
+					{
+						notConnectedDevices.Add(device.ID, device);
+					}
 				}
+
+				devices.RefreshDevicesConnectionState(connectionInfos);
 			}
 
 			if (notConnectedDevices.Any())

@@ -9,27 +9,29 @@ namespace SHToolKit.SpeechRecognition
 {
 	internal class SphinxWrapper
 	{
-		[DllImport("SR.dll", EntryPoint = "init_sphinx", CallingConvention = CallingConvention.Cdecl)]
+		private const string _lib = @"SR.dll";
+
+		[DllImport(_lib, EntryPoint = "init_sphinx", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr InitSphinx(string configFile);
 
 
-		[DllImport("SR.dll", EntryPoint = "open_recording_device")]
+		[DllImport(_lib, EntryPoint = "open_recording_device")]
 		public static extern IntPtr OpenRecordingDevice(IntPtr ps);
 
 
-		[DllImport("SR.dll", EntryPoint = "recognize_from_mic", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport(_lib, EntryPoint = "recognize_from_mic", CallingConvention = CallingConvention.Cdecl)]
 		public static extern IntPtr RecognizeFromMic(IntPtr decoder, IntPtr audioDevice);
 
 
-		[DllImport("SR.dll", EntryPoint = "free_sphinx")]
+		[DllImport(_lib, EntryPoint = "free_sphinx")]
 		public static extern void FreeSphinx(IntPtr ps, IntPtr audioDevice);
 
 
-		[DllImport("SR.dll", EntryPoint = "recognizer_is_run", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport(_lib, EntryPoint = "recognizer_is_run", CallingConvention = CallingConvention.Cdecl)]
 		public static extern bool RecognizerIsRun();
 
 
-		[DllImport("SR.dll", EntryPoint = "stop_recognize", CallingConvention = CallingConvention.Cdecl)]
+		[DllImport(_lib, EntryPoint = "stop_recognize", CallingConvention = CallingConvention.Cdecl)]
 		public static extern void StopRecognize();
 	}
 }

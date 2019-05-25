@@ -120,6 +120,14 @@ namespace Switches
 			return result != null ? result.Success : false;
 		}
 
+		public override void RefreshDevicesConnectionState(IEnumerable<DeviceConnectionInfo> connectionInfos)
+		{
+			foreach(DeviceConnectionInfo connectionInfo in connectionInfos)
+			{
+				(connectionInfo.Device as BaseSwitch).IsConnected = connectionInfo.ConnectionState;
+			}
+		}
+
 		protected abstract IBaseSwitch CreteDeviceFromDeviceInfo(IDeviceInfo deviceInfo);
 
 		protected IDeviceInfo[] MakeInfos(IEnumerable<IDeviceBase> devices)
