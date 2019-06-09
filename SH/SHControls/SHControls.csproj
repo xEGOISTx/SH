@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{8B4509DC-2135-45E1-946B-D1943A434EF2}</ProjectGuid>
+    <ProjectGuid>{7349C9C6-DCB9-4C0F-ADAF-F43031F68AF5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SHBaseControls</RootNamespace>
-    <AssemblyName>SHBaseControls</AssemblyName>
+    <RootNamespace>SHControls</RootNamespace>
+    <AssemblyName>SHControls</AssemblyName>
     <DefaultLanguage>ru-RU</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.17134.0</TargetPlatformVersion>
@@ -120,19 +120,47 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="DevicesGroup.xaml.cs">
-      <DependentUpon>DevicesGroup.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Properties\SHBaseControls.rd.xml" />
+    <Compile Include="ViewModels\DevicesViewModel.cs" />
+    <Compile Include="ViewModels\SHViewModel.cs" />
+    <Compile Include="Views\DevicesView.xaml.cs">
+      <DependentUpon>DevicesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SHView.xaml.cs">
+      <DependentUpon>SHView.xaml</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="Properties\SHControls.rd.xml" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>6.2.3</Version>
+      <Version>6.2.8</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Page Include="DevicesGroup.xaml">
+    <ProjectReference Include="..\..\Devices\Switches\SwitchesControls\SwitchesControls.csproj">
+      <Project>{421990d9-1026-42a7-ad34-7cc97a65cb53}</Project>
+      <Name>SwitchesControls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SHToolKit\ISHToolKit\ISHToolKit.csproj">
+      <Project>{7cbc218c-9c09-4a6a-b115-44c022560b22}</Project>
+      <Name>ISHToolKit</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\UWPHelper\UWPHelper\UWPHelper.csproj">
+      <Project>{30070a18-bd50-41c5-80a7-7c28667a78be}</Project>
+      <Name>UWPHelper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ISH\ISH.csproj">
+      <Project>{fcfbf19f-49c8-4f4e-a93f-54a6d08d35d7}</Project>
+      <Name>ISH</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Views\DevicesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SHView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

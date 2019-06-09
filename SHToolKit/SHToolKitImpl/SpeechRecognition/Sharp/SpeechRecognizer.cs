@@ -29,15 +29,15 @@ namespace SHToolKit.SpeechRecognition
 		/// <summary>
 		/// Принудительное завершение всех процессов распознавания и очистка неупраляемых объектов
 		/// </summary>
-		public async void Dispose()
-		{
-			if (IsRunRecognition)
-			{
-				await StopRecognizeAsync();
-			}
+		//public async void Dispose()
+		//{
+		//	if (IsRunRecognition)
+		//	{
+		//		await StopRecognizeAsync();
+		//	}
 
-			Free();			
-		}
+		//	Free();			
+		//}
 
 		/// <summary>
 		/// Инициализация объектов необходимых для распознавания
@@ -73,23 +73,28 @@ namespace SHToolKit.SpeechRecognition
 		}
 
 		/// <summary>
-		/// Уничтожить неуправляемые внутренние объекты. Не выполнится, если запущено распознавание 
+		/// Принудительное завершение всех процессов распознавания и очистка неупраляемых объектов
 		/// </summary>
-		public void Free()
+		public async void Free()
 		{
-			if (IsInit && !IsRunRecognition)
+			if (IsInit)
 			{
+				if (IsRunRecognition)
+				{
+					await StopRecognizeAsync();
+				}
+
 				SphinxWrapper.FreeSphinx(_ps, _ad);
 				_ps = IntPtr.Zero;
 				_ad = IntPtr.Zero;
 
-				GC.Collect();
+				//GC.Collect();
 				IsInit = false;
 			}
 		}
 
 		/// <summary>
-		/// Запуск процесса распознавания. Что бы получать результаты распознавания необходимо подписаться на  event Recognized
+		/// Запуск процесса распознавания. Что бы получать результаты распознавания необходимо подписаться на event Recognized
 		/// </summary>
 		public async void StartRecognizeAsync()
 		{

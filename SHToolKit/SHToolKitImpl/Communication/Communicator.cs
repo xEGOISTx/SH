@@ -57,28 +57,46 @@ namespace SHToolKit.Communication
 		/// <summary>
 		/// Возвращает базовую инфу об устройстве
 		/// </summary>
+		/// <param name="deviceIP"></param>
+		/// <param name="asAP">Получить инфо устройсва как точки доступа</param>
 		/// <returns></returns>
-		public async Task<IOperationGetBaseInfoResult> GetDeviceInfo(IPAddress deviceIP)
+		public async Task<IOperationGetBaseInfoResult> GetDeviceInfo(IPAddress deviceIP, bool asAP = false)
 		{
+			if(deviceIP == null)
+			{
+				return new GetBaseInfoResult(new OperationResult { ErrorMessage = "deviceIP не может быть null" });
+			}
+
 			return await Task.Run(async () =>
 			{
 				DeviceInfo deviceInfo = null;
+				IPAddress curIP = deviceIP;
 
 				OperationResult result = await SendToDevice(deviceIP, CommandName.GetInfo) as OperationResult;
 
-				if (result.Success)
+				if(asAP)
+				{
+					curIP = await GetLocalIPFromDeviceAsAP(deviceIP);
+				}
+
+				if (result.Success && curIP != null)
 				{
 					string[] info = result.ResponseMessage.Split('&');
 
-					deviceInfo = new DeviceInfo(deviceIP)
+					deviceInfo = new DeviceInfo(curIP)
 					{
 						ID = ushort.Parse(info[0]),
 						FirmwareType = (FirmwareType)int.Parse(info[1]),
 						Mac = new MacAddress(info[2]),
 						Name = info[3],
 						DeviceType = int.Parse(info[4]),
-						IsConnected = true
+						IsConnected = curIP != Consts.ZERO_IP
 					};
+				}
+				else if(result.Success && curIP == null)
+				{
+					result.Success = false;
+					result.ErrorMessage = "Не удалось получить IP";
 				}
 
 				return new GetBaseInfoResult(result) { BasicInfo = deviceInfo };
@@ -112,7 +130,7 @@ namespace SHToolKit.Communication
 			});
 
 		}
-	
+
 		/// <summary>
 		/// Проверить соединение с устройством
 		/// </summary>
@@ -120,24 +138,138 @@ namespace SHToolKit.Communication
 		/// <returns></returns>
 		public async Task<bool> CheckConnection(IDeviceBase device)
 		{
+			if (device.IP != null)
+			{
+				IOperationGetBaseInfoResult getInfoResult = await GetDeviceInfo(device.IP);
+
+				if (getInfoResult.Success &&
+					getInfoResult.BasicInfo.ID == device.ID &&
+					getInfoResult.BasicInfo.Mac == device.Mac &&
+					getInfoResult.BasicInfo.DeviceType == device.DeviceType)
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		/// <summary>
+		/// Отправить IP хоста устройству
+		/// </summary>
+		/// <param name="hostIP"></param>
+		/// <returns></returns>
+		public async Task<IOperationResult> SendHostIPToDevice(IPAddress deviceIP, IPAddress hostIP)
+		{
+			OperationResult result = new OperationResult();
+
+			if (deviceIP != null && deviceIP != Consts.ZERO_IP)
+			{
+				List<CommandParameter> content = new List<CommandParameter>(4);
+				byte[] bytes = hostIP.GetAddressBytes();
+				byte bNumber = 1;
+
+				foreach (byte b in bytes)
+				{
+					content.Add(new CommandParameter($"b{bNumber}", b.ToString()));
+					bNumber++;
+				}
+
+				result = (OperationResult)await SendToDevice(deviceIP, CommandName.SetHostIP, content);			
+			}
+			else
+			{
+				result.Success = false;
+				result.ErrorMessage = $"IP не может быть null или {Consts.ZERO_IP}";
+			}
+
+			return result;
+		}
+
+		/// <summary>
+		/// Отпрпавить id устройству
+		/// </summary>
+		/// <param name = "id" ></ param >
+		/// < returns ></ returns >
+		public async Task<IOperationResult> SendIdToDevice(int id, IPAddress deviceIP)
+		{
+			if (deviceIP != null && deviceIP != Consts.ZERO_IP)
+			{
+				byte[] bytes = BitConverter.GetBytes(id);
+				string byte1value = bytes[0].ToString();
+				string byte2value = bytes[1].ToString();
+
+				List<CommandParameter> content = new List<CommandParameter>
+				{
+					new CommandParameter("b1", byte1value),
+					new CommandParameter("b2", byte2value)
+				};
+
+				IOperationResult result = await SendToDevice(deviceIP, CommandName.SetID, content);
+
+				return result;
+			}
+			else
+			{
+				return new OperationResult { Success = false, ErrorMessage = "Не задан IP" };
+			}
+		}
+
+		/// <summary>
+		/// Отправить устройству параметры для подключения к роутеру. Устройство сразу попытается подключится к роутеру
+		/// </summary>
+		/// <param name="connectionParams"></param>
+		/// <returns></returns>
+		public async Task<IOperationResult> SendConnectionParamsToDevice(IPAddress deviceIP, IConnectionParams connectionParams)
+		{
 			return await Task.Run(async () =>
 			{
-				if (device.IP != null && device.IP != Consts.ZERO_IP)
+				List<CommandParameter> content = new List<CommandParameter>
 				{
-					IOperationGetBaseInfoResult result = await GetDeviceInfo(device.IP);
+					new CommandParameter("ssid", connectionParams.Ssid),
+					new CommandParameter("password", connectionParams.Password)
+				};
 
-					if(result.Success && 
-					result.BasicInfo.ID == device.ID && 
-					result.BasicInfo.Mac == device.Mac && 
-					result.BasicInfo.DeviceType == device.DeviceType)
+
+				OperationResult result = await SendToDevice(deviceIP, CommandName.ConnectionParams, content) as OperationResult;
+
+				if (!result.Success)
+				{
+					ConnectorByWiFi connector = new ConnectorByWiFi();
+					WiFiAdapter wiFiAdapter = await connector.GetWiFiAdapter();
+					if (wiFiAdapter.NetworkAdapter.NetworkItem.GetNetworkTypes() == Windows.Networking.Connectivity.NetworkTypes.None)
 					{
-						return true;
+						result.Success = await connector.Reconnect();
 					}
 				}
 
-				return false;
+				return result;
 			});
+		}
 
+		/// <summary>
+		/// Возвращает ip присвоенный роутером
+		/// </summary>
+		/// <returns></returns>
+		private async Task<IPAddress> GetLocalIPFromDeviceAsAP(IPAddress accessPointIP)
+		{
+			return await Task.Run(async () =>
+			{
+				IPAddress ip = Consts.ZERO_IP;
+
+				OperationResult result = await SendToDevice(accessPointIP, CommandName.GetIP) as OperationResult;
+
+				if (result.Success)
+				{
+					ip = IPAddress.Parse(result.ResponseMessage);
+				}
+				else
+				{
+					return null;
+				}
+
+				return ip;
+			});
 		}
 	}
 }

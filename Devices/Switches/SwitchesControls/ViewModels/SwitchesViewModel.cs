@@ -8,12 +8,14 @@ using SHToolKit.DevicesManagement;
 
 namespace SwitchesControls.ViewModels
 {
-	public class SwitchesViewModel
+	public class SwitchesViewModel : UWPHelper.BaseViewModel
 	{
 		public SwitchesViewModel(IDevicesGetter devicesGetter)
 		{
 			Switches = new SwitchListViewModel(devicesGetter);
 			Outlets = new OutletListViewModel(devicesGetter);
+
+
 		}
 
 		public SwitchListViewModel Switches { get; }

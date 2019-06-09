@@ -22,7 +22,7 @@ namespace SHToolKit.Communication
 		/// Возвращает базовую инфу об устройстве
 		/// </summary>
 		/// <returns></returns>
-		Task<IOperationGetBaseInfoResult> GetDeviceInfo(IPAddress deviceIP);
+		Task<IOperationGetBaseInfoResult> GetDeviceInfo(IPAddress deviceIP, bool asAP = false);
 
 		/// <summary>
 		/// Получить ID устройства

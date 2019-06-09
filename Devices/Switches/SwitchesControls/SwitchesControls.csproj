@@ -140,6 +140,10 @@
       <Project>{31e8465c-6bc2-46d5-834d-0e940c3c33ea}</Project>
       <Name>ISHBase</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\SHBase\SHBaseControls\SHBaseControls.csproj">
+      <Project>{8b4509dc-2135-45e1-946b-d1943a434ef2}</Project>
+      <Name>SHBaseControls</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\SHToolKit\ISHToolKit\ISHToolKit.csproj">
       <Project>{7CBC218C-9C09-4A6A-B115-44C022560B22}</Project>
       <Name>ISHToolKit</Name>

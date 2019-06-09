@@ -5,25 +5,14 @@
     xmlns:local="using:SHMain"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:dPresenter="using:DevicesPresenterControls.Views"
+    xmlns:sh ="using:SHControls.Views"
     xmlns:controls ="using:SHBaseControls"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     Name="thisControl"
     Loaded="ThisControl_Loaded">
 
-
     <Grid>
-        <dPresenter:DevicePresenterView DataContext="{Binding Path=DevicePresenterVM}"/>
-        
-        <!--<controls:DevicesManager >
-            <controls:DevicesManager.DevicesGroup>
-                <controls:DevicesGroup>
-
-                </controls:DevicesGroup>
-
-            </controls:DevicesManager.DevicesGroup>
-
-        </controls:DevicesManager>-->
+        <sh:SHView DataContext="{Binding Path=SHVM}"/>
     </Grid>
 </Page>

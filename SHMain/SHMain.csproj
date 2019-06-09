@@ -179,6 +179,18 @@
       <Project>{44c0ff7d-0786-4f03-89f5-4e5efa3c190c}</Project>
       <Name>SHToolKitImpl</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SH\ISH\ISH.csproj">
+      <Project>{fcfbf19f-49c8-4f4e-a93f-54a6d08d35d7}</Project>
+      <Name>ISH</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SH\SHControls\SHControls.csproj">
+      <Project>{7349c9c6-dcb9-4c0f-adaf-f43031f68af5}</Project>
+      <Name>SHControls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SH\SHImpl\SHImpl.csproj">
+      <Project>{b68737a9-71b8-4af7-bb80-057d212a2da0}</Project>
+      <Name>SHImpl</Name>
+    </ProjectReference>
     <ProjectReference Include="..\UWPHelper\UWPHelper\UWPHelper.csproj">
       <Project>{30070A18-BD50-41C5-80A7-7C28667A78BE}</Project>
       <Name>UWPHelper</Name>

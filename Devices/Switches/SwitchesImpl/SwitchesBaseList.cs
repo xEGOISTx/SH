@@ -20,32 +20,6 @@ namespace Switches
 		}
 
 
-		public async override Task<IEnumerable<IDeviceBase>> GetNotConnectedDevicesAsync()
-		{
-			List<IDeviceBase> notConndevices = new List<IDeviceBase>();
-			SHToolKit.Communication.Communicator communicator = new SHToolKit.Communication.Communicator();
-
-			await Task.Run(async () =>
-			{
-				foreach (IDeviceBase device in this)
-				{
-					bool result = await communicator.CheckConnection(device);
-
-					if (!result)
-					{
-						(device as BaseSwitch).IsConnected = false;
-						notConndevices.Add(device);
-					}
-					else
-					{
-						(device as BaseSwitch).IsConnected = true;
-					}
-				}
-			});
-
-			return notConndevices;
-		}
-
 
 		public async override Task<int[]> Save(IEnumerable<IDeviceBase> devices)
 		{
@@ -136,7 +110,7 @@ namespace Switches
 
 			foreach (IDeviceBase device in devices)
 			{
-				IDeviceInfo info = _data.CreateDeviceInfo(device.Description, device.DeviceType, (int)device.FirmwareType, device.Mac.ToString());
+				IDeviceInfo info = _data.CreateDeviceInfo(device.Description ?? device.Name, device.DeviceType, (int)device.FirmwareType, device.Mac.ToString());
 				infos.Add(info);
 			}
 

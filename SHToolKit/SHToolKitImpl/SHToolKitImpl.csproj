@@ -124,7 +124,6 @@
     <Compile Include="Communication\CommandNames.cs" />
     <Compile Include="Communication\CommandParameter.cs" />
     <Compile Include="Communication\Communicator.cs" />
-    <Compile Include="Communication\CommunicatorAP.cs" />
     <Compile Include="Communication\ConnectorByWiFi.cs" />
     <Compile Include="Communication\DeviceInfo.cs" />
     <Compile Include="Communication\RequestsSender.cs" />
@@ -143,6 +142,9 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.2.8</Version>
+    </PackageReference>
+    <PackageReference Include="System.ValueTuple">
+      <Version>4.5.0</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

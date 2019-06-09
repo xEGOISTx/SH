@@ -10,6 +10,9 @@ using Windows.UI.Xaml;
 using DevicesPresenter;
 using SHToolKit.DevicesManagement;
 using Windows.Storage;
+using SH;
+using SHControls.ViewModels;
+using SHBase.DevicesBaseComponents;
 
 namespace SHMain.Main.ViewModels
 {
@@ -20,22 +23,25 @@ namespace SHMain.Main.ViewModels
 			
 		}
 
-		public DevicePresenterViewModel DevicePresenterVM { get; private set; }
+		public SHViewModel SHVM { get; private set; }
 
 		public async void Init()
 		{
 			DataManager.DataManager dataManager = new DataManager.DataManager();
 			dataManager.InitializeDatabase();
 
-			DevicesManager devicesManager = new DevicesManager();
-			devicesManager.AddForManagement(new Switches.SwitchList(dataManager));
-			devicesManager.AddForManagement(new Switches.OutletList(dataManager));
+			List<DeviceBaseList> devices = new List<DeviceBaseList>
+			{
+				new Switches.SwitchList(dataManager),
+				new Switches.OutletList(dataManager)
+			};
 
-			DevicePresenterVM = new DevicePresenterViewModel(devicesManager);
-			OnPropertyChanged(nameof(DevicePresenterVM));
+			SmartHome sH = new SmartHome(devices);
+			SHVM = new SHViewModel(sH);
+			OnPropertyChanged(nameof(SHVM));
 
-			await devicesManager.LoadDevicesAsync();
-			DevicePresenterVM.Update.Execute(null);
+			await sH.Start();
+			SHVM.Refresh();
 		}
 	}
 }

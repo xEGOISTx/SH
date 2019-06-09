@@ -11,9 +11,10 @@ using Windows.Storage.Streams;
 
 namespace SHBase
 {
+	//TODO: перенести в инструменты
 	public class Server
 	{
-		private const int PORT = 8000;
+		private const string PORT = "8000";
 
 		public Server()
 		{
@@ -25,7 +26,7 @@ namespace SHBase
 		private async void StartServer()
 		{
 			StreamSocketListener listener = new StreamSocketListener();
-			await listener.BindServiceNameAsync(PORT.ToString());
+			await listener.BindServiceNameAsync(PORT);
 
 			listener.ConnectionReceived += async (s, e) =>
 			{

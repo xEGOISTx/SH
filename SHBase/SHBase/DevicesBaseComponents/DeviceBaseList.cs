@@ -72,8 +72,6 @@ namespace SHBase.DevicesBaseComponents
 		/// <returns></returns>
 		public abstract Task Synchronization(IEnumerable<IDeviceBase> devicesFromRouter);
 
-		public abstract Task<IEnumerable<IDeviceBase>> GetNotConnectedDevicesAsync();
-
 		public abstract IDeviceBase CreateDevice(int id,string name, IPAddress iP,FirmwareType firmwareType, MacAddress mac);
 
 		public abstract void RefreshDevicesConnectionState(IEnumerable<DeviceConnectionInfo> connectionInfos);

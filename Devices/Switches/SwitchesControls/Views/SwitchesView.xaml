@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:swVM="using:SwitchesControls.ViewModels"
+    xmlns:shCtrls ="using:SHBaseControls"    
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400">
@@ -16,41 +17,15 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../Resources/StylesOfSwitches.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-
-            <Style TargetType="ListView">
-                <Setter Property="ItemsPanel">
-                    <Setter.Value>
-                        <ItemsPanelTemplate>
-                            <StackPanel Orientation="Horizontal"/>
-                        </ItemsPanelTemplate>
-                    </Setter.Value>
-                </Setter>
-
-                <Setter Property="ScrollViewer.HorizontalScrollMode" Value="Auto"/>
-                <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
-                <Setter Property="Margin" Value="10"/>
-                <Setter Property="SelectionMode" Value="None"/>
-            </Style>
-
-
-            <Style TargetType="ListViewItem">
-                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                <Setter Property="VerticalContentAlignment" Value="Stretch"/>
-                <Setter Property="Padding" Value="0"/>
-                <Setter Property="Margin" Value="10,0,10,20"/>
-            </Style>
         </ResourceDictionary>
     </UserControl.Resources>
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+        <!--<ListView ItemsSource="{Binding Path=Switches.List}" ItemTemplate="{StaticResource SwitchOutletItemTemplate}"/>
 
-        <ListView ItemsSource="{Binding Path=Switches.List}" ItemTemplate="{StaticResource SwitchOutletItemTemplate}"/>
+        <ListView Grid.Row="1" ItemsSource="{Binding Path=Outlets.List}" ItemTemplate="{StaticResource SwitchOutletItemTemplate}"/>-->
 
-        <ListView Grid.Row="1" ItemsSource="{Binding Path=Outlets.List}" ItemTemplate="{StaticResource SwitchOutletItemTemplate}"/>
+        <shCtrls:DevicesGroup ItemsSource="{Binding Path=Switches.List}" ItemTemplate="{StaticResource SwitchOutletItemTemplate}"/>
+
     </Grid>
 </UserControl>
