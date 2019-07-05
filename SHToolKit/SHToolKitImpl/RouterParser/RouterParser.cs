@@ -29,30 +29,34 @@ namespace SHToolKit
 			//_ip = ip;
 			//_login = login;
 			//_password = password;
-
-			if(_webView == null)
-			{
-				_webView = new WebView();
-			}
 		}
 
-		public async Task<IParseOperationResult> GetDevicesIPs(IPAddress routerIP, string login, string password)
+		public async Task<IParseOperationResult> GetDevicesIPs(SHBase.ICredentials routerCredentials)
 		{
+			if (_webView == null)
+			{
+				await Window.Current.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+				{
+					_webView = new WebView();
+				});
+			}
+
+
 			ParseOperationResult result = new ParseOperationResult();
-			string strUrl = $"http://{ routerIP }/";
+			//string strUrl = $"http://{ routerIP }/";
 
 			if (_parseComplete)
 			{
 				_parseComplete = false;
 				_loadComplete = false;
 
-				OperationResult authorizationResult = await Authorization(strUrl, login, password);
+				OperationResult authorizationResult = await Authorization(routerCredentials.Uri.AbsoluteUri, routerCredentials.Login, routerCredentials.Password);
 
 				_webView.LoadCompleted += WebView_LoadCompleted;
 
 				await Window.Current.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
 				{
-					_webView.Navigate(new Uri(strUrl));
+					_webView.Navigate(routerCredentials.Uri);
 				});
 
 

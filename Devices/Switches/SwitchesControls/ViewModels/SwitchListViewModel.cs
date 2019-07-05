@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using Switches;
 using UWPHelper;
-using SHToolKit.DevicesManagement;
+using SH;
 
 namespace SwitchesControls.ViewModels
 {

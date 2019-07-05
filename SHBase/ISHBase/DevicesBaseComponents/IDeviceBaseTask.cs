@@ -29,6 +29,6 @@ namespace SHBase.DevicesBaseComponents
 		/// </summary>
 		IDeviceBase Owner { get; }
 
-		Task<bool> Execute();
+		//Task<bool> Execute();
 	}
 }

@@ -127,7 +127,10 @@
     <Compile Include="Communication\ConnectorByWiFi.cs" />
     <Compile Include="Communication\DeviceInfo.cs" />
     <Compile Include="Communication\RequestsSender.cs" />
-    <Compile Include="DevicesManagement\DevicesManager.cs" />
+    <Compile Include="DevicesManagement\DeviceConnectionInfo.cs" />
+    <Compile Include="DevicesManagement\DevicesConnectionInfo.cs" />
+    <Compile Include="DevicesManagement\DevicesFinder.cs" />
+    <Compile Include="OperationsResult\FindDevicesOperationResult.cs" />
     <Compile Include="OperationsResult\GetBaseInfoResult.cs" />
     <Compile Include="OperationsResult\OperationResult.cs" />
     <Compile Include="Consts.cs" />
@@ -137,6 +140,7 @@
     <Compile Include="SpeechRecognition\Sharp\RecognizeEventArg.cs" />
     <Compile Include="SpeechRecognition\Sharp\SpeechRecognizer.cs" />
     <Compile Include="SpeechRecognition\Sharp\SphinxWrapper.cs" />
+    <Compile Include="Tools.cs" />
     <EmbeddedResource Include="Properties\SHToolKitImpl.rd.xml" />
   </ItemGroup>
   <ItemGroup>

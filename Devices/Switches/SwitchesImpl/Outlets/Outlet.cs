@@ -29,22 +29,22 @@ namespace Switches
 		public ISwitchOutletTaskList Tasks => _tasks;
 
 
-		/// <summary>
-		/// Включить
-		/// </summary>
-		public async Task<bool> TurnOn()
-		{
-			ISwitchOutletTask turnOn = _tasks.GetByKey(SwitchOutletTaskType.TurnOn);
-			return await TurnOn(turnOn);
-		}
+		///// <summary>
+		///// Включить
+		///// </summary>
+		//public async Task<bool> TurnOn()
+		//{
+		//	ISwitchOutletTask turnOn = _tasks.GetByKey(SwitchOutletTaskType.TurnOn);
+		//	return await TurnOn(turnOn);
+		//}
 
-		/// <summary>
-		/// Выключить
-		/// </summary>
-		public async Task<bool> TurnOff()
-		{
-			ISwitchOutletTask turnOff = _tasks.GetByKey(SwitchOutletTaskType.TurnOff);
-			return await TurnOff(turnOff);
-		}
+		///// <summary>
+		///// Выключить
+		///// </summary>
+		//public async Task<bool> TurnOff()
+		//{
+		//	ISwitchOutletTask turnOff = _tasks.GetByKey(SwitchOutletTaskType.TurnOff);
+		//	return await TurnOff(turnOff);
+		//}
 	}
 }

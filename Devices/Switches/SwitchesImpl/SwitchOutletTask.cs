@@ -36,10 +36,10 @@ namespace Switches
 
 		public IDeviceBase Owner { get;}
 
-		public async Task<bool> Execute()
-		{
-			Communicator communicator = new Communicator();
-			return await communicator.SendGPIOTask(this);
-		}
+		//public async Task<bool> Execute()
+		//{
+		//	Communicator communicator = new Communicator();
+		//	return await communicator.SendGPIOTask(this);
+		//}
 	}
 }

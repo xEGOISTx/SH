@@ -93,11 +93,11 @@ namespace SwitchesControls.ViewModels
 			IsNotBlockOnOff = false;
 			if (value)
 			{
-				await _device.TurnOn();
+				//await _device.TurnOn();
 			}
 			else
 			{
-				await _device.TurnOff();
+				//await _device.TurnOff();
 			}
 
 			//задержка, чтобы успела отработать анимация 

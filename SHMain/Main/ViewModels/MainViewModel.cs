@@ -4,15 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UWPHelper;
-using DevicesPresenterControls.ViewModels;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml;
-using DevicesPresenter;
-using SHToolKit.DevicesManagement;
 using Windows.Storage;
 using SH;
 using SHControls.ViewModels;
 using SHBase.DevicesBaseComponents;
+using DataManager;
+using SHToolKit;
+using SHBase;
 
 namespace SHMain.Main.ViewModels
 {
@@ -23,25 +23,24 @@ namespace SHMain.Main.ViewModels
 			
 		}
 
-		public SHViewModel SHVM { get; private set; }
+		public NodeViewModel NodeVM { get; private set; }
 
 		public async void Init()
-		{
-			DataManager.DataManager dataManager = new DataManager.DataManager();
-			dataManager.InitializeDatabase();
+		{		
+			Data.InitializeDatabase();
 
 			List<DeviceBaseList> devices = new List<DeviceBaseList>
 			{
-				new Switches.SwitchList(dataManager),
-				new Switches.OutletList(dataManager)
+				new Switches.SwitchList(),
+				new Switches.OutletList()
 			};
 
-			SmartHome sH = new SmartHome(devices);
-			SHVM = new SHViewModel(sH);
-			OnPropertyChanged(nameof(SHVM));
+			Node node = new Node();
+			node.AddDevices(devices);
+			NodeVM = new NodeViewModel(node, Data.DataLoader, new Tools());
+			OnPropertyChanged(nameof(NodeVM));
 
-			await sH.Start();
-			SHVM.Refresh();
+			IOperationResult res = await NodeVM.Init();
 		}
 	}
 }

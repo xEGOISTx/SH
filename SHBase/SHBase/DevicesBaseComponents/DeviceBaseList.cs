@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -35,11 +36,19 @@ namespace SHBase.DevicesBaseComponents
 			return _devices.Values.GetEnumerator();
 		}
 
-		public virtual void Add(IDeviceBase device)
+		public void Add(IDeviceBase device)
 		{
 			if (device != null && device.ID > 0 && !_devices.ContainsKey(device.ID) && device.DeviceType == DevicesType)
 			{
 				_devices.Add(device.ID, device);
+			}
+		}
+
+		public void AddRange(IEnumerable<IDeviceBase> devices)
+		{
+			foreach(IDeviceBase device in devices.ToArray())
+			{
+				Add(device);
 			}
 		}
 
@@ -56,14 +65,14 @@ namespace SHBase.DevicesBaseComponents
 				&& deviceFromRouter.DeviceType == device.DeviceType;
 		}
 
-		public abstract Task<bool> Load();
+		//public abstract Task<bool> Load();
 
 		/// <summary>
 		/// Сохранить утройства. Возвращает IDs сохранённых устройств в том же порядке как устройсва были переданы!
 		/// </summary>
 		/// <param name="devices"></param>
 		/// <returns></returns>
-		public abstract Task<int[]> Save(IEnumerable<IDeviceBase> devices);
+		//public abstract Task<int[]> Save(IEnumerable<IDeviceBase> devices);
 
 		/// <summary>
 		/// Синхронизация с подключенными к роутеру устройствами
@@ -72,9 +81,9 @@ namespace SHBase.DevicesBaseComponents
 		/// <returns></returns>
 		public abstract Task Synchronization(IEnumerable<IDeviceBase> devicesFromRouter);
 
-		public abstract IDeviceBase CreateDevice(int id,string name, IPAddress iP,FirmwareType firmwareType, MacAddress mac);
+		public abstract IDeviceBase CreateDevice(int id, string name, string description, IPAddress iP, FirmwareType firmwareType, MacAddress mac);
 
-		public abstract void RefreshDevicesConnectionState(IEnumerable<DeviceConnectionInfo> connectionInfos);
+		public abstract void RefreshDevicesConnectionState(IEnumerable<IDeviceConnectionInfo> connectionInfos);
 		#endregion Methods
 
 	}

@@ -20,14 +20,14 @@ namespace Switches
 		/// </summary>
 		CurrentState State { get; }
 
-		/// <summary>
-		/// Включить
-		/// </summary>
-		Task<bool> TurnOn();
+		///// <summary>
+		///// Включить
+		///// </summary>
+		//Task<bool> TurnOn();
 
-		/// <summary>
-		/// Выключить
-		/// </summary>
-		Task<bool> TurnOff();
+		///// <summary>
+		///// Выключить
+		///// </summary>
+		//Task<bool> TurnOff();
 	}
 }

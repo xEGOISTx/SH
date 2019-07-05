@@ -1,15 +1,15 @@
-﻿namespace DataManager
-{
-	public interface IDeviceInfo
-	{
-		int ID { get; }
+﻿//namespace DataManager
+//{
+//	public interface IDeviceInfo
+//	{
+//		int ID { get; }
 
-		string MacAddress { get; set; }
+//		string MacAddress { get; set; }
 
-		int DeviceType { get; set; }
+//		int DeviceType { get; set; }
 
-		int FirmwareType { get; set; }
+//		int FirmwareType { get; set; }
 
-		string Description { get; }
-	}
-}
+//		string Description { get; }
+//	}
+//}

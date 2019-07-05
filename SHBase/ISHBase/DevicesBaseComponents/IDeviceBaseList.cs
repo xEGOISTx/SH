@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SHBase.DevicesBaseComponents
 {
-	public interface IDeviceBaseList<out DeviceType> : BaseContainers.IContainer<int,DeviceType>
+	public interface IDeviceBaseList<out DeviceType> : BaseContainers.IContainer<int, DeviceType>
 		where DeviceType : IDeviceBase
 	{
 		int DevicesType { get; }

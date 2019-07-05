@@ -41,7 +41,7 @@ namespace SHToolKit.Communication
 		internal async Task<bool> Reconnect()
 		{
 			if (_currentWiFi != null && _currentCredential != null)
-				return await ConnectToDeviceAsync(_currentWiFi, _currentCredential);
+				return await ConnectToDeviceAsync(_currentWiFi, _currentCredential.Password);
 			else
 				return false;
 		}
@@ -73,10 +73,10 @@ namespace SHToolKit.Communication
 		/// <param name="wiFi">Устройсво как точка доступа</param>
 		/// <param name="credential">Пароль</param>
 		/// <returns></returns>
-		public async Task<bool> ConnectToDeviceAsync(WiFiAvailableNetwork wiFi, PasswordCredential credential)
+		public async Task<bool> ConnectToDeviceAsync(WiFiAvailableNetwork wiFi, string devPassword)
 		{
 			_currentWiFi = wiFi;
-			_currentCredential = credential;
+			_currentCredential = new PasswordCredential { Password = devPassword };
 
 			WiFiConnectionResult conResult;
 			bool initRes = await InitializeFirstAdapter();
@@ -85,7 +85,7 @@ namespace SHToolKit.Communication
 			{
 				do
 				{
-					conResult = await _wifiAdapter.ConnectAsync(wiFi, WiFiReconnectionKind.Manual, credential);
+					conResult = await _wifiAdapter.ConnectAsync(wiFi, WiFiReconnectionKind.Manual, _currentCredential);
 
 					if (conResult.ConnectionStatus != WiFiConnectionStatus.Success)
 					{

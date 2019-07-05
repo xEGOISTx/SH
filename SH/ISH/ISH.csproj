@@ -120,7 +120,9 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="ISmartHome.cs" />
+    <Compile Include="DevicesManagement\IDevicesGetter.cs" />
+    <Compile Include="DevicesManagement\IDevicesManager.cs" />
+    <Compile Include="INode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\ISH.rd.xml" />
   </ItemGroup>
@@ -130,11 +132,16 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\SHBase\ISHBase\ISHBase.csproj">
+      <Project>{31e8465c-6bc2-46d5-834d-0e940c3c33ea}</Project>
+      <Name>ISHBase</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\SHToolKit\ISHToolKit\ISHToolKit.csproj">
       <Project>{7cbc218c-9c09-4a6a-b115-44c022560b22}</Project>
       <Name>ISHToolKit</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

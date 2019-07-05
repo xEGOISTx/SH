@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SHToolKit
 {
-	public interface IOperationGetBaseInfoResult : IOperationResult
+	public interface IOperationGetBaseInfoResult : SHBase.IOperationResult
 	{
 		SHBase.DevicesBaseComponents.IDeviceBase BasicInfo { get; }
 	}

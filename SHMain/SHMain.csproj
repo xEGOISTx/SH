@@ -143,18 +143,6 @@
       <Project>{d47ad259-430a-4a84-8ac2-fced700fb4ad}</Project>
       <Name>IDataManager</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DevicesPresenter\DevicesPresenterControls\DevicesPresenterControls.csproj">
-      <Project>{0b1bcbd6-eeef-47d8-a824-9a52444e95ac}</Project>
-      <Name>DevicesPresenterControls</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DevicesPresenter\DevicesPresenterImpl\DevicesPresenterImpl.csproj">
-      <Project>{c3312f4d-66f3-4d13-9703-eb1182d41abe}</Project>
-      <Name>DevicesPresenterImpl</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DevicesPresenter\IDevicesPresenter\IDevicesPresenter.csproj">
-      <Project>{469fce32-1d2a-4cc9-bfa9-dba0114fd551}</Project>
-      <Name>IDevicesPresenter</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Devices\Switches\SwitchesImpl\SwitchesImpl.csproj">
       <Project>{0f48f833-5a2c-4c19-85da-296a6ea5554c}</Project>
       <Name>SwitchesImpl</Name>

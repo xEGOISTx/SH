@@ -32,29 +32,29 @@ namespace Switches
 		public FirmwareType FirmwareType { get; internal set; }
 
 
-		protected async Task<bool> TurnOff(IDeviceBaseTask task)
-		{
-			bool res = await task?.Execute();
+		//protected async Task<bool> TurnOff(IDeviceBaseTask task)
+		//{
+		//	bool res = await task?.Execute();
 
-			if (res)
-			{
-				State = CurrentState.TurnedOff;
-			}
+		//	if (res)
+		//	{
+		//		State = CurrentState.TurnedOff;
+		//	}
 
-			return res;
-		}
+		//	return res;
+		//}
 
-		protected async Task<bool> TurnOn(IDeviceBaseTask task)
-		{
-			bool res = await task?.Execute();
+		//protected async Task<bool> TurnOn(IDeviceBaseTask task)
+		//{
+		//	bool res = await task?.Execute();
 
-			if (res)
-			{
-				State = CurrentState.TurnedOn;
-			}
+		//	if (res)
+		//	{
+		//		State = CurrentState.TurnedOn;
+		//	}
 
-			return res;
-		}
+		//	return res;
+		//}
 
 		//TODO: добавить абстрактный метод GetOwnPrams
 	}

@@ -1,7 +1,7 @@
-﻿namespace DataManager
-{
-	public interface IResultOperationSave : IDBOperationResult
-	{
-		int[] NewIDs { get; }
-	}
-}
+﻿//namespace DataManager
+//{
+//	public interface IResultOperationSave : IDBOperationResult
+//	{
+//		int[] NewIDs { get; }
+//	}
+//}

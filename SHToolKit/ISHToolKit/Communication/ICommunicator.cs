@@ -1,4 +1,5 @@
-﻿using SHBase.DevicesBaseComponents;
+﻿using SHBase;
+using SHBase.DevicesBaseComponents;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +31,14 @@ namespace SHToolKit.Communication
 		/// <param name="device"></param>
 		/// <returns></returns>
 		Task<int> GetDeviceID(IPAddress deviceIP);
+
+		/// <summary>
+		/// Отпрпавить id устройству
+		/// </summary>
+		/// <param name="id"></param>
+		/// <param name="deviceIP"></param>
+		/// <returns></returns>
+		Task<IOperationResult> SendIdToDevice(int id, IPAddress deviceIP);
 
 		/// <summary>
 		/// Проверить соединение с устройством

@@ -18,7 +18,7 @@ namespace SHToolKit.Communication
 	/// <summary>
 	/// Класс для общения с устройством
 	/// </summary>
-	public class Communicator : RequestsSender, ICommunicator
+	internal class Communicator : RequestsSender, ICommunicator
 	{
 		/// <summary>
 		/// Отправить устройству задачу действия с пинами
@@ -64,7 +64,7 @@ namespace SHToolKit.Communication
 		{
 			if(deviceIP == null)
 			{
-				return new GetBaseInfoResult(new OperationResult { ErrorMessage = "deviceIP не может быть null" });
+				return new GetBaseInfoResult { ErrorMessage = "deviceIP не может быть null" };
 			}
 
 			return await Task.Run(async () =>
@@ -189,8 +189,9 @@ namespace SHToolKit.Communication
 		/// <summary>
 		/// Отпрпавить id устройству
 		/// </summary>
-		/// <param name = "id" ></ param >
-		/// < returns ></ returns >
+		/// <param name="id"></param>
+		/// <param name="deviceIP"></param>
+		/// <returns></returns>
 		public async Task<IOperationResult> SendIdToDevice(int id, IPAddress deviceIP)
 		{
 			if (deviceIP != null && deviceIP != Consts.ZERO_IP)
@@ -220,7 +221,7 @@ namespace SHToolKit.Communication
 		/// </summary>
 		/// <param name="connectionParams"></param>
 		/// <returns></returns>
-		public async Task<IOperationResult> SendConnectionParamsToDevice(IPAddress deviceIP, IConnectionParams connectionParams)
+		public async Task<IOperationResult> SendConnectionParamsToDevice(IPAddress deviceIP, IConnectionParamsToAP connectionParams)
 		{
 			return await Task.Run(async () =>
 			{
@@ -251,7 +252,7 @@ namespace SHToolKit.Communication
 		/// Возвращает ip присвоенный роутером
 		/// </summary>
 		/// <returns></returns>
-		private async Task<IPAddress> GetLocalIPFromDeviceAsAP(IPAddress accessPointIP)
+		public async Task<IPAddress> GetLocalIPFromDeviceAsAP(IPAddress accessPointIP)
 		{
 			return await Task.Run(async () =>
 			{

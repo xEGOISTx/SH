@@ -148,6 +148,10 @@
       <Project>{7CBC218C-9C09-4A6A-B115-44C022560B22}</Project>
       <Name>ISHToolKit</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\SH\ISH\ISH.csproj">
+      <Project>{fcfbf19f-49c8-4f4e-a93f-54a6d08d35d7}</Project>
+      <Name>ISH</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\UWPHelper\UWPHelper\UWPHelper.csproj">
       <Project>{30070a18-bd50-41c5-80a7-7c28667a78be}</Project>
       <Name>UWPHelper</Name>
