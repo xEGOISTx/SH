@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Switches
 {
-	public class OutletList : SwitchesBaseList, IOutletList
+	public class OutletList : SwitchesBaseList<Outlet>, IOutletList
 	{
 		//private readonly IDataManager _data;
 

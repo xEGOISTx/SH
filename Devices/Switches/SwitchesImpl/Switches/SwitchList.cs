@@ -10,7 +10,7 @@ using SHBase.DevicesBaseComponents;
 
 namespace Switches
 {
-	public class SwitchList : SwitchesBaseList , ISwitchList
+	public class SwitchList : SwitchesBaseList<Switch> , ISwitchList
 	{
 		//private readonly IDataManager _data;
 

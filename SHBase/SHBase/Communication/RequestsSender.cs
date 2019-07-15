@@ -7,10 +7,11 @@ using System.Text;
 using System.Threading.Tasks;
 using SHBase;
 
-namespace SHToolKit.Communication
+namespace SHBase.Communication
 {
 	public abstract class RequestsSender
 	{
+		//TODO: добавить IRequestOperationResult с параметром ResponseMessage
 		/// <summary>
 		/// Отправить устройству запрос
 		/// </summary>
@@ -72,18 +73,6 @@ namespace SHToolKit.Communication
 
 				return result;
 			});
-		}
-
-		/// <summary>
-		/// Отправить устройству запрос
-		/// </summary>
-		/// <param name="deviceIP"></param>
-		/// <param name="commandName"></param>
-		/// <param name="content"></param>
-		/// <returns></returns>
-		internal async Task<IOperationResult> SendToDevice(IPAddress deviceIP, CommandName commandName, IEnumerable<CommandParameter> content = null)
-		{
-			return await SendToDevice(deviceIP, commandName.ToString(), content);
 		}
 	}
 }

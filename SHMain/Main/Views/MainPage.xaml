@@ -13,6 +13,8 @@
     Loaded="ThisControl_Loaded">
 
     <Grid>
-        <sh:SHView DataContext="{Binding Path=NodeVM}"/>
+        <sh:NodeView DataContext="{Binding Path=NodeVM}">
+
+        </sh:NodeView>
     </Grid>
 </Page>

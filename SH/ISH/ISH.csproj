@@ -120,9 +120,13 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="DevicesManagement\IDevicesConnectionInfo.cs" />
+    <Compile Include="DevicesManagement\IDevicesFinder.cs" />
     <Compile Include="DevicesManagement\IDevicesGetter.cs" />
     <Compile Include="DevicesManagement\IDevicesManager.cs" />
     <Compile Include="INode.cs" />
+    <Compile Include="OperationsResult\IFindDevicesOperationResult.cs" />
+    <Compile Include="OperationsResult\IOperationGetBaseInfoResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\ISH.rd.xml" />
   </ItemGroup>

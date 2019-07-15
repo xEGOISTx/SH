@@ -65,14 +65,6 @@ namespace SHBase.DevicesBaseComponents
 				&& deviceFromRouter.DeviceType == device.DeviceType;
 		}
 
-		//public abstract Task<bool> Load();
-
-		/// <summary>
-		/// Сохранить утройства. Возвращает IDs сохранённых устройств в том же порядке как устройсва были переданы!
-		/// </summary>
-		/// <param name="devices"></param>
-		/// <returns></returns>
-		//public abstract Task<int[]> Save(IEnumerable<IDeviceBase> devices);
 
 		/// <summary>
 		/// Синхронизация с подключенными к роутеру устройствами

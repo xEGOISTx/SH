@@ -5,7 +5,7 @@ namespace DataManager
 {
 	internal class OperationResultDevicesLoad : IOperationResultDevicesLoad
 	{
-		public IDBDevice[] Devices { get; set; }
+		public IDevice[] Devices { get; set; }
 
 		public bool Success { get; set; }
 

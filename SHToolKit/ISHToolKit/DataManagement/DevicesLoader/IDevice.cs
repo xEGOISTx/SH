@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SHToolKit.DataManagement
 {
-	public interface IDBDevice
+	public interface IDevice
 	{
 		int ID { get; }
 

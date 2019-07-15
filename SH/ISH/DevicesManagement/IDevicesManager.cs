@@ -1,9 +1,9 @@
 ﻿using SHToolKit.DataManagement;
 using SHBase;
 using SHToolKit;
-using SHToolKit.Communication;
-using SHToolKit.DevicesManagement;
+using SH.DevicesManagement;
 using System.Threading.Tasks;
+
 
 namespace SH
 {
@@ -24,7 +24,7 @@ namespace SH
 		/// <param name="loader">Загрузчик. Используется для сохранения устройств в хранилище</param>
 		/// <param name="communicator">Средство общения с устройствами</param>
 		/// <returns></returns>
-		Task<IOperationResult> SaveAndDistributeNewDevices(IFindDevicesOperationResult findDevicesResult, IDevicesLoader loader, ICommunicator communicator);
+		Task<IOperationResult> SaveAndDistributeNewDevices(IFindDevicesOperationResult findDevicesResult, IDevicesLoader loader);
 
 		/// <summary>
 		/// Возвращает неподключенные устройства и информацию о подключении устройств измеривших своё состояние
@@ -55,5 +55,7 @@ namespace SH
 		Task<IOperationResult> DevicesSynchronization(IFindDevicesOperationResult devsFromRouterResult);
 
 		Task<IOperationResult> LoadDataFromRepository(IDataLoader loader);
+
+		IDevicesFinder GetDevicesFinder(IRouterParser customParser = null);
 	}
 }

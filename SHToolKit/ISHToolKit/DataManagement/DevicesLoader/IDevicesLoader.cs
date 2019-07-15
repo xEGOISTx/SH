@@ -10,6 +10,6 @@ namespace SHToolKit.DataManagement
 	{
 		IOperationResultDevicesLoad LoadDevices(int devicesType);
 
-		IOperationResultSaveDevices SaveDevices(IDBDevice[] devices);
+		IOperationResultSaveDevices SaveDevices(IDevice[] devices);
 	}
 }

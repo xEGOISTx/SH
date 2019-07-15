@@ -6,21 +6,21 @@ using System.Text;
 using System.Threading.Tasks;
 using SHBase;
 using SHBase.DevicesBaseComponents;
-using SHToolKit.Communication;
+using SH.Communication;
 using Windows.Devices.WiFi;
+using SHToolKit;
 
-namespace SHToolKit.DevicesManagement
+namespace SH.DevicesManagement
 {
 	internal class DevicesFinder : IDevicesFinder
 	{
 		private readonly Communicator _communicator;
-		private readonly ConnectorByWiFi _connector;
+		private readonly ConnectorByWiFi _connector = new ConnectorByWiFi();
 		private readonly IRouterParser _rParser;
 
-		internal DevicesFinder(Communicator communicator, ConnectorByWiFi connector, IRouterParser routerParser = null)
+		internal DevicesFinder(Communicator communicator, IRouterParser routerParser = null)
 		{
 			_communicator = communicator;
-			_connector = connector;
 			_rParser = routerParser ?? new RouterParser();
 		}
 
@@ -104,21 +104,23 @@ namespace SHToolKit.DevicesManagement
 
 					if (iPsFromRouter.Success)
 					{
+						IEnumerable<IPAddress> iPs = iPsFromRouter.IPs.Select(ip => IPAddress.Parse(ip));
+
 						await Task.Run(async () =>
 						{
-						//идём по устройствам подключенным к роутеру
-						foreach (IPAddress devIP in iPsFromRouter.IPs)
+							//идём по устройствам подключенным к роутеру
+							foreach (IPAddress devIP in iPs)
 							{
-							//получаем инфу об устройстве
-							IOperationGetBaseInfoResult infoResult = await _communicator.GetDeviceInfo(devIP);
+								//получаем инфу об устройстве
+								IOperationGetBaseInfoResult infoResult = await _communicator.GetDeviceInfo(devIP);
 
-							// проверяем на успех получения инфы
-							if (infoResult.Success)
+								// проверяем на успех получения инфы
+								if (infoResult.Success)
 								{
 									IDeviceBase devFromRouter = infoResult.BasicInfo;
 
-								//удостоверяемся, что это устойство было определенно как не подключенное
-								if (notConDevs.ContainsKey(devFromRouter.ID))
+									//удостоверяемся, что это устойство было определенно как не подключенное
+									if (notConDevs.ContainsKey(devFromRouter.ID))
 									{
 										if (!devsFromRouter.ContainsKey(devFromRouter.DeviceType))
 										{
@@ -145,7 +147,7 @@ namespace SHToolKit.DevicesManagement
 					}
 				}
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				result.Success = false;
 				result.ErrorMessage = ex.Message;

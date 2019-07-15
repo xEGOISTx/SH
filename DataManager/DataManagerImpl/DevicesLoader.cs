@@ -14,7 +14,7 @@ namespace DataManager
 		public IOperationResultDevicesLoad LoadDevices(int devicesType)
 		{
 			OperationResultDevicesLoad result = new OperationResultDevicesLoad();
-			List<IDBDevice> devices = new List<IDBDevice>();
+			List<IDevice> devices = new List<IDevice>();
 
 			using (SqliteConnection db = new SqliteConnection(Consts.CONNECTION_STRING))
 			{
@@ -57,7 +57,7 @@ namespace DataManager
 			return result;
 		}
 
-		public IOperationResultSaveDevices SaveDevices(IDBDevice[] devices)
+		public IOperationResultSaveDevices SaveDevices(IDevice[] devices)
 		{
 			OperationResultSaveDevices result = new OperationResultSaveDevices();
 			List<int> newIDs = GenerateIDs(devices);
@@ -78,7 +78,7 @@ namespace DataManager
 
 				try
 				{
-					foreach (IDBDevice device in devices)
+					foreach (IDevice device in devices)
 					{
 						insertDeviceCommand.Parameters[0].Value = device.ID;
 						insertDeviceCommand.Parameters[1].Value = device.MacAddress;
@@ -105,7 +105,7 @@ namespace DataManager
 			return result;
 		}
 
-		private List<int> GenerateIDs(IDBDevice[] deviceInfos)
+		private List<int> GenerateIDs(IDevice[] deviceInfos)
 		{
 			List<int> newIDs = new List<int>();
 			Dictionary<int, int> oldIDs = GetDevicesIDs();

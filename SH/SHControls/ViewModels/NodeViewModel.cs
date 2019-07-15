@@ -15,13 +15,12 @@ namespace SHControls.ViewModels
 	{
 		private readonly INode _node;
 		private readonly IDataLoader _loader;
-		private readonly ITools _tools;
 
-		public NodeViewModel(INode node, IDataLoader loader, ITools tools)
+		public NodeViewModel(INode node, IDataLoader loader)
 		{
 			_node = node;
 			_loader = loader;
-			_tools = tools;
+			DevicesVM = new DevicesViewModel(_node.DevicesManager, _loader);
 		}
 
 
@@ -30,8 +29,8 @@ namespace SHControls.ViewModels
 
 		public async Task<IOperationResult> Init()
 		{		
-			DevicesVM = new DevicesViewModel(_node.DevicesManager, _loader, _tools);
-			OnPropertyChanged(nameof(DevicesVM));
+			//DevicesVM = new DevicesViewModel(_node.DevicesManager, _loader, _tools);
+			//OnPropertyChanged(nameof(DevicesVM));
 			return await DevicesVM.PreInit();
 		}
 	}

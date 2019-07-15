@@ -17,11 +17,19 @@ using Windows.UI.Xaml.Navigation;
 
 namespace SHControls.Views
 {
-	public sealed partial class SHView : UserControl
+	public sealed partial class NodeView : UserControl
 	{
-		public SHView()
+		DevicesView _devs;
+
+		public NodeView()
 		{
 			this.InitializeComponent();
+		}
+
+		public DevicesView Devices
+		{
+			get { return _devs; }
+			set { _devs = value; }
 		}
 	}
 }

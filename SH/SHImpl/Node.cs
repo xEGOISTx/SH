@@ -12,20 +12,16 @@ namespace SH
 		private List<DeviceBaseList> _devices = new List<DeviceBaseList>();
 		//private bool _isInit;
 
-		public Node()
+		public Node(IEnumerable<DeviceBaseList> devices)
 		{
-
-		}
-
-		public IDevicesManager DevicesManager { get;} = new DevicesManager();
-
-		public void AddDevices(IEnumerable<DeviceBaseList> devices)
-		{
-			foreach(DeviceBaseList devsList in devices)
+			foreach (DeviceBaseList devsList in devices)
 			{
 				(DevicesManager as DevicesManager).AddForManagement(devsList);
 				_devices.Add(devsList);
 			}
 		}
+
+		public IDevicesManager DevicesManager { get;} = new DevicesManager();
+
 	}
 }

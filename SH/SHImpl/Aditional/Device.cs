@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SH
 {
-	internal class Device : SHToolKit.DataManagement.IDBDevice
+	internal class Device : SHToolKit.DataManagement.IDevice
 	{
 		public int ID { get; set; }
 

@@ -9,11 +9,12 @@ using SHBase.DevicesBaseComponents;
 
 namespace Switches
 {
-	public abstract class SwitchesBaseList : DeviceBaseList
+	public abstract class SwitchesBaseList<DeviceType> : DeviceBaseList
+		where DeviceType : BaseSwitch
 	{
 		public SwitchesBaseList(int deviceType) : base(deviceType)
 		{
-
+			
 		}
 
 

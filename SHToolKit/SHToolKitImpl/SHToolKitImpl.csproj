@@ -121,17 +121,6 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Communication\CommandNames.cs" />
-    <Compile Include="Communication\CommandParameter.cs" />
-    <Compile Include="Communication\Communicator.cs" />
-    <Compile Include="Communication\ConnectorByWiFi.cs" />
-    <Compile Include="Communication\DeviceInfo.cs" />
-    <Compile Include="Communication\RequestsSender.cs" />
-    <Compile Include="DevicesManagement\DeviceConnectionInfo.cs" />
-    <Compile Include="DevicesManagement\DevicesConnectionInfo.cs" />
-    <Compile Include="DevicesManagement\DevicesFinder.cs" />
-    <Compile Include="OperationsResult\FindDevicesOperationResult.cs" />
-    <Compile Include="OperationsResult\GetBaseInfoResult.cs" />
     <Compile Include="OperationsResult\OperationResult.cs" />
     <Compile Include="Consts.cs" />
     <Compile Include="OperationsResult\ParseOperationResult.cs" />

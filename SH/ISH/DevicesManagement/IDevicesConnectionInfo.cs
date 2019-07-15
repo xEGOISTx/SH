@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using SHBase;
 using SHBase.DevicesBaseComponents;
 
-namespace SHToolKit.DevicesManagement
+namespace SH.DevicesManagement
 {
 	public interface IDevicesConnectionInfo
 	{

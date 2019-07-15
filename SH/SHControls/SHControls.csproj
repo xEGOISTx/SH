@@ -126,8 +126,8 @@
     <Compile Include="Views\DevicesView.xaml.cs">
       <DependentUpon>DevicesView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\SHView.xaml.cs">
-      <DependentUpon>SHView.xaml</DependentUpon>
+    <Compile Include="Views\NodeView.xaml.cs">
+      <DependentUpon>NodeView.xaml</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Properties\SHControls.rd.xml" />
   </ItemGroup>
@@ -164,7 +164,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\SHView.xaml">
+    <Page Include="Views\NodeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

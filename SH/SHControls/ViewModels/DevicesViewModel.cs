@@ -9,14 +9,13 @@ using SH;
 using SHBase;
 using SHToolKit;
 using SHToolKit.DataManagement;
-using SHToolKit.DevicesManagement;
+using SH.DevicesManagement;
 
 namespace SHControls.ViewModels
 {
 	public class DevicesViewModel : BaseViewModel
 	{
 		private delegate Task<IOperationResult> Process();
-		private readonly ITools _tools;
 		private readonly IDataLoader _loader;
 		private readonly IDevicesManager _manager;
 		private bool _isEnabled;
@@ -28,10 +27,9 @@ namespace SHControls.ViewModels
 		}
 
 
-		public DevicesViewModel(IDevicesManager manager, IDataLoader loader, ITools tools)
+		public DevicesViewModel(IDevicesManager manager, IDataLoader loader)
 		{
 			_manager = manager;
-			_tools = tools;
 			_loader = loader;
 
 			FindDevices = new RelayCommand(ExecuteFindDevices);
@@ -98,21 +96,22 @@ namespace SHControls.ViewModels
 
 		private async Task<IOperationResult> FindAndConnectDevicesAsync()
 		{
-			IFindDevicesOperationResult foundDevsRes = await _manager.FindAndConnectToRouterNewDevicesAsync(_tools.GetDevicesFinder());
+			IFindDevicesOperationResult foundDevsRes = await _manager.FindAndConnectToRouterNewDevicesAsync(_manager.GetDevicesFinder());
 			if (!foundDevsRes.Success) { return foundDevsRes; }
 
-			IOperationResult saveResult = await _manager.SaveAndDistributeNewDevices(foundDevsRes, _loader.GetDevicesLoader(), _tools.GetCommunicator());
+			IOperationResult saveResult = await _manager.SaveAndDistributeNewDevices(foundDevsRes, _loader.GetDevicesLoader());
 
 			return saveResult;
 		}
 
 		private async Task<IOperationResult> RefreshDevicesAsync()
 		{
-			IDevicesConnectionInfo connectionInfo = await _manager.GetDevicesConnectionInfo(_tools.GetDevicesFinder());
+			IDevicesFinder finder = _manager.GetDevicesFinder();
+			IDevicesConnectionInfo connectionInfo = await _manager.GetDevicesConnectionInfo(finder);
 
 			_manager.RefreshDevicesConnectionState(connectionInfo);
 
-			IFindDevicesOperationResult foundDevsRes = await _manager.FindDevicesAtRouterIfItsConn(_tools.GetDevicesFinder(), connectionInfo);
+			IFindDevicesOperationResult foundDevsRes = await _manager.FindDevicesAtRouterIfItsConn(finder, connectionInfo);
 			if (!foundDevsRes.Success) { return foundDevsRes; }
 
 			IOperationResult result = await _manager.DevicesSynchronization(foundDevsRes);

@@ -11,14 +11,14 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Windows.Devices.WiFi;
-using Windows.Web.Http;
+using SHBase.Communication;
 
-namespace SHToolKit.Communication
+namespace SH.Communication
 {
 	/// <summary>
 	/// Класс для общения с устройством
 	/// </summary>
-	internal class Communicator : RequestsSender, ICommunicator
+	internal class Communicator : RequestsSender
 	{
 		/// <summary>
 		/// Отправить устройству задачу действия с пинами
@@ -62,26 +62,30 @@ namespace SHToolKit.Communication
 		/// <returns></returns>
 		public async Task<IOperationGetBaseInfoResult> GetDeviceInfo(IPAddress deviceIP, bool asAP = false)
 		{
+			GetBaseInfoResult result = new GetBaseInfoResult();
+
 			if(deviceIP == null)
 			{
-				return new GetBaseInfoResult { ErrorMessage = "deviceIP не может быть null" };
+				result.ErrorMessage = "deviceIP не может быть null";
+				return result;
 			}
 
-			return await Task.Run(async () =>
-			{
-				DeviceInfo deviceInfo = null;
-				IPAddress curIP = deviceIP;
 
-				OperationResult result = await SendToDevice(deviceIP, CommandName.GetInfo) as OperationResult;
+			return await Task.Run(async () =>
+			{  
+				DeviceInfo deviceInfo = null;
+				IPAddress curIP = deviceIP;                                    
+
+				SHBase.OperationResult getInfoResult = await SendToDevice(deviceIP, CommandName.GetInfo) as SHBase.OperationResult;
 
 				if(asAP)
 				{
 					curIP = await GetLocalIPFromDeviceAsAP(deviceIP);
 				}
 
-				if (result.Success && curIP != null)
+				if (getInfoResult.Success && curIP != null)
 				{
-					string[] info = result.ResponseMessage.Split('&');
+					string[] info = getInfoResult.ResponseMessage.Split('&');
 
 					deviceInfo = new DeviceInfo(curIP)
 					{
@@ -92,14 +96,20 @@ namespace SHToolKit.Communication
 						DeviceType = int.Parse(info[4]),
 						IsConnected = curIP != Consts.ZERO_IP
 					};
+
+					result.Success = true;
+					result.BasicInfo = deviceInfo;
 				}
-				else if(result.Success && curIP == null)
+				else if(!getInfoResult.Success)
 				{
-					result.Success = false;
+					result.ErrorMessage = getInfoResult.ErrorMessage;
+				}
+				else if(curIP == null)
+				{
 					result.ErrorMessage = "Не удалось получить IP";
 				}
 
-				return new GetBaseInfoResult(result) { BasicInfo = deviceInfo };
+				return result;
 			});
 		}
 
@@ -114,7 +124,7 @@ namespace SHToolKit.Communication
 			{
 				if (deviceIP != null && deviceIP != Consts.ZERO_IP)
 				{
-					OperationResult result = await SendToDevice(deviceIP, CommandName.GetID) as OperationResult;
+					SHBase.OperationResult result = await SendToDevice(deviceIP, CommandName.GetID) as SHBase.OperationResult;
 
 					if (result.Success)
 					{
@@ -258,7 +268,7 @@ namespace SHToolKit.Communication
 			{
 				IPAddress ip = Consts.ZERO_IP;
 
-				OperationResult result = await SendToDevice(accessPointIP, CommandName.GetIP) as OperationResult;
+				SHBase.OperationResult result = await SendToDevice(accessPointIP, CommandName.GetIP) as SHBase.OperationResult;
 
 				if (result.Success)
 				{
@@ -271,6 +281,18 @@ namespace SHToolKit.Communication
 
 				return ip;
 			});
+		}
+
+		/// <summary>
+		/// Отправить устройству запрос
+		/// </summary>
+		/// <param name="deviceIP"></param>
+		/// <param name="commandName"></param>
+		/// <param name="content"></param>
+		/// <returns></returns>
+		private async Task<IOperationResult> SendToDevice(IPAddress deviceIP, CommandName commandName, IEnumerable<CommandParameter> content = null)
+		{
+			return await SendToDevice(deviceIP, commandName.ToString(), content);
 		}
 	}
 }

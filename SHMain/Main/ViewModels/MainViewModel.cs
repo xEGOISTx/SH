@@ -35,9 +35,9 @@ namespace SHMain.Main.ViewModels
 				new Switches.OutletList()
 			};
 
-			Node node = new Node();
-			node.AddDevices(devices);
-			NodeVM = new NodeViewModel(node, Data.DataLoader, new Tools());
+
+			Node node = new Node(devices);
+			NodeVM = new NodeViewModel(node, Data.DataLoader);
 			OnPropertyChanged(nameof(NodeVM));
 
 			IOperationResult res = await NodeVM.Init();

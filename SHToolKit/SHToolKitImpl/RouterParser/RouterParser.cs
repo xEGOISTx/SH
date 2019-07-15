@@ -9,7 +9,6 @@ using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
-using SHToolKit.Communication;
 using SHBase;
 
 namespace SHToolKit
@@ -68,7 +67,7 @@ namespace SHToolKit
 					if (_content != null)
 					{
 						result.Success = true;
-						result.IPs = GetDivInfo(_content).Select(dI => dI.IP);
+						result.IPs = GetIPs(_content);//.Select(dI => dI.IP);
 					}
 					else
 					{
@@ -96,10 +95,12 @@ namespace SHToolKit
 		}
 
 
-		private IEnumerable<DeviceInfo> GetDivInfo(string content)
+		private IEnumerable<string> GetIPs(string content)
 		{
+			//TODO: тестовый парсинг. перделать на что-нибудь по серьёзнее
+
 			List<List<string>> data = new List<List<string>>();
-			List<DeviceInfo> deviceInfos = new List<DeviceInfo>();
+			List<string> iPs = new List<string>();
 
 			//разбаваем на строки
 			string[] pars = content.Split(new char[] { '\n', '\t' }, StringSplitOptions.RemoveEmptyEntries);
@@ -136,19 +137,19 @@ namespace SHToolKit
 
 				if (name.Contains("ESP") && isConnected)
 				{
-					IPAddress ip = IPAddress.Parse(item[3]);
-					MacAddress mac = new MacAddress(item[4]);
-					DeviceInfo deviceInfo = new DeviceInfo(ip)
-					{
-						Name = name,
-						Mac = mac,
-						IsConnected = isConnected
-					};
-					deviceInfos.Add(deviceInfo);
+					string ip  = item[3];
+					//MacAddress mac = new MacAddress(item[4]);
+					//DeviceInfo deviceInfo = new DeviceInfo(ip)
+					//{
+					//	Name = name,
+					//	Mac = mac,
+					//	IsConnected = isConnected
+					//};
+					iPs.Add(ip);
 				}
 			}
 
-			return deviceInfos;
+			return iPs;
 		}
 
 		private async Task<OperationResult> Authorization(string strUrl, string login, string password)

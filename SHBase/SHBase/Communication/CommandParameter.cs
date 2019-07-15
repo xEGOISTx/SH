@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SHToolKit.Communication
+namespace SHBase.Communication
 {
 	public class CommandParameter
 	{

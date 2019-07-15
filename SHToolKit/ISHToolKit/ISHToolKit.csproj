@@ -120,8 +120,7 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Communication\ICommunicator.cs" />
-    <Compile Include="DataManagement\DevicesLoader\IDBDevice.cs" />
+    <Compile Include="DataManagement\DevicesLoader\IDevice.cs" />
     <Compile Include="DataManagement\DevicesLoader\IDevicesLoader.cs" />
     <Compile Include="OperationsResult\IOperationResultDevicesLoad.cs" />
     <Compile Include="OperationsResult\IOperationResultSaveDevices.cs" />
@@ -130,14 +129,8 @@
     <Compile Include="DataManagement\SettingLoader\IConnectionSettings.cs" />
     <Compile Include="OperationsResult\ILoadSettingOperationResult.cs" />
     <Compile Include="DataManagement\SettingLoader\ISettingsLoader.cs" />
-    <Compile Include="DevicesManagement\IDevicesConnectionInfo.cs" />
-    <Compile Include="DevicesManagement\IDevicesFinder.cs" />
-    <Compile Include="ITools.cs" />
-    <Compile Include="OperationsResult\IFindDevicesOperationResult.cs" />
-    <Compile Include="OperationsResult\IFindNotConnectedDevicesOperationResult.cs" />
     <Compile Include="OperationsResult\IParseOperationResult.cs" />
     <Compile Include="RouterParser\IRouterParser.cs" />
-    <Compile Include="OperationsResult\IOperationGetBaseInfoResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\ISHToolKit.rd.xml" />
   </ItemGroup>

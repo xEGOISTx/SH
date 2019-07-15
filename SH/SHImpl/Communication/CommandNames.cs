@@ -1,4 +1,4 @@
-﻿namespace SHToolKit.Communication
+﻿namespace SH.Communication
 {
 	internal enum CommandName
 	{

@@ -9,6 +9,6 @@ namespace SHToolKit
 {
 	public interface IOperationResultDevicesLoad : SHBase.IOperationResult
 	{
-		IDBDevice[] Devices { get; }
+		IDevice[] Devices { get; }
 	}
 }

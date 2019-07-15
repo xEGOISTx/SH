@@ -13,6 +13,6 @@ namespace SHToolKit
 
 		public ParseOperationResult(OperationResult operationResult) : base(operationResult){ }
 
-		public IEnumerable<IPAddress> IPs { get; set; }
+		public IEnumerable<string> IPs { get; set; }
 	}
 }

@@ -11,7 +11,7 @@ using Windows.Devices.Enumeration;
 using Windows.Devices.WiFi;
 using Windows.Security.Credentials;
 
-namespace SHToolKit.Communication
+namespace SH.Communication
 {
 	/// <summary>
 	/// Класс для поиска устройств и соединения с ними

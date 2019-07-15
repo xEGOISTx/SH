@@ -4,7 +4,7 @@
 
 using System.Net;
 
-namespace SHToolKit.Communication
+namespace SH.Communication
 {
 	/// <summary>
 	/// Базовая инфа устройства

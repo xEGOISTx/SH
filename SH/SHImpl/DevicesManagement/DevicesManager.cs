@@ -7,9 +7,9 @@ using SHBase.DevicesBaseComponents;
 using Windows.Devices.WiFi;
 using Windows.Security.Credentials;
 using SHBase;
+using SH.Communication;
 using SHToolKit;
-using SHToolKit.Communication;
-using SHToolKit.DevicesManagement;
+using SH.DevicesManagement;
 using SHToolKit.DataManagement;
 
 namespace SH
@@ -19,6 +19,7 @@ namespace SH
 		private readonly Dictionary<int, DeviceBaseList> _devicesLists = new Dictionary<int, DeviceBaseList>();
 		private ConnectionSettings _connectionSettings;
 		private bool _devicesIsLoad;
+		private Communicator _communicator = new Communicator();
 
 		public void AddForManagement(DeviceBaseList devices)
 		{
@@ -53,7 +54,7 @@ namespace SH
 		/// <param name="loader">Загрузчик. Используется для сохранения устройств в хранилище</param>
 		/// <param name="communicator">Средство общения с устройствами</param>
 		/// <returns></returns>
-		public async Task<IOperationResult> SaveAndDistributeNewDevices(IFindDevicesOperationResult findDevicesResult, IDevicesLoader loader, ICommunicator communicator)
+		public async Task<IOperationResult> SaveAndDistributeNewDevices(IFindDevicesOperationResult findDevicesResult, IDevicesLoader loader)
 		{
 			IOperationResult result = new OperationResult { Success = true };
 
@@ -61,7 +62,7 @@ namespace SH
 
 			if(saveResult.Success)
 			{
-				IOperationResult result1 = await DistributeNewDevices(iDs, findDevicesResult, communicator);
+				IOperationResult result1 = await DistributeNewDevices(iDs, findDevicesResult);
 
 				if(!result1.Success)
 				{
@@ -179,6 +180,10 @@ namespace SH
 				});
 		}
 
+		public IDevicesFinder GetDevicesFinder(IRouterParser customParser = null)
+		{
+			return new DevicesFinder(_communicator, customParser);
+		}
 
 		/// <summary>
 		/// 
@@ -201,7 +206,7 @@ namespace SH
 					int devsType = pair.Key;
 					IEnumerable<IDeviceBase> devsToSave = pair.Value;
 
-					IDBDevice[] dBItems = MakeDBItems(devsToSave);
+					IDevice[] dBItems = MakeDBItems(devsToSave);
 					IOperationResultSaveDevices saveResult = loader.SaveDevices(dBItems);
 
 					if (saveResult.Success)
@@ -218,54 +223,55 @@ namespace SH
 			});
 		}
 
-		private async Task<IOperationResult> DistributeNewDevices(Dictionary<int, int[]> iDs, IFindDevicesOperationResult findDevicesResult, ICommunicator communicator)
+		private async Task<IOperationResult> DistributeNewDevices(Dictionary<int, int[]> iDs, IFindDevicesOperationResult findDevicesResult)
 		{
 			OperationResult result = new OperationResult { Success = true };
 
-			await Task.Run(async () =>
+			if (iDs.Any() && findDevicesResult.FoundDevices.Any())
 			{
-				//Dictionary<int, List<IDeviceBase>> filledDevices = new Dictionary<int, List<IDeviceBase>>(iDs.Count);
-				try
+				await Task.Run(async () =>
 				{
-					foreach (DeviceBaseList baseList in _devicesLists.Values)
+					try
 					{
-						int devsType = baseList.DevicesType;
-						int[] newIDs = iDs[devsType];
-						IDeviceBase[] newDevs = findDevicesResult.FoundDevices[devsType].ToArray();
-
-						List<IDeviceBase> devicesToAdd = new List<IDeviceBase>(newIDs.Length);
-
-						for (int i = 0; i < newIDs.Length; i++)
+						foreach (DeviceBaseList baseList in _devicesLists.Values)
 						{
-							int nID = newIDs[i];
-							IDeviceBase nDev = newDevs[i];
+							int devsType = baseList.DevicesType;
+							int[] newIDs = iDs[devsType];
+							IDeviceBase[] newDevs = findDevicesResult.FoundDevices[devsType].ToArray();
 
-							//отправляем устройству его ID
-							IOperationResult sendResult = await communicator.SendIdToDevice(nID, nDev.IP);
+							List<IDeviceBase> devicesToAdd = new List<IDeviceBase>(newIDs.Length);
+
+							for (int i = 0; i < newIDs.Length; i++)
+							{
+								int nID = newIDs[i];
+								IDeviceBase nDev = newDevs[i];
+
+								//отправляем устройству его ID
+								IOperationResult sendResult = await _communicator.SendIdToDevice(nID, nDev.IP);
 
 
-							IDeviceBase dev = baseList.CreateDevice
-							(
-								nID,
-								nDev.Name,
-								string.Empty,
-								nDev.IP,
-								nDev.FirmwareType,
-								nDev.Mac
-							);
+								IDeviceBase dev = baseList.CreateDevice
+								(
+									nID,
+									nDev.Name,
+									string.Empty,
+									nDev.IP,
+									nDev.FirmwareType,
+									nDev.Mac
+								);
 
-							baseList.Add(dev);
+								baseList.Add(dev);
+							}
 						}
 					}
-				}
-				catch(Exception ex)
-				{
-					result.Success = false;
-					result.ErrorMessage = ex.Message;
-				}
+					catch (Exception ex)
+					{
+						result.Success = false;
+						result.ErrorMessage = ex.Message;
+					}
 
-			});
-
+				});
+			}
 			return result;
 		}
 
@@ -285,7 +291,7 @@ namespace SH
 				{
 					if (loadResult.Success)
 					{
-						foreach (IDBDevice dBItem in loadResult.Devices)
+						foreach (IDevice dBItem in loadResult.Devices)
 						{
 							IDeviceBase device = devices.CreateDevice
 							(
@@ -349,9 +355,9 @@ namespace SH
 			//return loadRes.Success;
 		}
 
-		private IDBDevice[] MakeDBItems(IEnumerable<IDeviceBase> devices)
+		private IDevice[] MakeDBItems(IEnumerable<IDeviceBase> devices)
 		{
-			List<IDBDevice> dBItems = new List<IDBDevice>(devices.Count());
+			List<IDevice> dBItems = new List<IDevice>(devices.Count());
 
 			foreach (IDeviceBase device in devices)
 			{

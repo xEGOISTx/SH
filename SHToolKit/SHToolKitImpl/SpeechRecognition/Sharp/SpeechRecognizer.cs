@@ -47,6 +47,7 @@ namespace SHToolKit.SpeechRecognition
 		public async Task<bool> Init(string argFile)
 		{
 			bool checkResult = await CheckDLLs();
+			bool result = true;
 
 			if (!checkResult)
 			{
@@ -55,7 +56,7 @@ namespace SHToolKit.SpeechRecognition
 
 			if (!IsInit)
 			{
-				return await Task.Run(() =>
+				await Task.Run(() =>
 				{
 					_ps = SphinxWrapper.InitSphinx(argFile);
 					_ad = SphinxWrapper.OpenRecordingDevice(_ps);
@@ -64,12 +65,16 @@ namespace SHToolKit.SpeechRecognition
 					{
 						IsInit = true;
 					}
+					else
+					{
+						result = false;
+					}
 
-					return false;
+					//return result;
 				});
 			}
 
-			return true;
+			return result;
 		}
 
 		/// <summary>

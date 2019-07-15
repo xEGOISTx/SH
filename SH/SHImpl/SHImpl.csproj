@@ -121,11 +121,21 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Aditional\Device.cs" />
+    <Compile Include="Communication\CommandNames.cs" />
+    <Compile Include="Communication\Communicator.cs" />
+    <Compile Include="Communication\ConnectorByWiFi.cs" />
+    <Compile Include="Communication\DeviceInfo.cs" />
+    <Compile Include="Consts.cs" />
     <Compile Include="DevicesManagement\ConnectionParamsToRouterAsAP.cs" />
     <Compile Include="Aditional\ConnectionSettings.cs" />
+    <Compile Include="DevicesManagement\DeviceConnectionInfo.cs" />
+    <Compile Include="DevicesManagement\DevicesConnectionInfo.cs" />
+    <Compile Include="DevicesManagement\DevicesFinder.cs" />
     <Compile Include="DevicesManagement\DevicesManager.cs" />
-    <Compile Include="DevicesManagement\OperationResult.cs" />
+    <Compile Include="OperationsResult\FindDevicesOperationResult.cs" />
+    <Compile Include="OperationsResult\OperationResult.cs" />
     <Compile Include="DevicesManagement\RouterCredentals.cs" />
+    <Compile Include="OperationsResult\GetBaseInfoResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Node.cs" />
     <EmbeddedResource Include="Properties\SHImpl.rd.xml" />

@@ -9,6 +9,6 @@ namespace SHToolKit
 {
 	public interface IParseOperationResult : SHBase.IOperationResult
 	{
-		IEnumerable<IPAddress> IPs { get; }
+		IEnumerable<string> IPs { get; }
 	}
 }
