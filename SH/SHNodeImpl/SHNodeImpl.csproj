@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>SH.Node</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\SHCore\ISHCore\ISHCore.csproj" />
+    <ProjectReference Include="..\..\SHCore\SHCoreImpl\SHCoreImpl.csproj" />
+    <ProjectReference Include="..\ISHNode\ISHNode.csproj" />
+  </ItemGroup>
+
+</Project>
