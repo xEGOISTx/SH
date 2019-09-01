@@ -17,6 +17,8 @@ namespace SH.Communication
 
 		public bool IsEditing { get; private set; }
 
+		internal ConnectionParams OriginalCopyConnectionParams => _originalCopyConnectionParams;
+
 		public void ChangeAPSSIDsForSearch(string[] aPSSIDsForSearch)
 		{
 			if(IsEditing)
@@ -47,15 +49,15 @@ namespace SH.Communication
 		{
 			if(IsEditing)
 			{
-				(_targetConnectionParams.ConnectionParamsToRouter.ConnectionParams as Core.ConnectionParamsToAP).Password = routerAPPassword;
+				_targetConnectionParams.RouterAPPassword = routerAPPassword;
 			}
 		}
 
-		public void ChangeRouterIP(IPAddress ip)
+		public void ChangeRouterUriToParse(string uriToParse)
 		{
 			if (IsEditing)
 			{
-				(_targetConnectionParams.ConnectionParamsToRouter as ConnectionParamsToRouter).RouterIP = ip;
+				_targetConnectionParams.RouterUriToParse = new Uri(uriToParse);
 			}
 		}
 
@@ -63,7 +65,7 @@ namespace SH.Communication
 		{
 			if(IsEditing)
 			{
-				(_targetConnectionParams.ConnectionParamsToRouter.Credentials as Core.Credentials).Login = routerLogin;
+				_targetConnectionParams.RouterLogin = routerLogin;
 			}
 		}
 
@@ -71,7 +73,7 @@ namespace SH.Communication
 		{
 			if (IsEditing)
 			{
-				(_targetConnectionParams.ConnectionParamsToRouter.Credentials as Core.Credentials).Password = routerPassword;
+				_targetConnectionParams.RouterPassword = routerPassword;
 			}
 		}
 
@@ -79,7 +81,7 @@ namespace SH.Communication
 		{
 			if (IsEditing)
 			{
-				(_targetConnectionParams.ConnectionParamsToRouter.ConnectionParams as Core.ConnectionParamsToAP).SSID = routerSsid;
+				_targetConnectionParams.RouterSsid = routerSsid;
 			}
 		}
 
@@ -93,53 +95,48 @@ namespace SH.Communication
 			}
 		}
 
-		public void EndEditing(bool applyCancelChanges)
+        public void EndEditing(bool applyCancelChanges)
+        {
+            if (IsEditing)
+            {
+                if (applyCancelChanges)
+                {
+                    if (OnApply().Cancel)
+                    {
+                        CancelChanges();
+                    }
+                }
+                else
+                {
+                    CancelChanges();
+                }
+
+                _originalCopyConnectionParams = null;
+                IsEditing = false;
+            }
+        }
+
+
+		private void CancelChanges()
 		{
-			if(IsEditing)
-			{
-				if(applyCancelChanges)
-				{
-					if(OnApply().Cancel)
-					{
-						FillFromCopy();
-					}
-				}
-				else
-				{
-					FillFromCopy();				
-				}
-			}
-
-			_originalCopyConnectionParams = null;
-			IsEditing = false;
-		}
-
-
-		private void FillFromCopy()
-		{
+			_targetConnectionParams.RouterUriToParse =  _originalCopyConnectionParams.RouterUriToParse;
+			_targetConnectionParams.RouterSsid = _originalCopyConnectionParams.RouterSsid;
+			_targetConnectionParams.RouterAPPassword = _originalCopyConnectionParams.RouterAPPassword;
+			_targetConnectionParams.RouterLogin = _originalCopyConnectionParams.RouterLogin;
+			_targetConnectionParams.RouterPassword = _originalCopyConnectionParams.RouterPassword;
 			_targetConnectionParams.DeviceDafaultIP = _originalCopyConnectionParams.DeviceDafaultIP;
 			_targetConnectionParams.DeviceAPPassword = _originalCopyConnectionParams.DeviceAPPassword;
 
 			APSSIDs targetAPSSIDs = _targetConnectionParams.APSSIDsForSearch as APSSIDs;
 			targetAPSSIDs.Clear();
 			targetAPSSIDs.AddRange(_originalCopyConnectionParams.APSSIDsForSearch.List);
-
-			(_targetConnectionParams.ConnectionParamsToRouter as ConnectionParamsToRouter).RouterIP =  _originalCopyConnectionParams.ConnectionParamsToRouter.RouterIP;
-
-			Core.ConnectionParamsToAP paramsToRouter = _targetConnectionParams.ConnectionParamsToRouter.ConnectionParams as Core.ConnectionParamsToAP;
-			paramsToRouter.SSID = _originalCopyConnectionParams.ConnectionParamsToRouter.ConnectionParams.SSID;
-			paramsToRouter.Password = _originalCopyConnectionParams.ConnectionParamsToRouter.ConnectionParams.Password;
-
-			Core.Credentials routerCreadentials = _targetConnectionParams.ConnectionParamsToRouter.Credentials as Core.Credentials;
-			routerCreadentials.Login = _originalCopyConnectionParams.ConnectionParamsToRouter.Credentials.Login;
-			routerCreadentials.Password = _originalCopyConnectionParams.ConnectionParamsToRouter.Credentials.Password;
 		}
 
-		private ApplyConnectionParamsEventArg OnApply()
+		private ApplyConnectionParamsEventArgs OnApply()
 		{
-			ApplyConnectionParamsEventArg arg = new ApplyConnectionParamsEventArg(_targetConnectionParams);
-			Apply?.Invoke(this, arg);
-			return arg;
+			ApplyConnectionParamsEventArgs args = new ApplyConnectionParamsEventArgs(_targetConnectionParams);
+			Apply?.Invoke(this, args);
+			return args;
 		}
 
 		public event ApplyConnectionParamsEventHandler Apply;

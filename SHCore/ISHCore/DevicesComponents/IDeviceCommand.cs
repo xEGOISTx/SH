@@ -1,21 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SH.Core
+﻿namespace SH.Core.DevicesComponents
 {
 	/// <summary>
 	/// Команда для устройства
 	/// </summary>
 	public interface IDeviceCommand
 	{
-		/// <summary>
-		/// Идентификатор команды
-		/// </summary>
-		int ID { get; }
+        IDevice Owner { get; }
+
+        /// <summary>
+        /// Идентификатор команды
+        /// </summary>
+        int ID { get; }
+
+		string CommandName { get; }
 
 		/// <summary>
 		/// Описание
@@ -30,6 +27,6 @@ namespace SH.Core
 		/// <summary>
 		/// Выполнить команду
 		/// </summary>
-		void Execute();
+		void Execute(string parameter = null);
 	}
 }

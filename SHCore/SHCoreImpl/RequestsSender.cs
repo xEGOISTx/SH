@@ -11,14 +11,14 @@ namespace SH.Core
 	/// </summary>
 	public abstract class RequestsSender
 	{
-		/// <summary>
-		/// Отправить устройству запрос
-		/// </summary>
-		/// <param name="deviceIP"></param>
-		/// <param name="commandName"></param>
-		/// <param name="content"></param>
-		/// <returns></returns>
-		protected async Task<IRequestOperationResult> SendToDevice(IPAddress deviceIP, string commandName, IEnumerable<RequestParameter> content = null)
+        /// <summary>
+        /// Отправить устройству запрос
+        /// </summary>
+        /// <param name="deviceIP"></param>
+        /// <param name="commandName"></param>
+        /// <param name="content"></param>
+        /// <returns></returns>
+        protected async Task<IRequestOperationResult> SendToDeviceAsync(IPAddress deviceIP, string commandName, IEnumerable<RequestParameter> content = null)
 		{
 			return await Task.Run(async () =>
 			{

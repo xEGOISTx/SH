@@ -8,6 +8,7 @@
 		GetID,
 		SetID,
 		ConnectionParams,
-		SetHostIP
+		SetHostIP,
+		GetCommands
 	}
 }

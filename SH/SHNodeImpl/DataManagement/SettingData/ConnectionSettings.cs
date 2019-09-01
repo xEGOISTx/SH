@@ -21,25 +21,25 @@ namespace SH.DataManagement
 		private void FillParameters(IConnectionParams connectionParams)
 		{
 			List<IParameter> parameters = new List<IParameter>();
-			IConnectionParamsToRouter paramsToRouter = connectionParams.ConnectionParamsToRouter;
+			//IConnectionParamsToRouter paramsToRouter = connectionParams.ConnectionParamsToRouter;
 
 			Parameter routerIP = new Parameter
 			{
-				Index = (int)ParamName.RouterIP,
-				Value = paramsToRouter.RouterIP != null ? paramsToRouter.RouterIP.ToString() : string.Empty
+				Index = (int)ParamName.RouterUriToParse,
+				Value =  connectionParams.RouterUriToParse.AbsoluteUri
 			};
 			parameters.Add(routerIP);
 
-			Parameter routerSsid = new Parameter { Index = (int)ParamName.RouterSsid, Value = paramsToRouter.ConnectionParams.SSID };
+			Parameter routerSsid = new Parameter { Index = (int)ParamName.RouterSsid, Value = connectionParams.RouterSsid};
 			parameters.Add(routerSsid);
 
-			Parameter routerAPPassword = new Parameter { Index = (int)ParamName.RouterAPPassword, Value = paramsToRouter.ConnectionParams.Password };
+			Parameter routerAPPassword = new Parameter { Index = (int)ParamName.RouterAPPassword, Value = connectionParams.RouterAPPassword };
 			parameters.Add(routerAPPassword);
 
-			Parameter routerLogin = new Parameter { Index = (int)ParamName.RouterLogin, Value = paramsToRouter.Credentials.Login };
+			Parameter routerLogin = new Parameter { Index = (int)ParamName.RouterLogin, Value = connectionParams.RouterLogin };
 			parameters.Add(routerLogin);
 
-			Parameter routerPassword = new Parameter { Index = (int)ParamName.RouterPassword, Value = paramsToRouter.Credentials.Password };
+			Parameter routerPassword = new Parameter { Index = (int)ParamName.RouterPassword, Value = connectionParams.RouterPassword };
 			parameters.Add(routerPassword);
 
 			Parameter deviceDafaultIP = new Parameter

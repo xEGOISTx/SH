@@ -1,11 +1,11 @@
 ﻿using System.Net;
 
-namespace SH.Core
+namespace SH.Core.DevicesComponents
 {
 	/// <summary>
 	/// Основа всех устройств
 	/// </summary>
-	public interface IDeviceBase
+	public interface IDevice
 	{
 		/// <summary>
 		/// Уникальный идентификатор
@@ -15,7 +15,7 @@ namespace SH.Core
 		/// <summary>
 		/// Системное имя устройства
 		/// </summary>
-		string Name { get; }
+		//string SystemName { get; }
 
 		/// <summary>
 		/// Назвние устройства
@@ -43,13 +43,13 @@ namespace SH.Core
 		int DeviceType { get; }
 
 		/// <summary>
-		/// Тип прошивки. Характерезует физическую модель устройства.
+		/// Тип прошивки. Характерезует физическую модель устройства
 		/// </summary>
-		int FirmwareType { get; }
+		//int FirmwareType { get; }
 
 		/// <summary>
 		/// Список исполняемых задачь устройством
 		/// </summary>
-		IDeviceBaseCommandList Tasks { get; }
+		IDeviceCommandList Commands { get; }
 	}
 }

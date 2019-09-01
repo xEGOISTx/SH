@@ -1,12 +1,17 @@
 ﻿using System.Collections.Generic;
 
-namespace SH.Core
+namespace SH.Core.DevicesComponents
 {
 	/// <summary>
 	/// Список команд
 	/// </summary>
-	public interface IDeviceBaseCommandList : IEnumerable<IDeviceCommand>
+	public interface IDeviceCommandList : IEnumerable<IDeviceCommand>
 	{
+		/// <summary>
+		/// Редактор команд
+		/// </summary>
+		IDeviceCommandEditor Editor { get; }
+
 		/// <summary>
 		/// Возвращает задачу по id
 		/// </summary>
@@ -19,6 +24,12 @@ namespace SH.Core
 		/// </summary>
 		/// <param name="voiceCommand"></param>
 		/// <returns></returns>
-		IDeviceCommand GetByVoiceCommand(string voiceCommand);
+		//IDeviceCommand GetByVoiceCommand(string voiceCommand);
+
+		/// <summary>
+		/// Добавить команду
+		/// </summary>
+		/// <param name="command"></param>
+		//void Add(IDeviceCommand command);
 	}
 }

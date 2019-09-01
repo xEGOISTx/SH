@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Net;
 using SH.DataManagement;
+using SH.Node;
 
 namespace SH.Communication
 {
 	internal enum ParamName
 	{
-		RouterIP = 1,
+		RouterUriToParse = 1,
 		RouterSsid,
 		RouterAPPassword,
 		RouterLogin,
@@ -20,36 +21,80 @@ namespace SH.Communication
 
 	internal class ConnectionParams : IConnectionParams
 	{
-		public ConnectionParams()
+		internal ConnectionParams()
 		{
-			ConnectionParamsToRouter = new ConnectionParamsToRouter
-			{
-				Credentials = new Core.Credentials(),
-				ConnectionParams = new Core.ConnectionParamsToAP()
-			};
-
 			Editor = new ConnectionParamsEditor(this);
 		}
 
-		public ConnectionParams(IConnectionSettings connectionSettings) : base()
-		{
-			InsertConnetionSettings(connectionSettings);
-		}
+	
+		public Uri RouterUriToParse { get; set; } = new Uri("");
 
+        public string RouterLogin { get; set; } = string.Empty;
 
-		public IAPSSIDs APSSIDsForSearch { get; set; } = new APSSIDs();
+		public string RouterPassword { get; set; } = string.Empty;
+
+        public string RouterSsid { get; set; } = string.Empty;
+
+        public string RouterAPPassword { get; set; } = string.Empty;
+
+        public IAPSSIDs APSSIDsForSearch { get; internal set; } = new APSSIDs();
 
 		public IPAddress DeviceDafaultIP { get; set; }
 
 		public string DeviceAPPassword { get; set; } = string.Empty;
 
-		public IConnectionParamsToRouter ConnectionParamsToRouter { get; set; }
+        public IConnectionParamsEditor Editor { get; }
 
-		public IConnectionParamsEditor Editor { get; }
 
-		public void InsertConnetionSettings(IConnectionSettings connectionSettings)
+
+		internal ConnectionParamsToRouter GetConnectionParamsToRouter()
 		{
-			if (connectionSettings.Parameters != null)
+			if (Editor.IsEditing)
+			{
+				return GetConnParams((Editor as ConnectionParamsEditor).OriginalCopyConnectionParams);
+			}
+			else
+			{
+				return GetConnParams(this);
+			}
+
+			ConnectionParamsToRouter GetConnParams(ConnectionParams target)
+			{
+				return new ConnectionParamsToRouter
+				{
+					RouterUriToParse = target.RouterUriToParse,
+					Credentials = new Core.Credentials { Login = target.RouterLogin, Password = target.RouterPassword },
+					ConnectionParams = new Core.ConnectionParamsToAP { SSID = target.RouterSsid, Password = target.RouterAPPassword }
+				};
+			}
+
+		}
+
+		internal ConnectionParamsToDevice GetConnectionParamsToDevice()
+		{
+			if (Editor.IsEditing)
+			{
+				return GetConnParams((Editor as ConnectionParamsEditor).OriginalCopyConnectionParams);
+			}
+			else
+			{
+				return GetConnParams(this);
+			}
+
+			ConnectionParamsToDevice GetConnParams(ConnectionParams target)
+			{
+				return new ConnectionParamsToDevice
+				{
+					APSSIDsForSearch = target.APSSIDsForSearch,
+					DeviceAPPassword = target.DeviceAPPassword,
+					DeviceDafaultIP = target.DeviceDafaultIP ?? Consts.ZERO_IP
+				};
+			}
+		}
+
+		internal void InsertConnetionSettings(IConnectionSettings connectionSettings)
+		{
+			if (connectionSettings.Parameters != null && connectionSettings.Parameters.Length > 0)
 			{
 				Dictionary<ParamName, string> connParams = new Dictionary<ParamName, string>();
 
@@ -58,41 +103,45 @@ namespace SH.Communication
 					connParams.Add((ParamName)parameter.Index, parameter.Value);
 				}
 
+				RouterSsid = connParams[ParamName.RouterSsid];
+				RouterAPPassword = connParams[ParamName.RouterAPPassword];
+				RouterLogin = connParams[ParamName.RouterLogin];
+				RouterPassword = connParams[ParamName.RouterPassword];
+				DeviceAPPassword = connParams[ParamName.DeviceAPPassword];
+
 				if (connParams[ParamName.DeviceDafaultIP] != string.Empty)
 				{
 					DeviceDafaultIP = IPAddress.Parse(connParams[ParamName.DeviceDafaultIP]);
 				}
 
-				DeviceAPPassword = connParams[ParamName.DeviceAPPassword];
+				//if (connParams[ParamName.RouterUriToParse] != string.Empty)
+				//{
+				RouterUriToParse = new Uri(connParams[ParamName.RouterUriToParse]);
+				//}
 
 				APSSIDs targetAPSSIDs = APSSIDsForSearch as APSSIDs;
 				string APSSIDs = connParams[ParamName.APSSIDsForSearch];
 				targetAPSSIDs.Clear();
 				targetAPSSIDs.AddRange(APSSIDs.Split(new char[] { '&' }, StringSplitOptions.RemoveEmptyEntries));
-
-				if (connParams[ParamName.RouterIP] != string.Empty)
-				{
-					(ConnectionParamsToRouter as ConnectionParamsToRouter).RouterIP = IPAddress.Parse(connParams[ParamName.RouterIP]);
-				}
-
-				Core.ConnectionParamsToAP paramsToRouter = ConnectionParamsToRouter.ConnectionParams as Core.ConnectionParamsToAP;
-				paramsToRouter.SSID = connParams[ParamName.RouterSsid];
-				paramsToRouter.Password = connParams[ParamName.RouterAPPassword];
-
-				Core.Credentials routerCreadentials = ConnectionParamsToRouter.Credentials as Core.Credentials;
-				routerCreadentials.Login = connParams[ParamName.RouterLogin];
-				routerCreadentials.Password = connParams[ParamName.RouterPassword];
 			}
 		}
 
-		public ConnectionParams GetCopy()
+		internal ConnectionParams GetCopy()
 		{
 			ConnectionParams connParamsCopy = new ConnectionParams
-			{				
+			{	
+				RouterLogin = this.RouterLogin,
+				RouterPassword = this.RouterPassword,
+				RouterSsid = this.RouterSsid,
+				RouterAPPassword = this.RouterAPPassword,				
 				DeviceAPPassword = DeviceAPPassword,
 				APSSIDsForSearch = (APSSIDsForSearch as APSSIDs).GetCopy(),
-				ConnectionParamsToRouter = (ConnectionParamsToRouter as ConnectionParamsToRouter).GetCopy()
 			};
+
+			if(RouterUriToParse != null)
+			{
+				connParamsCopy.RouterUriToParse = new Uri(RouterUriToParse.AbsoluteUri);
+			}
 
 			if(DeviceDafaultIP != null)
 			{

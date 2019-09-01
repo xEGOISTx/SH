@@ -9,6 +9,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using SH.Core;
+using SH.Core.DevicesComponents;
 using SH.Node;
 
 namespace SH.Communication
@@ -56,11 +57,10 @@ namespace SH.Communication
 		/// Возвращает базовую инфу об устройстве
 		/// </summary>
 		/// <param name="deviceIP"></param>
-		/// <param name="asAP">Получить инфо устройсва как точки доступа</param>
 		/// <returns></returns>
-		public async Task<OperationGetBaseInfoResult> GetDeviceInfo(IPAddress deviceIP, bool asAP = false)
+		public async Task<GetBaseInfoOperationResult> GetDeviceInfo(IPAddress deviceIP/*, bool asAP = false*/)
 		{
-			OperationGetBaseInfoResult result = new OperationGetBaseInfoResult();
+			GetBaseInfoOperationResult result = new GetBaseInfoOperationResult();
 
 			if(deviceIP == null)
 			{
@@ -68,92 +68,121 @@ namespace SH.Communication
 				return result;
 			}
 
-
 			return await Task.Run(async () =>
 			{  
 				DeviceInfo deviceInfo = null;
-				IPAddress curIP = deviceIP;                                    
+				//IPAddress curIP = deviceIP;                                    
 
 				IRequestOperationResult getInfoResult = await SendToDevice(deviceIP, CommandName.GetInfo);
 
-				if(asAP)
-				{
-					curIP = await GetLocalIPFromDevice(deviceIP);
-				}
+				//if(asAP)
+				//{
+				//	curIP = await GetLocalIPFromDevice(deviceIP);
+				//}
 
-				if (getInfoResult.Success && curIP != null)
+				if (getInfoResult.Success /*&& curIP != null*/)
 				{
 					string[] info = getInfoResult.ResponseMessage.Split('&');
 
-					deviceInfo = new DeviceInfo(curIP)
+					deviceInfo = new DeviceInfo()
 					{
 						ID = ushort.Parse(info[0]),
-						FirmwareType = int.Parse(info[1]),
+
+						//FirmwareType = int.Parse(info[1]),
 						Mac = new MacAddress(info[2]),
 						Name = info[3],
 						DeviceType = int.Parse(info[4]),
-						IsConnected = curIP != Consts.ZERO_IP
+						IsConnected = true
 					};
 
 					result.Success = true;
-					result.BasicInfo = deviceInfo;
+					result.DeviceBasicInfo = deviceInfo;
 				}
 				else if(!getInfoResult.Success)
 				{
 					result.ErrorMessage = getInfoResult.ErrorMessage;
-				}
-				else if(curIP == null)
-				{
-					result.ErrorMessage = "Не удалось получить IP";
 				}
 
 				return result;
 			});
 		}
 
-		/// <summary>
-		/// Получить ID устройства
-		/// </summary>
-		/// <param name="device"></param>
-		/// <returns></returns>
-		public async Task<int> GetDeviceID(IPAddress deviceIP)
+		public async Task<GetDeviceCommandsOperationResult> GetDeviceCommands(IPAddress deviceIP)
 		{
+			GetDeviceCommandsOperationResult result = new GetDeviceCommandsOperationResult();
+
+			if (deviceIP == null)
+			{
+				result.ErrorMessage = "deviceIP не может быть null";
+				return result;
+			}
+
 			return await Task.Run(async () =>
 			{
-				if (deviceIP != null && deviceIP != Consts.ZERO_IP)
-				{
-					IRequestOperationResult result = await SendToDevice(deviceIP, CommandName.GetID);
+				IRequestOperationResult getCommandsResult = await SendToDevice(deviceIP, CommandName.GetCommands);
 
-					if (result.Success)
-					{
-						return ushort.Parse(result.ResponseMessage);
-					}
-					else
-					{
-						return -1;
-					}
+				if(getCommandsResult.Success)
+				{
+					string[] commandsParams = getCommandsResult.ResponseMessage.Split('&');
+                    List<DeviceCommandInfo> commandsInfos = new List<DeviceCommandInfo>(commandsParams.Length);
+
+                    foreach(string commandParams in commandsParams)
+                    {
+                        string[] cParams = commandParams.Split('=');
+                        commandsInfos.Add(new DeviceCommandInfo { ID = int.Parse(cParams[0]), CommandName = cParams[1] });
+                    }
+
+					result.CommandsInfos = commandsInfos;
+					result.Success = true;
+				}
+				else
+				{
+					result.ErrorMessage = getCommandsResult.ErrorMessage;
 				}
 
-				return -1;
+				return result;
 			});
-
 		}
+
+        /// <summary>
+        /// Получить ID устройства
+        /// </summary>
+        /// <param name="device"></param>
+        /// <returns></returns>
+        public async Task<int> GetDeviceIDAsync(IPAddress deviceIP)
+        {
+            if (deviceIP != null && deviceIP != Consts.ZERO_IP)
+            {
+                IRequestOperationResult result = await SendToDevice(deviceIP, CommandName.GetID);
+
+                if (result.Success)
+                {
+                    return ushort.Parse(result.ResponseMessage);
+                }
+                else
+                {
+                    return -1;
+                }
+            }
+
+            return -1;
+        }
 
 		/// <summary>
 		/// Проверить соединение с устройством
 		/// </summary>
 		/// <param name="device"></param>
 		/// <returns></returns>
-		public async Task<bool> CheckConnection(IDeviceBase device)
+		public async Task<bool> CheckConnection(IDevice device)
 		{
 			if (device.IP != null)
 			{
-				OperationGetBaseInfoResult getInfoResult = await GetDeviceInfo(device.IP);
+				GetBaseInfoOperationResult getInfoResult = await GetDeviceInfo(device.IP);
 
 				if (getInfoResult.Success &&
-					getInfoResult.BasicInfo.ID == device.ID &&
-					getInfoResult.BasicInfo.Mac == device.Mac &&
-					getInfoResult.BasicInfo.DeviceType == device.DeviceType)
+					getInfoResult.DeviceBasicInfo.ID == device.ID &&
+					getInfoResult.DeviceBasicInfo.Mac == device.Mac &&
+					getInfoResult.DeviceBasicInfo.DeviceType == device.DeviceType)
 				{
 					return true;
 				}
@@ -291,7 +320,7 @@ namespace SH.Communication
 		/// <returns></returns>
 		private async Task<IRequestOperationResult> SendToDevice(IPAddress deviceIP, CommandName commandName, IEnumerable<RequestParameter> content = null)
 		{
-			return await SendToDevice(deviceIP, commandName.ToString(), content);
+			return await SendToDeviceAsync(deviceIP, commandName.ToString(), content);
 		}
 	}
 }

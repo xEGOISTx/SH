@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Net;
-using System.Threading.Tasks;
 
-namespace SH.Core
+namespace SH.Core.DevicesComponents
 {
 	/// <summary>
 	/// Отправитель команд устройству
@@ -18,12 +15,23 @@ namespace SH.Core
 		/// </summary>
 		/// <param name="devIP"></param>
 		/// <param name="commandName"></param>
-		public async void SendCommandToDevice(IPAddress devIP, string commandName)
+		public async void SendCommandToDevice(IPAddress devIP, string commandName, string parameter = null)
 		{
 			if (_taskIsCompleted)
 			{
 				_taskIsCompleted = false;
-				IRequestOperationResult result = await SendToDevice(devIP, commandName);
+				if(parameter == null)
+				{
+					parameter = string.Empty;
+				}
+
+				List<RequestParameter> rParams = new List<RequestParameter>
+				{
+					new RequestParameter("p1", parameter)
+				};
+
+
+				IRequestOperationResult result = await SendToDeviceAsync(devIP, commandName, rParams);
 				_taskIsCompleted = true;
 			}
 

@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 
 namespace SH.Communication
 {
@@ -7,6 +8,18 @@ namespace SH.Communication
 	/// </summary>
 	public interface IConnectionParams
 	{
+
+		Uri RouterUriToParse { get; }
+
+		string RouterLogin { get; }
+
+		string RouterPassword { get; }
+
+		string RouterSsid { get; }
+
+		string RouterAPPassword { get; }
+
+
 		/// <summary>
 		/// Список имён точек для поиска
 		/// </summary>
@@ -22,10 +35,6 @@ namespace SH.Communication
 		/// </summary>
 		string DeviceAPPassword { get; }
 
-		/// <summary>
-		/// Параметры для подключения к роутеру
-		/// </summary>
-		IConnectionParamsToRouter ConnectionParamsToRouter { get; }
 
 		/// <summary>
 		/// Редактор параметров

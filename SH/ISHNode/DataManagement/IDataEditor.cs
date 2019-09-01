@@ -9,6 +9,6 @@ namespace SH.DataManagement
 {
 	public interface IDataEditor
 	{
-		IOperationResult RenameDevice(IDevice device);
+		IOperationResult RenameDevice(IDeviceData device);
 	}
 }

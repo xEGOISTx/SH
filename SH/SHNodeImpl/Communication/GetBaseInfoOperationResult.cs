@@ -1,9 +1,9 @@
 ﻿namespace SH.Communication
 {
-	internal class OperationGetBaseInfoResult : Core.IOperationResult
+	internal class GetBaseInfoOperationResult : Core.IOperationResult
 	{
 
-		public DeviceInfo BasicInfo { get; set; }
+		public DeviceInfo DeviceBasicInfo { get; set; }
 
 		public bool Success { get; set; }
 

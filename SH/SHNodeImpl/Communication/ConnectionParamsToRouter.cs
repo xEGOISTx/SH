@@ -6,9 +6,9 @@ using SH.Core;
 
 namespace SH.Communication
 {
-	internal class ConnectionParamsToRouter : IConnectionParamsToRouter
+	internal class ConnectionParamsToRouter
 	{
-		public IPAddress RouterIP { get; set; }
+		public Uri RouterUriToParse { get; set; } = new Uri("");
 
 		public IConnectionParamsToAP ConnectionParams { get; set; } = new ConnectionParamsToAP();
 
@@ -31,10 +31,10 @@ namespace SH.Communication
 				}
 			};
 
-			if(RouterIP != null)
-			{
-				connPCopy.RouterIP = IPAddress.Parse(this.RouterIP.ToString());
-			}
+			//if(RouterUriToParse != null)
+			//{
+			connPCopy.RouterUriToParse = new Uri(this.RouterUriToParse.AbsoluteUri);
+			//}
 
 			return connPCopy;
 		}

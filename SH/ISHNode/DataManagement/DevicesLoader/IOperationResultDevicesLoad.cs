@@ -4,6 +4,6 @@ namespace SH.DataManagement
 {
 	public interface IOperationResultDevicesLoad : IOperationResult
 	{
-		IDevice[] Devices { get; }
+		IDeviceData[] Devices { get; }
 	}
 }

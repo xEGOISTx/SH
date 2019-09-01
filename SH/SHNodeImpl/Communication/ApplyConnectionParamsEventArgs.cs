@@ -4,10 +4,10 @@ using System.Text;
 
 namespace SH.Communication
 {
-	internal delegate void ApplyConnectionParamsEventHandler(object sender, ApplyConnectionParamsEventArg e);
-	internal class ApplyConnectionParamsEventArg
+	internal delegate void ApplyConnectionParamsEventHandler(object sender, ApplyConnectionParamsEventArgs e);
+	internal class ApplyConnectionParamsEventArgs : EventArgs
 	{
-		public ApplyConnectionParamsEventArg(IConnectionParams connectionParams)
+		public ApplyConnectionParamsEventArgs(IConnectionParams connectionParams)
 		{
 			ConnectionParams = connectionParams;
 		}

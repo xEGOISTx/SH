@@ -5,8 +5,10 @@ using System.Linq;
 
 namespace SH.Communication
 {
-	internal class APSSIDs : IAPSSIDs
+	public class APSSIDs : IAPSSIDs
 	{
+		internal APSSIDs() { }
+
 		private readonly HashSet<string> _ssidsForSearch = new HashSet<string>();
 
 		public IEnumerable<string> List => _ssidsForSearch;
@@ -42,7 +44,7 @@ namespace SH.Communication
 			_ssidsForSearch.Clear();
 		}
 
-		public APSSIDs GetCopy()
+		internal APSSIDs GetCopy()
 		{
 			APSSIDs copy = new APSSIDs();
 

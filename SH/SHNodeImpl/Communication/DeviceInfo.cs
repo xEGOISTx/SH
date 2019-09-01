@@ -12,13 +12,6 @@ namespace SH.Communication
 	/// </summary>
 	internal class DeviceInfo
 	{
-		public DeviceInfo(IPAddress iP)
-		{
-			IP = iP;
-		}
-
-		public IPAddress IP { get; set; }
-
 		public MacAddress Mac { get; set; }
 
 		public int ID { get; set; }
@@ -28,9 +21,5 @@ namespace SH.Communication
 		public bool IsConnected { get; set; }
 
 		public int DeviceType { get; set; }
-
-		public int FirmwareType { get; set; }
-
-		//public string Description { get; set; }
 	}
 }

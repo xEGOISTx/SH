@@ -1,22 +1,18 @@
-﻿using System.Net;
+﻿using SH.Core;
+using System.Net;
 
 namespace SH.Communication
 {
 	/// <summary>
 	/// Редактор параметров подключения
 	/// </summary>
-	public interface IConnectionParamsEditor
+	public interface IConnectionParamsEditor : IEditor
 	{
-		/// <summary>
-		/// Признак редактирования
-		/// </summary>
-		bool IsEditing { get; }
-
 		/// <summary>
 		/// Изменить IP роутера
 		/// </summary>
-		/// <param name="ip"></param>
-		void ChangeRouterIP(IPAddress ip);
+		/// <param name="uriToPrase"></param>
+		void ChangeRouterUriToParse(string uriToPrase);
 
 		/// <summary>
 		/// Изменить логин подключения к роутеру
@@ -59,16 +55,5 @@ namespace SH.Communication
 		/// </summary>
 		/// <param name="deviceAPPassword"></param>
 		void ChangeDeviceAPPassword(string deviceAPPassword);
-
-		/// <summary>
-		/// Начать редактирование
-		/// </summary>
-		void StartEditing();
-
-		/// <summary>
-		/// Завершить редактирование
-		/// </summary>
-		/// <param name="applyCancelChanges"></param>
-		void EndEditing(bool applyCancelChanges);
 	}
 }

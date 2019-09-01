@@ -1,15 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SH.Core;
 
 namespace SH.DataManagement
 {
+	/// <summary>
+	/// Загрузчик устройств
+	/// </summary>
 	public interface IDevicesLoader
 	{
+		/// <summary>
+		/// Возвращает устройства указанного типа
+		/// </summary>
+		/// <param name="devicesType"></param>
+		/// <returns></returns>
 		IOperationResultDevicesLoad LoadDevices(int devicesType);
 
-		IOperationResultSaveDevices SaveDevices(IDevice[] devices);
+
+		/// <summary>
+		/// Сохранить устройство
+		/// </summary>
+		/// <param name="device"></param>
+		/// <param name="commands"></param>
+		/// <returns></returns>
+		IOperationResult SaveDevice(IDeviceData device);
+
+        /// <summary>
+        /// Обновить параметры команд
+        /// </summary>
+        /// <param name="commands"></param>
+        /// <returns></returns>
+        IOperationResult UpdateDeviceCommands(IDeviceCommandData[] commands);
+
+		/// <summary>
+		/// Удалить устройство
+		/// </summary>
+		/// <param name="deviceID"></param>
+		/// <returns></returns>
+		IOperationResult RemoveDevice(int deviceID);
 	}
 }
