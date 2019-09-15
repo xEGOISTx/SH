@@ -15,16 +15,16 @@ namespace SH.Core
         /// Отправить устройству запрос
         /// </summary>
         /// <param name="deviceIP"></param>
-        /// <param name="commandName"></param>
+        /// <param name="requestName"></param>
         /// <param name="content"></param>
         /// <returns></returns>
-        protected async Task<IRequestOperationResult> SendToDeviceAsync(IPAddress deviceIP, string commandName, IEnumerable<RequestParameter> content = null)
+        protected async Task<IRequestOperationResult> SendToDeviceAsync(IPAddress deviceIP, string requestName, IEnumerable<RequestParameter> content = null)
 		{
 			return await Task.Run(async () =>
 			{
 				RequestOperationResult result = new RequestOperationResult();
 
-				string strContent = $"&{commandName}&";
+				string strContent = $"&{requestName}&";
 
 				if (content != null)
 				{

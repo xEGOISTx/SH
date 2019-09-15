@@ -9,7 +9,7 @@ using SH.Core.DevicesComponents;
 
 namespace SH.Node
 {
-	public class SHNode
+	public sealed class SHNode
 	{
 		private readonly DevicesManager _devicesManager;
 		private readonly IDataLoader _loader;

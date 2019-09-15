@@ -20,16 +20,12 @@ namespace SH.Core.DevicesComponents
 			if (_taskIsCompleted)
 			{
 				_taskIsCompleted = false;
-				if(parameter == null)
-				{
-					parameter = string.Empty;
-				}
+                List<RequestParameter> rParams = new List<RequestParameter>();
 
-				List<RequestParameter> rParams = new List<RequestParameter>
+                if (parameter == null && parameter != string.Empty)
 				{
-					new RequestParameter("p1", parameter)
-				};
-
+                    rParams.Add(new RequestParameter("p1", parameter));
+                }
 
 				IRequestOperationResult result = await SendToDeviceAsync(devIP, commandName, rParams);
 				_taskIsCompleted = true;

@@ -20,8 +20,7 @@ namespace SHMain.Main.ViewModels
 	{
 		public MainViewModel()
 		{
-			
-		}
+        }
 
 		public NodeViewModel NodeVM { get; private set; }
 

@@ -11,8 +11,8 @@
     <AssemblyName>SHMain</AssemblyName>
     <DefaultLanguage>ru-RU</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.17134.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.15063.0</TargetPlatformMinVersion>
+    <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.16299.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0.16299.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -158,6 +158,10 @@
     <ProjectReference Include="..\SHBase\SHBase\SHBase.csproj">
       <Project>{56a497fa-3a32-49f2-95dd-66d2d24b3d9d}</Project>
       <Name>SHBase</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SHCore\SHCoreImpl\SHCoreImpl.csproj">
+      <Project>{65ed33f3-a9b1-4d12-b1e7-a3e244879181}</Project>
+      <Name>SHCoreImpl</Name>
     </ProjectReference>
     <ProjectReference Include="..\SHToolKit\ISHToolKit\ISHToolKit.csproj">
       <Project>{7cbc218c-9c09-4a6a-b115-44c022560b22}</Project>

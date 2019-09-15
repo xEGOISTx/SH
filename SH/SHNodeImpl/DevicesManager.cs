@@ -151,9 +151,9 @@ namespace SH.Node
         {
             IOperationResult result = new OperationResult { Success = true };
 
-            if (!_searchModeIsActive && !_searchModeIsActive)
+            if (!_searchModeIsActive && !_refreshIsActive)
             {
-                _searchModeIsActive = true;
+                _refreshIsActive = true;
                 ConnectionParamsToRouter connToRouter = connectionParams.GetConnectionParamsToRouter();
 
                 if (connToRouter.RouterUriToParse.AbsoluteUri != string.Empty
@@ -184,9 +184,9 @@ namespace SH.Node
                     });
                 }
 
-                _searchModeIsActive = false;
+                _refreshIsActive = false;
             }
-            else if (!_searchModeIsActive)
+            else if (_searchModeIsActive)
             {
                 (result as OperationResult).Success = false;
                 (result as OperationResult).ErrorMessage = "Не допускается обновление устройств во время поиска устройств!";
