@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using SH.DataPorts;
 
 namespace SH.DataManagement
 {
-	internal class Parameter : IParameter
+    internal class Parameter : IParameter
 	{
 		public int Index { get; set; }
 

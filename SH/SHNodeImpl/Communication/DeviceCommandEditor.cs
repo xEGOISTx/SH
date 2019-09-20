@@ -91,7 +91,7 @@ namespace SH.Communication
 
         private ApplyCommandsChangesEventArgs OnApply()
         {
-            ApplyCommandsChangesEventArgs args = new ApplyCommandsChangesEventArgs(EditedCommands);
+            ApplyCommandsChangesEventArgs args = new ApplyCommandsChangesEventArgs(_commands.OwnerID, EditedCommands);
             Apply?.Invoke(this, args);
             return args;
         }

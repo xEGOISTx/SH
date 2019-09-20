@@ -7,6 +7,8 @@ namespace SH.Core.DevicesComponents
 	/// </summary>
 	public interface IDeviceCommandList : IEnumerable<IDeviceCommand>
 	{
+        int OwnerID { get; }
+
 		/// <summary>
 		/// Редактор команд
 		/// </summary>

@@ -1,4 +1,4 @@
-﻿namespace SH.DataManagement
+﻿namespace SH.DataPorts
 {
 	/// <summary>
 	/// Сохраняемая информация об устройстве

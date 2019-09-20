@@ -1,6 +1,6 @@
 ﻿using SH.Core;
 
-namespace SH.DataManagement
+namespace SH.DataPorts
 {
 	/// <summary>
 	/// Загрузчик устройств

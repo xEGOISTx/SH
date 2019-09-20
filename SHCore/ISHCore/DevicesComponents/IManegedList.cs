@@ -3,7 +3,7 @@ using System.Net;
 
 namespace SH.Core.DevicesComponents
 {
-	public interface IManegedList<DType> : IEnumerable<DType>
+	public interface IManegedList<out DType> : IEnumerable<DType>
 		where DType : IDevice
 	{
 		int Count { get; }
@@ -12,24 +12,16 @@ namespace SH.Core.DevicesComponents
 
 		DType GetByID(int id);
 
-		bool Contains(int id);
-
-		void Add(DType device);
-
-		void AddRange(IEnumerable<DType> devices);
-
-		void Remove(DType device);
+		bool IsPresent(int id);
 
 		void RefreshDeviceConnectionState(IDeviceConnectionState connectionInfo);
 
-		DType CreateDevice(int id, int deviceType, IPAddress iP, MacAddress mac, string description = null);
-
-		void SetCommandsToDevice(IDevice device, IDeviceCommandList commands);
+        DType AddNewDevice(int id, int deviceType, IPAddress iP, MacAddress mac, IDeviceCommandList commands, string description = null);
 
 		void HandleDeviceRequest(IDeviceRequest request);
 
         IDefaultDeviceCommandParams GetDefaultParamsForCommand(int commandID);
 
-		event DeviceEventHandler RemoveDevice;
+		event DeviceEventHandler RemovingDevice;
 	}
 }

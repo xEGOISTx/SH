@@ -1,11 +1,13 @@
-﻿namespace SH.Core.DevicesComponents
+﻿using System.Net;
+
+namespace SH.Core.DevicesComponents
 {
 	/// <summary>
 	/// Команда для устройства
 	/// </summary>
 	public interface IDeviceCommand
 	{
-        IDevice Owner { get; }
+        IPAddress OwnerIP { get; }
 
         /// <summary>
         /// Идентификатор команды

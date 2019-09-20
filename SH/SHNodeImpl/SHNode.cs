@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using SH.Core.DevicesComponents;
+using SH.DataPorts;
 
 namespace SH.Node
 {
@@ -16,17 +17,14 @@ namespace SH.Node
 		private readonly IConnector _connector;
 		private readonly ConnectionParams _connectionParams;
 		private readonly IRouterParser _routerParser;
-		private readonly IDevicesRequestsListener _requestsListener;
 		private bool _nodeIsInit;
 
 		public SHNode(IEnumerable<IManegedList<IDevice>> devices, IDataLoader loader, IConnector connector, IRouterParser routerParser, IDevicesRequestsListener requestsListener)
 		{
-			_devicesManager = new DevicesManager(devices, loader.GetDevicesLoader());
+            _devicesManager = new DevicesManager(devices, new Communicator(requestsListener), loader.GetDevicesLoader());
 			_loader = loader;
 			_connector = connector;
 			_routerParser = routerParser;
-			_requestsListener = requestsListener;
-			_requestsListener.DeviceRequest += RequestsListener_DeviceRequest;
 
 			_connectionParams =  new ConnectionParams();
 			(_connectionParams.Editor as ConnectionParamsEditor).Apply += SHNode_ApplyConnParams;
@@ -34,7 +32,6 @@ namespace SH.Node
 
 
 		public IConnectionParams ConnectionParams => _connectionParams;
-
 
 
 
@@ -62,7 +59,8 @@ namespace SH.Node
                             result = await _devicesManager.RefreshDevicesAsync(_connectionParams, _routerParser);
 
                             _nodeIsInit = true;
-                            _requestsListener.StartListening();
+                            //запускаем прослушку запросов от устройств
+                            _devicesManager.Communicator.RequestsListener.StartListening();
                         }
                     }
                     else
@@ -109,11 +107,6 @@ namespace SH.Node
 			{
 				e.Cancel = true;
 			}
-		}
-
-		private void RequestsListener_DeviceRequest(object sender, DeviceRequestEventArgs e)
-		{
-			_devicesManager.HandleRequestAsync(e.Request);
 		}
 	}
 }

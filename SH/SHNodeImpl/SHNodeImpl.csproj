@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\DataPorts\IDataPorts\IDataPorts.csproj" />
     <ProjectReference Include="..\..\SHCore\ISHCore\ISHCore.csproj" />
     <ProjectReference Include="..\..\SHCore\SHCoreImpl\SHCoreImpl.csproj" />
     <ProjectReference Include="..\ISHNode\ISHNode.csproj" />

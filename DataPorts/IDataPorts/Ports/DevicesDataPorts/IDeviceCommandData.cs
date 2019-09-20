@@ -1,4 +1,4 @@
-﻿namespace SH.DataManagement
+﻿namespace SH.DataPorts
 {
 	public interface IDeviceCommandData
 	{

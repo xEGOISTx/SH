@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using SH.DataPorts;
 
 namespace SH.DataManagement
 {
-	internal class DeviceCommandData : IDeviceCommandData
+    internal class DeviceCommandData : IDeviceCommandData
 	{
         public int OwnerID { get; set; }
 
@@ -15,7 +13,5 @@ namespace SH.DataManagement
 		public string VoiceCommand { get; set; }
 
 		public string Description { get; set; }
-
-
     }
 }

@@ -8,6 +8,7 @@ using System.Net;
 using System.Threading.Tasks;
 using MList = SH.Core.DevicesComponents.IManegedList<SH.Core.DevicesComponents.IDevice>;
 using System.Linq;
+using SH.DataPorts;
 
 namespace SH.Node
 {
@@ -20,17 +21,21 @@ namespace SH.Node
 		private bool _requestsProcessed;
         private bool _refreshIsActive;
 
-        public DevicesManager(IEnumerable<IManegedList<IDevice>> devices, IDevicesLoader loader)
+        public DevicesManager(IEnumerable<IManegedList<IDevice>> devices, Communicator communicator,IDevicesLoader loader)
 		{
 			foreach(MList devsList in devices)
 			{
 				DevsLists.Add(devsList.DevicesType, devsList);
 			}
 
-			_loader = loader;
+            Communicator = communicator;
+            Communicator.RequestFromDevice += Communicator_RequestFromDevice;
+            _loader = loader;
 		}
 
-		public Dictionary<int, MList> DevsLists { get; } = new Dictionary<int, MList>();
+        public Dictionary<int, MList> DevsLists { get; } = new Dictionary<int, MList>();
+
+        public Communicator Communicator { get; }
 
 		public void ActivateSearchModeAsync(IConnector connector, ConnectionParams connectionParams)
 		{
@@ -40,9 +45,7 @@ namespace SH.Node
 				ConnectionParamsToDevice connectionParamsToDevice = connectionParams.GetConnectionParamsToDevice();
 
 				Task.Run(async() =>
-				{
-					Communicator communicator = new Communicator();
-
+				{		
 					while (true)
 					{
 						connector.Clear();
@@ -56,14 +59,14 @@ namespace SH.Node
 								connector.ConnectTo(aP);
 
 								//TODO: сделать возврат результата операции как везде 
-								IPAddress ip = await communicator.GetLocalIPFromDevice(connectionParamsToDevice.DeviceDafaultIP);
+								IPAddress ip = await Communicator.GetLocalIPFromDevice(connectionParamsToDevice.DeviceDafaultIP);
 
 								if (ip != null)
 								{
 									if (ip == Consts.ZERO_IP)
 									{									
-										IOperationResult sendHIPRes = await communicator.SendHostIPToDevice(connectionParamsToDevice.DeviceDafaultIP, connector.GetHostIP());
-										IOperationResult sendConnParamsRes = await communicator.SendConnectionParamsToDevice(connectionParamsToDevice.DeviceDafaultIP, connectionParams.GetConnectionParamsToRouter().ConnectionParams);
+										IOperationResult sendHIPRes = await Communicator.SendHostIPToDevice(connectionParamsToDevice.DeviceDafaultIP, connector.GetHostIP());
+										IOperationResult sendConnParamsRes = await Communicator.SendConnectionParamsToDevice(connectionParamsToDevice.DeviceDafaultIP, connectionParams.GetConnectionParamsToRouter().ConnectionParams);
 									}
 								}
 								else
@@ -97,27 +100,27 @@ namespace SH.Node
 				_searchStop = true;
 		}
 
-        public void HandleRequestAsync(string request)
-        {
-            Task.Run(() =>
-            {
-                string[] requestParams = request.Split('&');
+        //public void HandleRequestAsync(string request)
+        //{
+        //    Task.Run(() =>
+        //    {
+        //        string[] requestParams = request.Split('&');
 
-                DeviceRequest deviceRequest = new DeviceRequest
-                {
-                    RequestType = int.Parse(requestParams[0]),
-                    DeviceType = int.Parse(requestParams[1]),
-                    DeviceIP = IPAddress.Parse(requestParams[2])
-                };
+        //        DeviceRequest deviceRequest = new DeviceRequest
+        //        {
+        //            RequestType = int.Parse(requestParams[0]),
+        //            DeviceType = int.Parse(requestParams[1]),
+        //            DeviceIP = IPAddress.Parse(requestParams[2])
+        //        };
 
-                _requestsQueue.Enqueue(deviceRequest);
+        //        _requestsQueue.Enqueue(deviceRequest);
 
-                if (!_requestsProcessed)
-                {
-                    ExecuteHandleRequests();
-                }
-            });
-        }
+        //        if (!_requestsProcessed)
+        //        {
+        //            ExecuteHandleRequests();
+        //        }
+        //    });
+        //}
 
         public IOperationResult LoadDevices()
         {
@@ -173,9 +176,12 @@ namespace SH.Node
                             {
                                 MList curMList = DevsLists[connState.Device.DeviceType];
                                 curMList.RefreshDeviceConnectionState(connState);
-                            }
 
-                            //TODO: Закончил тут
+                                foreach(DeviceCommand command in connState.Device.Commands)
+                                {
+                                    command.OwnerIP = connState.IP;
+                                }
+                            }
                         }
                         else
                         {
@@ -201,13 +207,12 @@ namespace SH.Node
 
 
             Dictionary<int, DeviceConnectionState> connStates = new Dictionary<int,DeviceConnectionState>();
-            Communicator communicator = new Communicator();
 
             //получаем состояния подкл. который изменились на true
             foreach (string sIP in iPs)
             {
                 IPAddress ip = IPAddress.Parse(sIP);
-                int id = await communicator.GetDeviceIDAsync(ip);
+                int id = await Communicator.GetDeviceIDAsync(ip);
 
                 if(id != -1)
                 {
@@ -240,7 +245,7 @@ namespace SH.Node
             {
                 if (!connStates.ContainsKey(device.ID))
                 {
-                    bool isConnected = await communicator.CheckConnection(device);
+                    bool isConnected = await Communicator.CheckConnection(device);
 
                     if (!isConnected)
                     {
@@ -269,7 +274,6 @@ namespace SH.Node
                     {
                         IDevice device = MakeDeviceFromData(deviceData, curMList);
                         (device.Commands.Editor as DeviceCommandEditor).Apply += CommandsEditor_Apply;
-                        curMList.Add(device);
                         DevicesInnerRegister.Add(device);
                     }
                 }
@@ -283,105 +287,94 @@ namespace SH.Node
             return result;
         }
 
-		private void ExecuteHandleRequests()
-		{
-                _requestsProcessed = true;
+        private void ExecuteHandleRequests()
+        {
+            _requestsProcessed = true;
 
-                Task.Run(async () =>
-				{
-					Communicator communicator = new Communicator();
+            Task.Run(async () =>
+            {
+                while (_requestsQueue.Count != 0)
+                {
+                    IDeviceRequest request = _requestsQueue.Dequeue();
+                    IPAddress devIP = request.DeviceIP;
 
-					while(_requestsQueue.Count != 0)
-					{
-						IDeviceRequest request = _requestsQueue.Dequeue();
-						IPAddress devIP = request.DeviceIP;
+                    if (request.RequestType == 1)//1 = устройство успешно подключилось после передачи параметров подключения
+                    {
+                        if (DevsLists.ContainsKey(request.DeviceType))
+                        {
+                            GetBaseInfoOperationResult baseInfoRes = await Communicator.GetDeviceInfo(devIP);
+                            GetDeviceCommandsOperationResult commandsRes = await Communicator.GetDeviceCommands(devIP);
 
-						if (request.RequestType >= 0 && request.RequestType <= 255)
-						{
-							if (request.RequestType == 1)//1 = устройство успешно подключилось после передачи параметров подключения
-							{
-								if(DevsLists.ContainsKey(request.DeviceType))
-								{
-                                    GetBaseInfoOperationResult baseInfoRes = await communicator.GetDeviceInfo(devIP);
-                                    GetDeviceCommandsOperationResult commandsRes = await communicator.GetDeviceCommands(devIP);
+                            if (baseInfoRes.Success && commandsRes.Success)
+                            {
+                                DeviceInfo dInfo = baseInfoRes.DeviceBasicInfo;
+                                MList mList = DevsLists[dInfo.DeviceType];
 
-									if(baseInfoRes.Success && commandsRes.Success)
-									{
-                                        DeviceInfo dInfo = baseInfoRes.DeviceBasicInfo;
-                                        MList mList = DevsLists[dInfo.DeviceType];
-                                        IDevice device = mList.CreateDevice(DevicesInnerRegister.GetFreeID(), dInfo.DeviceType, devIP, dInfo.Mac, dInfo.Name);
-                                        List<DeviceCommand> deviceCommands = new List<DeviceCommand>();
+                                List<DeviceCommand> deviceCommands = new List<DeviceCommand>();
 
-                                        foreach(DeviceCommandInfo commandInfo in commandsRes.CommandsInfos)
-                                        {
-                                            IDefaultDeviceCommandParams defaultCommandParams = mList.GetDefaultParamsForCommand(commandInfo.ID);
+                                foreach (DeviceCommandInfo commandInfo in commandsRes.CommandsInfos)
+                                {
+                                    IDefaultDeviceCommandParams defaultCommandParams = mList.GetDefaultParamsForCommand(commandInfo.ID);
 
-                                            deviceCommands.Add(new DeviceCommand(device, commandInfo.ID, commandInfo.CommandName)
-                                            {
-                                                Description = defaultCommandParams.Description,
-                                                VoiceCommand = defaultCommandParams.VoiceCommand
-                                            });
-                                        }
+                                    deviceCommands.Add(new DeviceCommand(devIP, commandInfo.ID, commandInfo.CommandName)
+                                    {
+                                        Description = defaultCommandParams.Description,
+                                        VoiceCommand = defaultCommandParams.VoiceCommand
+                                    });
+                                }
 
-                                        IDeviceData deviceData = MakeDeviceData(device, deviceCommands);
-										IOperationResult saveRes = _loader.SaveDevice(deviceData);
+                                int newID = DevicesInnerRegister.GetFreeID();
+                                IDeviceData deviceData = MakeDeviceData(newID, dInfo, deviceCommands);
+                                IOperationResult saveRes = _loader.SaveDevice(deviceData);
 
-										if(saveRes.Success)
-										{
-											IOperationResult sendIdRes = await communicator.SendIdToDevice(device.ID, devIP);
+                                if (saveRes.Success)
+                                {
+                                    IOperationResult sendIdRes = await Communicator.SendIdToDevice(newID, devIP);
 
-											if(sendIdRes.Success)
-											{
-                                                DeviceCommandList commands = new DeviceCommandList();
-                                                commands.AddRange(deviceCommands);
-                                                DeviceCommandEditor editor = new DeviceCommandEditor(commands);
-                                                editor.Apply += CommandsEditor_Apply;
-                                                commands.Editor = editor;
-                                                mList.SetCommandsToDevice(device, commands);
+                                    if (sendIdRes.Success)
+                                    {
+                                        DeviceCommandList commands = new DeviceCommandList(newID);
+                                        commands.AddRange(deviceCommands);
+                                        DeviceCommandEditor editor = new DeviceCommandEditor(commands);
+                                        editor.Apply += CommandsEditor_Apply;
+                                        commands.Editor = editor;
 
-                                                mList.Add(device);
-												DevicesInnerRegister.Add(device);									
-											}
-											else
-											{
-												_loader.RemoveDevice(dInfo.ID);
-												//log
-												continue;
-											}
-										}
-										else
-										{
-											//log
-										}
-									}
-									else
-									{
-										//log
-									}
-								}
-								else
-								{
-									//log
-								}					
-							}
-						}
-						else
-						{
-							if (DevsLists.ContainsKey(request.DeviceType))
-							{
-								DevsLists[request.DeviceType].HandleDeviceRequest(request);
-							}
-						}
-					}
+                                        IDevice device = mList.AddNewDevice(newID, dInfo.DeviceType, devIP, dInfo.Mac, commands, dInfo.Name);
+                                        DevicesInnerRegister.Add(device);
+                                    }
+                                    else
+                                    {
+                                        _loader.RemoveDevice(dInfo.ID);
+                                        //log
+                                        continue;
+                                    }
+                                }
+                                else
+                                {
+                                    //log
+                                }
+                            }
+                            else
+                            {
+                                //log
+                            }
+                        }
+                        else
+                        {
+                            //log
+                        }
+                    }
 
-                    _requestsProcessed = false;
-                });
-			
-		}
+                }
+
+                _requestsProcessed = false;
+            });
+
+        }
 
         private void CommandsEditor_Apply(object sender, ApplyCommandsChangesEventArgs e)
         {
-            IDeviceCommandData[] commandDatas = MakeCommandsData(e.EditedCommands);
+            IDeviceCommandData[] commandDatas = MakeCommandsData(e.OwnerID, e.EditedCommands);
 
             IOperationResult updateRes = _loader.UpdateDeviceCommands(commandDatas);
 
@@ -392,19 +385,51 @@ namespace SH.Node
             }
         }
 
-        private IDeviceData MakeDeviceData(IDevice device, IEnumerable<DeviceCommand> commands)
-		{
-			return new DeviceData
-			{
-				ID = device.ID,
-				Description = device.Description,
-				DeviceType = device.DeviceType,
-				MacAddress = device.Mac.ToString(),
-                Commands = MakeCommandsData(commands)
-			};
-		}
+        private void Communicator_RequestFromDevice(object sender, RequestEventArgs e)
+        {
+            if (e.Request.RequestType >= 0 && e.Request.RequestType <= 255)
+            {
+                _requestsQueue.Enqueue(e.Request);
 
-		private IDeviceCommandData[] MakeCommandsData(IEnumerable<IDeviceCommand> deviceCommands)
+                if (!_requestsProcessed)
+                {
+                    ExecuteHandleRequests();
+                }
+            }
+            else
+            {               
+                if (DevsLists.ContainsKey(e.Request.DeviceType))
+                {
+                    DevsLists[e.Request.DeviceType].HandleDeviceRequest(e.Request);
+                }
+            }
+        }
+
+        //      private IDeviceData MakeDeviceData(IDevice device, IEnumerable<DeviceCommand> commands)
+        //{
+        //	return new DeviceData
+        //	{
+        //		ID = device.ID,
+        //		Description = device.Description,
+        //		DeviceType = device.DeviceType,
+        //		MacAddress = device.Mac.ToString(),
+        //              Commands = MakeCommandsData(commands)
+        //	};
+        //}
+
+        private IDeviceData MakeDeviceData(int devID, DeviceInfo device, IEnumerable<DeviceCommand> commands)
+        {
+            return new DeviceData
+            {
+                ID = devID,
+                Description = string.Empty,
+                DeviceType = device.DeviceType,
+                MacAddress = device.Mac.ToString(),
+                Commands = MakeCommandsData(devID, commands)
+            };
+        }
+
+        private IDeviceCommandData[] MakeCommandsData(int ownerID, IEnumerable<IDeviceCommand> deviceCommands)
 		{
 			List<IDeviceCommandData> deviceCommandDatas = new List<IDeviceCommandData>();
 
@@ -413,7 +438,7 @@ namespace SH.Node
 				deviceCommandDatas.Add(new DeviceCommandData 
                 { 
                     ID = com.ID,
-                    OwnerID = com.Owner.ID,
+                    OwnerID = ownerID,
                     Description = com.Description,
                     VoiceCommand = com.VoiceCommand,
                     CommandName = com.CommandName 
@@ -424,24 +449,22 @@ namespace SH.Node
 		}
 
         private IDevice MakeDeviceFromData(IDeviceData deviceData, MList targetMList)
-        {
-            IDevice device = targetMList.CreateDevice(deviceData.ID, deviceData.DeviceType, Consts.ZERO_IP, new MacAddress(deviceData.MacAddress), deviceData.Description);
+        {          
             List<IDeviceCommand> deviceCommands = new List<IDeviceCommand>();
 
-            foreach(IDeviceCommandData commandData in deviceData.Commands)
+            foreach (IDeviceCommandData commandData in deviceData.Commands)
             {
-                deviceCommands.Add(new DeviceCommand(device,commandData.ID,commandData.CommandName)
+                deviceCommands.Add(new DeviceCommand(Consts.ZERO_IP, commandData.ID, commandData.CommandName)
                 {
                     Description = commandData.Description,
                     VoiceCommand = commandData.VoiceCommand
                 });
             }
 
-            DeviceCommandList commands = new DeviceCommandList();
+            DeviceCommandList commands = new DeviceCommandList(deviceData.ID);
             commands.AddRange(deviceCommands);
             commands.Editor = new DeviceCommandEditor(commands);
-            targetMList.SetCommandsToDevice(device, commands);
-
+            IDevice device = targetMList.AddNewDevice(deviceData.ID, deviceData.DeviceType, Consts.ZERO_IP, new MacAddress(deviceData.MacAddress), commands, deviceData.Description);
             return device;
         }
 	}

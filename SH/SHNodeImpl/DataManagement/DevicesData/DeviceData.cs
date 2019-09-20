@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using SH.DataPorts;
 
 namespace SH.DataManagement
 {
-	public class DeviceData : IDeviceData
+    public class DeviceData : IDeviceData
 	{
 		public int ID { get; set; }
 

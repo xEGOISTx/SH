@@ -11,6 +11,13 @@ namespace SH.Communication
     {
         private readonly Dictionary<int, IDeviceCommand> _commands = new Dictionary<int, IDeviceCommand>();
 
+        public DeviceCommandList(int ownerID)
+        {
+            OwnerID = ownerID;
+        }
+
+        public int OwnerID { get; }
+
         public IDeviceCommandEditor Editor { get; set; }
 
         public IEnumerator<IDeviceCommand> GetEnumerator()

@@ -1,12 +1,11 @@
 ﻿using SH.Communication;
-using System;
 using System.Linq;
 using System.Collections.Generic;
-using System.Text;
+using SH.DataPorts;
 
 namespace SH.DataManagement
 {
-	internal class ConnectionSettings : IConnectionSettings
+    internal class ConnectionSettings : IConnectionSettings
 	{
 		public ConnectionSettings() { }
 

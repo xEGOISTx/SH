@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using SH.Core;
+using System.Collections.Generic;
 using System.Net;
 
-namespace SH.Core.DevicesComponents
+namespace SH.Communication
 {
 	/// <summary>
 	/// Отправитель команд устройству

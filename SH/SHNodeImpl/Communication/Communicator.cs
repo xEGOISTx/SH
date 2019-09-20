@@ -19,46 +19,21 @@ namespace SH.Communication
 	/// </summary>
 	internal class Communicator : RequestsSender
 	{
-		/// <summary>
-		/// Отправить устройству задачу действия с пинами
-		/// </summary>
-		/// <typeparam name="T">Тип действия</typeparam>
-		/// <param name="task">Задача</param>
-		/// <returns></returns>
-		//public async Task<bool> SendGPIOTask<T>(IBaseGPIOActionTask<T> task)
-		//	where T: IBaseGPIOAction
-		//{
-		//	return await Task.Run(async () =>
-		//	{
-		//		if(task != null && task.Owner != null &&  task.Owner.IP != null && task.Owner.IP != Consts.ZERO_IP)
-		//		{
-		//			List<CommandParameter> content = new List<CommandParameter>();
-		//			foreach (IBaseGPIOAction gPIOAction in task.Actions)
-		//			{
-		//				if (gPIOAction.Mode != GPIOMode.NotDefined && gPIOAction.Level != GPIOLevel.NotDefined)
-		//				{
-		//					CommandParameter commandParameter = new CommandParameter(gPIOAction.PinNumber.ToString(), $"{gPIOAction.Mode}_{gPIOAction.Level}");
-		//					content.Add(commandParameter);
-		//				}
-		//			}
+        public Communicator(IDevicesRequestsListener requestsListener)
+        {
+            RequestsListener = requestsListener;
+            RequestsListener.DeviceRequest += RequestsListener_DeviceRequest;
+        }
 
-		//			if (content.Count() > 0)
-		//			{
-		//				IOperationResult result = await SendToDevice(task.Owner.IP, CommandName.GPIOActions, content);
-		//				return result.Success;
-		//			}
-		//		}
 
-		//		return false;
-		//	});
-		//}
+        public IDevicesRequestsListener RequestsListener { get; }
 
-		/// <summary>
-		/// Возвращает базовую инфу об устройстве
-		/// </summary>
-		/// <param name="deviceIP"></param>
-		/// <returns></returns>
-		public async Task<GetBaseInfoOperationResult> GetDeviceInfo(IPAddress deviceIP/*, bool asAP = false*/)
+        /// <summary>
+        /// Возвращает базовую инфу об устройстве
+        /// </summary>
+        /// <param name="deviceIP"></param>
+        /// <returns></returns>
+        public async Task<GetBaseInfoOperationResult> GetDeviceInfo(IPAddress deviceIP/*, bool asAP = false*/)
 		{
 			GetBaseInfoOperationResult result = new GetBaseInfoOperationResult();
 
@@ -157,7 +132,8 @@ namespace SH.Communication
 
                 if (result.Success)
                 {
-                    return ushort.Parse(result.ResponseMessage);
+                    if (int.TryParse(result.ResponseMessage, out int id))
+                        return id;
                 }
                 else
                 {
@@ -322,5 +298,29 @@ namespace SH.Communication
 		{
 			return await SendToDeviceAsync(deviceIP, commandName.ToString(), content);
 		}
+
+        private void RequestsListener_DeviceRequest(object sender, DeviceRequestEventArgs e)
+        {
+            Task.Run(() =>
+            {
+                string[] requestParams = e.Request.Replace("\r\n", string.Empty).Split('&');
+
+                DeviceRequest deviceRequest = new DeviceRequest
+                {
+                    RequestType = int.Parse(requestParams[0]),
+                    DeviceType = int.Parse(requestParams[1]),
+                    DeviceIP = IPAddress.Parse(requestParams[2])
+                };
+
+                OnRequestFromDevice(deviceRequest);
+            });
+        }
+
+        private void OnRequestFromDevice(DeviceRequest request)
+        {
+            RequestFromDevice?.Invoke(this, new RequestEventArgs(request));
+        }
+
+        public event RequestEventHandler RequestFromDevice;
 	}
 }

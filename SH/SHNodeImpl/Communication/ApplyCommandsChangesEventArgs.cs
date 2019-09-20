@@ -9,10 +9,13 @@ namespace SH.Communication
 
     internal class ApplyCommandsChangesEventArgs : EventArgs
     {
-        public ApplyCommandsChangesEventArgs(IEnumerable<IDeviceCommand> editedCommands)
+        public ApplyCommandsChangesEventArgs(int ownerID, IEnumerable<IDeviceCommand> editedCommands)
         {
+            OwnerID = ownerID;
             EditedCommands = editedCommands;
         }
+
+        public int OwnerID { get; }
 
         public IEnumerable<IDeviceCommand> EditedCommands { get; }
 

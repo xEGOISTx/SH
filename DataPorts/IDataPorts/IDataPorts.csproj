@@ -1,12 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>SH.Node</RootNamespace>
+    <RootNamespace>SH.DataPorts</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\DataPorts\IDataPorts\IDataPorts.csproj" />
     <ProjectReference Include="..\..\SHCore\ISHCore\ISHCore.csproj" />
   </ItemGroup>
 

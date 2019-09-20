@@ -1,29 +1,31 @@
-﻿namespace SH.Core.DevicesComponents
+﻿using SH.Core.DevicesComponents;
+using System.Net;
+
+namespace SH.Communication
 {
 	/// <summary>
 	/// Команда для устройства
 	/// </summary>
-	public class DeviceCommand : IDeviceCommand
+	internal class DeviceCommand : IDeviceCommand
 	{
 		private readonly string _commandName;
-		private readonly IDevice _owner;
 		private readonly CommandSender _sender = new CommandSender();
 
-		/// <summary>
-		/// Инициализация команды
-		/// </summary>
-		/// <param name="owner">Устройство владелец команды</param>
-		/// <param name="commandName">Название команды на устройстве</param>
-		/// <param name="voiceCommand">Голосовая команда</param>
-		public DeviceCommand(IDevice owner,int id, string commandName)
+        /// <summary>
+        /// Инициализация команды
+        /// </summary>
+        /// <param name="ownerIP"></param>
+        /// <param name="id"></param>
+        /// <param name="commandName"></param>
+        public DeviceCommand(IPAddress ownerIP, int id, string commandName)
 		{
 			//VoiceCommand = voiceCommand;
 			_commandName = commandName;
             ID = id;
-			_owner = owner;
+            OwnerIP = ownerIP;
 		}
 
-        public IDevice Owner { get; }
+        public IPAddress OwnerIP { get; internal set; }
 
 		/// <summary>
 		/// Идентификатор команды
@@ -47,12 +49,12 @@
 		/// </summary>
 		public void Execute(string parameter = null)
 		{
-			_sender.SendCommandToDevice(_owner.IP, _commandName, parameter);
+			_sender.SendCommandToDevice(OwnerIP, _commandName, parameter);
 		}
 
         public DeviceCommand GetCopy()
         {
-            return new DeviceCommand(Owner, ID, CommandName)
+            return new DeviceCommand(OwnerIP, ID, CommandName)
             {
                 Description = Description,
                 VoiceCommand = VoiceCommand,
