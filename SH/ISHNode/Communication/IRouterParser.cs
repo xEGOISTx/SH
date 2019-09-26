@@ -6,6 +6,6 @@ namespace SH.Communication
 {
 	public interface IRouterParser
 	{
-		IParseOperationResult GetActiveIPs(Uri uriToParse, ICredentials routerCredentials);
+		Task<IParseOperationResult> GetActiveIPs(Uri uriToParse, ICredentials routerCredentials , IAPSSIDs aPSSIDs);
 	}
 }

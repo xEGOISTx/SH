@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace SH.Communication
 {
 	public interface IDevicesRequestsListener
 	{
-		void StartListening();
+		Task StartListening();
 
 		void StopListening();
 

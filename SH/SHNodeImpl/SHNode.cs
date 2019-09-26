@@ -60,7 +60,7 @@ namespace SH.Node
 
                             _nodeIsInit = true;
                             //запускаем прослушку запросов от устройств
-                            _devicesManager.Communicator.RequestsListener.StartListening();
+                            await _devicesManager.Communicator.RequestsListener.StartListening();
                         }
                     }
                     else

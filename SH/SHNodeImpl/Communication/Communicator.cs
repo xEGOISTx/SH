@@ -299,20 +299,24 @@ namespace SH.Communication
 			return await SendToDeviceAsync(deviceIP, commandName.ToString(), content);
 		}
 
-        private void RequestsListener_DeviceRequest(object sender, DeviceRequestEventArgs e)
+        private async void RequestsListener_DeviceRequest(object sender, DeviceRequestEventArgs e)
         {
-            Task.Run(() =>
-            {
-                string[] requestParams = e.Request.Replace("\r\n", string.Empty).Split('&');
+            DeviceRequest deviceRequest = await ConvertToRequest(e.Request);
+            OnRequestFromDevice(deviceRequest);
+        }
 
-                DeviceRequest deviceRequest = new DeviceRequest
+        private async Task<DeviceRequest> ConvertToRequest(string request)
+        {
+            return await Task.Run(() =>
+            {
+                string[] requestParams = request.Replace("\r\n", string.Empty).Split('&');
+
+                return new DeviceRequest
                 {
                     RequestType = int.Parse(requestParams[0]),
                     DeviceType = int.Parse(requestParams[1]),
                     DeviceIP = IPAddress.Parse(requestParams[2])
                 };
-
-                OnRequestFromDevice(deviceRequest);
             });
         }
 

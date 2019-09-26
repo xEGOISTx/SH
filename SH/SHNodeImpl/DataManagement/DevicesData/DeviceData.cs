@@ -2,7 +2,7 @@
 
 namespace SH.DataManagement
 {
-    public class DeviceData : IDeviceData
+    internal class DeviceData : IDeviceData
 	{
 		public int ID { get; set; }
 

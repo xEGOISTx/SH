@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace SH.Communication
 {
@@ -24,20 +25,19 @@ namespace SH.Communication
 		/// Найти точки с указанными именами
 		/// </summary>
 		/// <param name="ssids"></param>
-		void FindAPs(IAPSSIDs ssids);
+		Task FindAPs(IAPSSIDs ssids);
 
 		/// <summary>
 		/// Подключиться к указанной точке
 		/// </summary>
 		/// <param name="aP"></param>
 		/// <returns></returns>
-		bool ConnectTo(IAP aP);
+		Task ConnectTo(IAP aP);
 
 		/// <summary>
-		/// Отключится от указанной точки
+		/// Отключится от точки
 		/// </summary>
-		/// <param name="aP"></param>
-		void Disconnect(IAP aP);
+		void Disconnect();
 
 		/// <summary>
 		/// Очистить список найденных точек

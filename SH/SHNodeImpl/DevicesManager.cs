@@ -50,13 +50,13 @@ namespace SH.Node
 					{
 						connector.Clear();
 
-						connector.FindAPs(connectionParamsToDevice.APSSIDsForSearch);
+						await connector.FindAPs(connectionParamsToDevice.APSSIDsForSearch);
 						if(connector.CountFoundAP > 0)
 						{
 							foreach(IAP aP in connector.APs)
 							{
 								aP.SetPasswordToConnected(connectionParamsToDevice.DeviceAPPassword);
-								connector.ConnectTo(aP);
+								await connector.ConnectTo(aP);
 
 								//TODO: сделать возврат результата операции как везде 
 								IPAddress ip = await Communicator.GetLocalIPFromDevice(connectionParamsToDevice.DeviceDafaultIP);
@@ -74,8 +74,7 @@ namespace SH.Node
 									//TODO: тут будет запись в лог
 								}
 
-
-								connector.Disconnect(aP);
+								connector.Disconnect();
 
 								if (_searchStop)
 									break;
@@ -165,7 +164,7 @@ namespace SH.Node
                 {
                     await Task.Run(async () =>
                     {
-                        IParseOperationResult parseRes = routerParser.GetActiveIPs(connToRouter.RouterUriToParse, connToRouter.Credentials);
+                        IParseOperationResult parseRes = await routerParser.GetActiveIPs(connToRouter.RouterUriToParse, connToRouter.Credentials, connectionParams.APSSIDsForSearch);
 
                         if (parseRes.Success)
                         {
