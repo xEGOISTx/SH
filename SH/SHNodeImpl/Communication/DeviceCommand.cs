@@ -8,7 +8,6 @@ namespace SH.Communication
 	/// </summary>
 	internal class DeviceCommand : IDeviceCommand
 	{
-		private readonly string _commandName;
 		private readonly CommandSender _sender = new CommandSender();
 
         /// <summary>
@@ -17,10 +16,9 @@ namespace SH.Communication
         /// <param name="ownerIP"></param>
         /// <param name="id"></param>
         /// <param name="commandName"></param>
-        public DeviceCommand(IPAddress ownerIP, int id, string commandName)
+        public DeviceCommand(IPAddress ownerIP, int id)
 		{
 			//VoiceCommand = voiceCommand;
-			_commandName = commandName;
             ID = id;
             OwnerIP = ownerIP;
 		}
@@ -31,9 +29,7 @@ namespace SH.Communication
 		/// Идентификатор команды
 		/// </summary>
 		public int ID { get; }
-
-		public string CommandName { get; }
-		
+	
 		/// <summary>
 		/// Описание
 		/// </summary>
@@ -49,12 +45,12 @@ namespace SH.Communication
 		/// </summary>
 		public void Execute(string parameter = null)
 		{
-			_sender.SendCommandToDevice(OwnerIP, _commandName, parameter);
+			_sender.SendCommandToDevice(OwnerIP, ID, parameter);
 		}
 
         public DeviceCommand GetCopy()
         {
-            return new DeviceCommand(OwnerIP, ID, CommandName)
+            return new DeviceCommand(OwnerIP, ID)
             {
                 Description = Description,
                 VoiceCommand = VoiceCommand,

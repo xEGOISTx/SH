@@ -77,11 +77,11 @@ namespace SH.Node
             }
         }
 
-        public async void RefreshDevicesAsync()
+        public async Task RefreshDevicesAsync()
         {
             if (_nodeIsInit)
             {
-                IOperationResult result = await _devicesManager.RefreshDevicesAsync(_connectionParams, _routerParser);
+                await _devicesManager.RefreshDevicesAsync(_connectionParams, _routerParser);
             }
         }
 
@@ -99,11 +99,18 @@ namespace SH.Node
 
 		private void SHNode_ApplyConnParams(object sender, ApplyConnectionParamsEventArgs e)
 		{
-			IConnectionSettings connectionSettings = new ConnectionSettings(e.ConnectionParams);
+			bool ok = false;
+			ISettingsLoader sLoader = _loader.GetSettingsLoader();
+			IOperationResult delRes = sLoader.DeleteAll();
 
-			IOperationResult saveRes = _loader.GetSettingsLoader().Save(connectionSettings);
+			if (delRes.Success)
+			{
+				IConnectionSettings connectionSettings = new ConnectionSettings(e.ConnectionParams);
+				IOperationResult saveRes = sLoader.Save(connectionSettings);
+				ok = saveRes.Success;
+			}
 
-			if(!saveRes.Success)
+			if(!ok)
 			{
 				e.Cancel = true;
 			}

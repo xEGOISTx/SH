@@ -6,8 +6,6 @@
 
         int ID { get; }
 
-		string CommandName { get; }
-
 		string VoiceCommand { get; }
 
 		string Description { get; }

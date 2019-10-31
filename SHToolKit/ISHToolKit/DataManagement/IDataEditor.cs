@@ -1,5 +1,4 @@
-﻿using SHBase;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +8,6 @@ namespace SHToolKit.DataManagement
 {
 	public interface IDataEditor
 	{
-		IOperationResult RenameDevice(IDevice device);
+		//IOperationResult RenameDevice(IDevice device);
 	}
 }

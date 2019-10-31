@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SHToolKit
 {
-	internal class OperationResult : SHBase.IOperationResult
+	internal class OperationResult //: SHBase.IOperationResult
 	{
 		public OperationResult() { }
 

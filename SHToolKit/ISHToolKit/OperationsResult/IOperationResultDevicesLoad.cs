@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SHToolKit
 {
-	public interface IOperationResultDevicesLoad : SHBase.IOperationResult
+	public interface IOperationResultDevicesLoad //: SHBase.IOperationResult
 	{
 		IDevice[] Devices { get; }
 	}

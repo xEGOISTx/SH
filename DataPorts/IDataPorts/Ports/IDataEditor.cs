@@ -1,9 +1,9 @@
-﻿using SH.Core;
+﻿//using SH.Core;
 
-namespace SH.DataPorts
-{
-    public interface IDataEditor
-	{
-		IOperationResult RenameDevice(IDeviceData device);
-	}
-}
+//namespace SH.DataPorts
+//{
+//    public interface IDataEditor
+//	{
+//		IOperationResult RenameDevice(IDeviceData device);
+//	}
+//}

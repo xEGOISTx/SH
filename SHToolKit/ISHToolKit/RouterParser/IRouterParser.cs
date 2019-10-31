@@ -9,6 +9,6 @@ namespace SHToolKit
 {
 	public interface IRouterParser
 	{
-		Task<IParseOperationResult> GetDevicesIPs(SHBase.ICredentials routerCredentials);
+		//Task<IParseOperationResult> GetDevicesIPs(SHBase.ICredentials routerCredentials);
 	}
 }

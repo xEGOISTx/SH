@@ -141,14 +141,6 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\SHBase\ISHBase\ISHBase.csproj">
-      <Project>{31e8465c-6bc2-46d5-834d-0e940c3c33ea}</Project>
-      <Name>ISHBase</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\SHBase\SHBase\SHBase.csproj">
-      <Project>{56a497fa-3a32-49f2-95dd-66d2d24b3d9d}</Project>
-      <Name>SHBase</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ISHToolKit\ISHToolKit.csproj">
       <Project>{7cbc218c-9c09-4a6a-b115-44c022560b22}</Project>
       <Name>ISHToolKit</Name>

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SHBase;
 
 namespace SHToolKit.DataManagement
 {
@@ -11,6 +10,6 @@ namespace SHToolKit.DataManagement
 	{
 		ILoadSettingOperationResult Load();
 
-		IOperationResult Save(IConnectionSettings settings);
+		//IOperationResult Save(IConnectionSettings settings);
 	}
 }

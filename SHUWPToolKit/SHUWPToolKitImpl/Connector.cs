@@ -54,7 +54,9 @@ namespace SH.UWPToolKit
 
         public async Task FindAPs(IAPSSIDs ssids)
         {
-            bool initRes = await InitializeFirstAdapter();
+			_availableAPs.Clear();
+
+			bool initRes = await InitializeFirstAdapter();
 
             if (initRes)
             {

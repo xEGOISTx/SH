@@ -6,6 +6,8 @@ namespace SH.DataPorts
 	{
 		ILoadSettingOperationResult Load();
 
+		IOperationResult DeleteAll();
+
 		IOperationResult Save(IConnectionSettings settings);
 	}
 }

@@ -15,8 +15,8 @@ namespace SH.Communication
 		/// Отправить команду устройству
 		/// </summary>
 		/// <param name="devIP"></param>
-		/// <param name="commandName"></param>
-		public async void SendCommandToDevice(IPAddress devIP, string commandName, string parameter = null)
+		/// <param name="commandID"></param>
+		public async void SendCommandToDevice(IPAddress devIP, int commandID, string parameter = null)
 		{
 			if (_taskIsCompleted)
 			{
@@ -28,7 +28,7 @@ namespace SH.Communication
                     rParams.Add(new RequestParameter("p1", parameter));
                 }
 
-				IRequestOperationResult result = await SendToDeviceAsync(devIP, commandName, rParams);
+				IRequestOperationResult result = await SendToDeviceAsync(devIP, commandID.ToString(), rParams);
 				_taskIsCompleted = true;
 			}
 

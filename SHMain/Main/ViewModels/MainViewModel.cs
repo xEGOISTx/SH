@@ -1,18 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UWPHelper;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml;
-using Windows.Storage;
-using SH;
-using SHControls.ViewModels;
-using SHBase.DevicesBaseComponents;
-using DataManager;
-using SHToolKit;
-using SHBase;
+﻿using UWPHelper;
+using SH.DataRepository;
 
 namespace SHMain.Main.ViewModels
 {
@@ -22,24 +9,26 @@ namespace SHMain.Main.ViewModels
 		{
         }
 
-		public NodeViewModel NodeVM { get; private set; }
+		//public NodeViewModel NodeVM { get; private set; }
 
-		public async void Init()
-		{		
-			Data.InitializeDatabase();
+		public void Init()
+		{
+            Repository.InitializeDatabase();
 
-			List<DeviceBaseList> devices = new List<DeviceBaseList>
-			{
-				new Switches.SwitchList(),
-				new Switches.OutletList()
-			};
+			//Data.InitializeDatabase();
+
+			//List<DeviceBaseList> devices = new List<DeviceBaseList>
+			//{
+			//	new Switches.SwitchList(),
+			//	new Switches.OutletList()
+			//};
 
 
-			Node node = new Node(devices);
-			NodeVM = new NodeViewModel(node, Data.DataLoader);
-			OnPropertyChanged(nameof(NodeVM));
+			//Node node = new Node(devices);
+			//NodeVM = new NodeViewModel(node, Data.DataLoader);
+			//OnPropertyChanged(nameof(NodeVM));
 
-			IOperationResult res = await NodeVM.Init();
+			//IOperationResult res = await NodeVM.Init();
 		}
 	}
 }

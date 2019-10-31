@@ -30,11 +30,19 @@ namespace SH.Communication
             throw new NotImplementedException();
         }
 
+        public void Add(IDeviceCommand command)
+        {
+            if(!_commands.ContainsKey(command.ID))
+            {
+                _commands.Add(command.ID, command);
+            }
+        }
+
         public void AddRange(IEnumerable<IDeviceCommand> commands)
         {
             foreach (IDeviceCommand command in commands.ToArray())
             {
-                _commands.Add(command.ID, command);
+                Add(command);
             }
         }
 

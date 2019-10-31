@@ -42,10 +42,10 @@ namespace SH.Node
 			if(!_searchModeIsActive)
 			{
 				_searchModeIsActive = true;
-				ConnectionParamsToDevice connectionParamsToDevice = connectionParams.GetConnectionParamsToDevice();
 
 				Task.Run(async() =>
-				{		
+				{
+                    ConnectionParamsToDevice connectionParamsToDevice = connectionParams.GetConnectionParamsToDevice();                
 					while (true)
 					{
 						connector.Clear();
@@ -123,27 +123,17 @@ namespace SH.Node
 
         public IOperationResult LoadDevices()
         {
-            Dictionary<int, IDeviceData[]> loadedDevs = new Dictionary<int, IDeviceData[]>();
-            IOperationResult result = new OperationResult { Success = true };
+            IOperationResult result;
 
-            foreach (MList mList in DevsLists.Values)
+            IOperationResultDevicesLoad loadRes = _loader.LoadDevices();
+
+            if (loadRes.Success)
             {
-                IOperationResultDevicesLoad loadRes = _loader.LoadDevices(mList.DevicesType);
-
-                if (loadRes.Success)
-                {
-                    loadedDevs.Add(mList.DevicesType, loadRes.Devices);
-                }
-                else
-                {
-                    result = loadRes;
-                    break;
-                }
+                result = AddLoadedDevicesToMLists(loadRes.Devices);
             }
-
-            if (result.Success)
+            else
             {
-                result = AddLoadedDevicesToMLists(loadedDevs);
+                result = loadRes;
             }
 
             return result;
@@ -257,23 +247,42 @@ namespace SH.Node
             return connStates.Values;
         }
 
-        private IOperationResult AddLoadedDevicesToMLists(Dictionary<int, IDeviceData[]> loadedDevices)
+        private IOperationResult AddLoadedDevicesToMLists(IEnumerable<IDeviceData> loadedDevices)
         {
             OperationResult result = new OperationResult { Success = true };
 
             try
             {
-                foreach (var devices in loadedDevices)
+                Dictionary<int, List<IDeviceData>> loadedDevsByTypes = new Dictionary<int, List<IDeviceData>>();
+
+                //разбиваем по типам для удобства
+                foreach (IDeviceData deviceData in loadedDevices)
+                {
+                    if (!loadedDevsByTypes.ContainsKey(deviceData.DeviceType))
+                    {
+                        loadedDevsByTypes.Add(deviceData.DeviceType, new List<IDeviceData> { deviceData });
+                    }
+                    else
+                    {
+                        loadedDevsByTypes[deviceData.DeviceType].Add(deviceData);
+                    }
+                }
+
+                foreach (var devices in loadedDevsByTypes)
                 {
                     int devsType = devices.Key;
-                    MList curMList = DevsLists[devsType];
-                    IDeviceData[] deviceDatas = devices.Value;
 
-                    foreach (IDeviceData deviceData in deviceDatas)
+                    if (DevsLists.ContainsKey(devsType))
                     {
-                        IDevice device = MakeDeviceFromData(deviceData, curMList);
-                        (device.Commands.Editor as DeviceCommandEditor).Apply += CommandsEditor_Apply;
-                        DevicesInnerRegister.Add(device);
+                        MList curMList = DevsLists[devsType];
+                        IEnumerable<IDeviceData> deviceDatas = devices.Value;
+
+                        foreach (IDeviceData deviceData in deviceDatas)
+                        {
+                            IDevice device = MakeDeviceFromData(deviceData, curMList);
+                            (device.Commands.Editor as DeviceCommandEditor).Apply += CommandsEditor_Apply;
+                            DevicesInnerRegister.Add(device);
+                        }
                     }
                 }
             }
@@ -315,7 +324,7 @@ namespace SH.Node
                                 {
                                     IDefaultDeviceCommandParams defaultCommandParams = mList.GetDefaultParamsForCommand(commandInfo.ID);
 
-                                    deviceCommands.Add(new DeviceCommand(devIP, commandInfo.ID, commandInfo.CommandName)
+                                    deviceCommands.Add(new DeviceCommand(devIP, commandInfo.ID)
                                     {
                                         Description = defaultCommandParams.Description,
                                         VoiceCommand = defaultCommandParams.VoiceCommand
@@ -384,25 +393,37 @@ namespace SH.Node
             }
         }
 
-        private void Communicator_RequestFromDevice(object sender, RequestEventArgs e)
-        {
-            if (e.Request.RequestType >= 0 && e.Request.RequestType <= 255)
-            {
-                _requestsQueue.Enqueue(e.Request);
+		private void Communicator_RequestFromDevice(object sender, RequestEventArgs e)
+		{
+			if (e.Request.RequestType >= 0 && e.Request.RequestType <= 255)
+			{
+				_requestsQueue.Enqueue(e.Request);
 
-                if (!_requestsProcessed)
-                {
-                    ExecuteHandleRequests();
-                }
-            }
-            else
-            {               
-                if (DevsLists.ContainsKey(e.Request.DeviceType))
-                {
-                    DevsLists[e.Request.DeviceType].HandleDeviceRequest(e.Request);
-                }
-            }
-        }
+				if (!_requestsProcessed)
+				{
+					ExecuteHandleRequests();
+				}
+
+			}
+			else
+			{
+				if (CheckRequest(e.Request))
+				{
+					if (DevsLists.ContainsKey(e.Request.DeviceType))
+					{
+						DevsLists[e.Request.DeviceType].HandleDeviceRequest(e.Request);
+					}
+				}
+				else
+				{
+					//нераспознанное устройство
+					//пытаемся идентифицировать
+					//если удалось идентифицировать сбрасываем устройсво или пробуем восстановить
+					//если не удалось идентифицировать принять меры по безопаснсти затем отключить устройство то сети принудительно 
+					//log
+				}
+			}
+		}
 
         //      private IDeviceData MakeDeviceData(IDevice device, IEnumerable<DeviceCommand> commands)
         //{
@@ -440,7 +461,6 @@ namespace SH.Node
                     OwnerID = ownerID,
                     Description = com.Description,
                     VoiceCommand = com.VoiceCommand,
-                    CommandName = com.CommandName 
                 });
 			}
 
@@ -448,23 +468,39 @@ namespace SH.Node
 		}
 
         private IDevice MakeDeviceFromData(IDeviceData deviceData, MList targetMList)
-        {          
-            List<IDeviceCommand> deviceCommands = new List<IDeviceCommand>();
+        {
+            //создаём команды устройства
+            IDeviceCommandList commands = MakeCommandsFromData(deviceData.ID, deviceData.Commands);
 
-            foreach (IDeviceCommandData commandData in deviceData.Commands)
+            //создаём утройство
+            IDevice device = targetMList.AddNewDevice(deviceData.ID, deviceData.DeviceType, Consts.ZERO_IP, 
+                new MacAddress(deviceData.MacAddress), commands, deviceData.Description);
+
+            return device;
+        }
+
+        private IDeviceCommandList MakeCommandsFromData(int ownerID, IEnumerable<IDeviceCommandData> deviceCommands)
+        {
+            DeviceCommandList commandsList = new DeviceCommandList(ownerID);
+            commandsList.Editor = new DeviceCommandEditor(commandsList);
+
+            foreach (IDeviceCommandData commandData in deviceCommands)
             {
-                deviceCommands.Add(new DeviceCommand(Consts.ZERO_IP, commandData.ID, commandData.CommandName)
+                commandsList.Add(new DeviceCommand(Consts.ZERO_IP, commandData.ID)
                 {
                     Description = commandData.Description,
                     VoiceCommand = commandData.VoiceCommand
                 });
             }
 
-            DeviceCommandList commands = new DeviceCommandList(deviceData.ID);
-            commands.AddRange(deviceCommands);
-            commands.Editor = new DeviceCommandEditor(commands);
-            IDevice device = targetMList.AddNewDevice(deviceData.ID, deviceData.DeviceType, Consts.ZERO_IP, new MacAddress(deviceData.MacAddress), commands, deviceData.Description);
-            return device;
+            return commandsList;
         }
-	}
+
+		private bool CheckRequest(IDeviceRequest request)
+		{
+			IDevice device = DevicesInnerRegister.GetByID(request.DeviceID);
+
+			return device != null && device.Mac == request.Mac;
+		}
+    }
 }

@@ -103,8 +103,7 @@ namespace SH.Communication
 
                     foreach(string commandParams in commandsParams)
                     {
-                        string[] cParams = commandParams.Split('=');
-                        commandsInfos.Add(new DeviceCommandInfo { ID = int.Parse(cParams[0]), CommandName = cParams[1] });
+                        commandsInfos.Add(new DeviceCommandInfo { ID = int.Parse(commandParams) });
                     }
 
 					result.CommandsInfos = commandsInfos;
@@ -313,9 +312,11 @@ namespace SH.Communication
 
                 return new DeviceRequest
                 {
-                    RequestType = int.Parse(requestParams[0]),
-                    DeviceType = int.Parse(requestParams[1]),
-                    DeviceIP = IPAddress.Parse(requestParams[2])
+					DeviceID = int.Parse(requestParams[0]),
+                    RequestType = int.Parse(requestParams[1]),
+                    DeviceType = int.Parse(requestParams[2]),
+                    DeviceIP = IPAddress.Parse(requestParams[3]),			
+					Mac = new MacAddress(requestParams[4])
                 };
             });
         }

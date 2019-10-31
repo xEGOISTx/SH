@@ -8,12 +8,11 @@ namespace SH.DataPorts
 	public interface IDevicesLoader
 	{
 		/// <summary>
-		/// Возвращает устройства указанного типа
+		/// Возвращает устройства
 		/// </summary>
 		/// <param name="devicesType"></param>
 		/// <returns></returns>
-		IOperationResultDevicesLoad LoadDevices(int devicesType);
-
+		IOperationResultDevicesLoad LoadDevices();
 
 		/// <summary>
 		/// Сохранить устройство

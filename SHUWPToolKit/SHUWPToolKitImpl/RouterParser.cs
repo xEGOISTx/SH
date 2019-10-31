@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using SH.Communication;
 using SH.Core;
@@ -76,6 +75,10 @@ namespace SH.UWPToolKit
 
 
                     _parseComplete = true;
+                }
+                else
+                {
+                    result.ErrorMessage = "Не удалось авторизироваться";
                 }
             }
             else

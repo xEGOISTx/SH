@@ -7,7 +7,7 @@ using SHToolKit.DataManagement;
 
 namespace SHToolKit
 {
-	public interface ILoadSettingOperationResult : SHBase.IOperationResult
+	public interface ILoadSettingOperationResult //: SHBase.IOperationResult
 	{
 		IConnectionSettings ConnectionSettings { get; }
 	}

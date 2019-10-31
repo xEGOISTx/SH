@@ -14,8 +14,6 @@ namespace SH.Core.DevicesComponents
         /// </summary>
         int ID { get; }
 
-		string CommandName { get; }
-
 		/// <summary>
 		/// Описание
 		/// </summary>

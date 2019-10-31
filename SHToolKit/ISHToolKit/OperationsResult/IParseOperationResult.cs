@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SHToolKit
 {
-	public interface IParseOperationResult : SHBase.IOperationResult
+	public interface IParseOperationResult //: SHBase.IOperationResult
 	{
 		IEnumerable<string> IPs { get; }
 	}
